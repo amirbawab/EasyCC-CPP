@@ -1,31 +1,31 @@
 {
     "states": [
         {
-            "type": "initial",
+            "type": "INITIAL",
             "id": "0"
         },
         {
-            "type": "normal",
+            "type": "NORMAL",
             "id": "1"
         },
         {
-            "type": "final",
+            "type": "FINAL",
             "id": "2",
             "token": "T_WORD",
             "backtrack": "true"
         },
         {
-            "type": "normal",
+            "type": "NORMAL",
             "id": "3"
         },
         {
-            "type": "final",
+            "type": "FINAL",
             "id": "4",
             "token": "T_NUMBER",
             "backtrack": "true"
         },
         {
-            "type": "final",
+            "type": "FINAL",
             "id": "5",
             "token": "T_INVALID_CHAR",
             "backtrack": "false"
