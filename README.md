@@ -59,6 +59,28 @@ The state machine is provided as a json file with the follwoing syntax:
     <td>Must be defined for final states only. Otherwise it will be ignored.</td>
   </tr>
   <tr>
-    <td>edge</td>
+    <td rowspan="3">edge</td>
+    <td>from</td>
+    <td>State id</td>
+    <td>State id must exist</td>
+  </tr>
+  <tr>
+    <td>to</td>
+    <td>State id</td>
+    <td>State id must exist</td>
+  </tr>
+  <tr>
+    <td>chars</td>
+    <td>Array of transition values</td>
+    <td>
+    Each value in the array will be treated as an independent edge that goes from `from` to `to`.<br/>
+    The following are special values that will facilitate building the state machine:<br/>
+    - `EOF`: End of file<br/>
+    - `LOWER_CASE_LETTER`: A letter from a to z<br/>
+    - `UPPER_CASE_LETTER`: A letter from A to Z<br/>
+    - `DIGIT`: A digit between (inclusive) 0 and 9<br/>
+    - `POSITIVE`: A positive digit<br/>
+    - `OTHER`: Any other character which no special path has been defined for it. This is often useful for tokens that need to backtrack on the final state and for detecting syntax errors.<br/>
+    </td>
   </tr>
 </table>
