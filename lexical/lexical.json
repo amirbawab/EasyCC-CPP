@@ -1,0 +1,76 @@
+{
+    "states": [
+        {
+            "type": "initial",
+            "id": "0"
+        },
+        {
+            "type": "normal",
+            "id": "1"
+        },
+        {
+            "type": "final",
+            "id": "2",
+            "token": "T_WORD",
+            "backtrack": "true"
+        },
+        {
+            "type": "normal",
+            "id": "3"
+        },
+        {
+            "type": "final",
+            "id": "4",
+            "token": "T_NUMBER",
+            "backtrack": "true"
+        },
+        {
+            "type": "final",
+            "id": "5",
+            "token": "T_INVALID_CHAR",
+            "backtrack": "false"
+        }
+    ],
+    "edges": [
+        {
+            "from": "0",
+            "to": "0",
+            "chars": [" ","\n","EOF"]
+        },
+        {
+            "from": "0",
+            "to": "1",
+            "chars": ["LOWER_CASE_LETTER","UPPER_CASE_LETTER"]
+        },
+        {
+            "from": "1",
+            "to": "1",
+            "chars": ["LOWER_CASE_LETTER","UPPER_CASE_LETTER"]
+        },
+        {
+            "from": "1",
+            "to": "2",
+            "chars": ["OTHER"]
+        },
+        {
+            "from": "0",
+            "to": "3",
+            "chars": ["DIGIT"]
+        },
+        {
+            "from": "3",
+            "to": "3",
+            "chars": ["DIGIT"]
+        },
+        {
+            "from": "3",
+            "to": "4",
+            "chars": ["OTHER"]
+        },
+        {
+            "from": "0",
+            "to": "5",
+            "chars": ["OTHER"]
+        }
+    ]
+}
