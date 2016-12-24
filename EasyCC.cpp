@@ -10,6 +10,6 @@ int main() {
 	graph.addState();
 	graph.addState();
 	graph.addState();
-		cout << graph << endl;
+	cout << graph << endl;
 	return 0;
 }

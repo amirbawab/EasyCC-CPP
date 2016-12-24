@@ -27,12 +27,21 @@ public:
 	void addTransition(int fromState, int toState, std::string label);
 
 	/**
-	 *
+	 * Get state by id
+	 * @return pointer to the state
 	 */
 	std::shared_ptr<State> getStateById(int id) const {return this->states[id];}
 private:
+
+	// List of all states
 	std::vector<std::shared_ptr<State>> states;
+
+	// Starting state of the graph
 	std::shared_ptr<State> root;
+
+	/**
+	 * To string
+	 */
 	friend std::ostream& operator<<(std::ostream& os, const Graph &graph) {
 	    os << "Graph has " << graph.states.size() << " states";
 		for(size_t i=0; i < graph.states.size(); i++){

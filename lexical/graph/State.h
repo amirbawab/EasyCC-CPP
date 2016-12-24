@@ -75,6 +75,14 @@ public:
 	 */
 	std::string getTypeStr() const;
 
+	/**
+	 * Set the type
+	 * @param type of type STATE
+	 */
+	void setType(STATE type) {
+		this->type = type;
+	}
+
 private:
 
 	// Store in a map all transitions from this state
