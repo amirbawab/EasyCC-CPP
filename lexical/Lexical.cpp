@@ -66,6 +66,18 @@ namespace ecc {
                 throw std::runtime_error(std::string("State type undefined: ") + type);
             }
         }
+
+        for(auto i=d[TRANSITIONS].Begin(); i != d[TRANSITIONS].End(); i++) {
+
+            // Read from and to data
+            int fromStateId = (*i)[FROM].GetInt();
+            int toStateId = (*i)[TO].GetInt();
+
+            // Read the transition labels
+            for(auto &v : (*i)[CHARS].GetArray()) {
+                graph->addTransition(fromStateId, toStateId, v.GetString());
+            }
+        }
         return graph;
     }
 }
