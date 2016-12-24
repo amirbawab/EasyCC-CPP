@@ -8,16 +8,15 @@
 
 namespace ecc {
 
-enum STATE {
-	INITIAL,
-	NORMAL,
-	FINAL
-};
-
 class State {
 public:
 
-	State(int id) : type(STATE::NORMAL), id(id), backtrack(false){}
+	// State type
+	static const std::string INITIAL;
+	static const std::string NORMAL;
+	static const std::string FINAL;
+
+	State(int id) : type(State::NORMAL), id(id), backtrack(false){}
 
 	/**
 	 * Add Transition for the current state
@@ -67,19 +66,13 @@ public:
 	 * Get state type
 	 * @return type as enum of STATE
 	 */
-	STATE getType() const {return this->type;}
-
-	/**
-	 * Get state string type
-	 * @return get type as string
-	 */
-	std::string getTypeStr() const;
+	const std::string getType() const {return this->type;}
 
 	/**
 	 * Set the type
 	 * @param type of type STATE
 	 */
-	void setType(STATE type) {
+	void setType(std::string type) {
 		this->type = type;
 	}
 
@@ -89,7 +82,7 @@ private:
 	std::map<std::string, std::shared_ptr<State>> transitionMap;
 
 	// Set the type of the state
-	STATE type;
+	std::string type;
 
 	// Unique id for each state
 	int id;
@@ -105,7 +98,7 @@ private:
 	 */
 	friend std::ostream& operator<<(std::ostream& os, const State &state) {
 	    os << state.getId();
-	    os << " (" << state.getTypeStr() << ")" ;
+	    os << " (" << state.getType() << ")" ;
 	    os << ":";
 	    for(auto i=state.transitionMap.begin(); i!=state.transitionMap.end(); i++){
 	    	os << " (" << i->first << "," << i->second->id << ")";

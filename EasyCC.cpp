@@ -1,4 +1,4 @@
-#include "lexical/graph/Graph.h"
+#include "lexical/Lexical.h"
 #include <iostream>
 #include <string>
 
@@ -6,10 +6,8 @@ using namespace std;
 using namespace ecc;
 
 int main() {
-	Graph graph;
-	graph.addState();
-	graph.addState();
-	graph.addState();
-	cout << graph << endl;
+	Lexical lexical;
+	std::shared_ptr<Graph> graph =
+			lexical.buildGraph("/home/amir/github/EasyCC-CPP/lexical/state_machine.json");
 	return 0;
 }
