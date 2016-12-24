@@ -116,14 +116,15 @@ The state machine is provided as a json file with the follwoing syntax:
 <table>
   <tr>
     <th>Object</th>
+    <th>Definition</th>
     <th>Data</th>
     <th>Value</th>
     <th>Description</th>
   </tr>
   <tr>
+    <td rowspan="4">ignore</td>
     <td rowspan="4">
-    `ignore`:<br/>
-    Ignored tokens will pass to the next phase of the compiler which is the Syntax analysis. Ignoring tokens is usually useful when parser comments. Such tokens can be placed anywhere in the grammar and should not result in any error.
+      Ignored tokens will pass to the next phase of the compiler which is the Syntax analysis. Ignoring tokens is usually useful when parser comments. Such tokens can be placed anywhere in the grammar and should not result in any error.
     </td>
     <td>prefix</td>
     <td>Prefix of token names</td>
@@ -145,8 +146,8 @@ The state machine is provided as a json file with the follwoing syntax:
     <td>Don't ignore token names that exist in the array, even if they appear in `prefix`, `suffix` or `include`</td>
   </tr>
   <tr>
+    <td rowspan="4">error</td>
     <td rowspan="4">
-    `error`:<br/>
     Error tokens will stop the program at the end of the lexical analysis phase. If an error message is assigned to the token name, it will be displayed on the screen.
     </td>
     <td>prefix</td>
