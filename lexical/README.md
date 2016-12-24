@@ -178,7 +178,8 @@ The state machine is provided as a json file with the follwoing syntax:
 ```
 {
     "messages": {
-        "..." : "..."
+        "..." : "...",
+        ...
     }
 }
 ```
