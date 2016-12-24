@@ -31,6 +31,14 @@ public:
 	 * @return pointer to the state
 	 */
 	std::shared_ptr<State> getStateById(int id) const {return this->states[id];}
+
+	/**
+	 * Check if graph has an initial state
+	 * @return true|false
+	 */
+	bool hasInitialState() const {return this->initialState;}
+
+	void setInitialState(bool initialState) {this->initialState = initialState;}
 private:
 
 	// List of all states
@@ -38,6 +46,9 @@ private:
 
 	// Starting state of the graph
 	std::shared_ptr<State> root;
+
+	// Store if initial state is defined
+	bool initialState = false;
 
 	/**
 	 * To string
