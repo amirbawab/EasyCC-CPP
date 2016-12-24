@@ -8,19 +8,19 @@ The state machine is provided as a json file with the follwoing syntax:
 {
   "states": [
     {
-      "type": ...
-      "id": ...
-      "token": ...
-      "backtrack": ...
+      "type": "...",
+      "id": "...",
+      "token": "...",
+      "backtrack": "..."
     },
     ...
   ],
   "transitions": [
     {
-      "from": ...
-      "to": ...
+      "from": "...",
+      "to": "...",
       "chars": [
-        ...
+        "...", ...
       ]
     },
     ...
@@ -96,17 +96,17 @@ The state machine is provided as a json file with the follwoing syntax:
 ```
 {
     "ignore": {
-        "prefix": ...,
-        "suffix": ...,
-        "include": [...],
-        "exclude": [...]
+        "prefix": "...",
+        "suffix": "...",
+        "include": ["...", ...],
+        "exclude": ["...", ...]
     },
 
     "error": {
-        "prefix": ...,
-        "suffix": ...,
-        "include": [...],
-        "exclude": [...]
+        "prefix": "...",
+        "suffix": "...",
+        "include": ["...", ...],
+        "exclude": ["...", ...]
     }
 }
 ```
@@ -169,4 +169,37 @@ The state machine is provided as a json file with the follwoing syntax:
     <td>List of token names</td>
     <td>Don't consider token names that exist in the array as error tokens, even if they appear in `prefix`, `suffix` or `include`</td>
   </tr>
+</table>
+
+### Error messages
+
+#### JSON
+
+```
+{
+    "messages": {
+        "..." : "..."
+    }
+}
+```
+
+#### Explanation
+
+<table>
+  <tr>
+    <th>Object</th>
+    <th>Data</th>
+    <th>Value</th>
+  </tr>
+  <tr>
+    <td>messages</td>
+    <td>Token name. If the token name does not exist or is not classified as error token, then the message will never be displayed.</td>
+    <td>
+    Error message. To display information about the token, one can use the following special variables:<br/>
+    - `${lexical.value}`: Display the value of the token object.<br/>
+    - `${lexical.column}`: Display the column number in the line starting from value 1.<br/>
+    - `${lexical.line}`: Display the line number in the text starting from value 1.<br/>    
+    </td>
+  </tr>
+  
 </table>
