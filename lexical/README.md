@@ -54,24 +54,24 @@ The state machine is provided as a json file with the follwoing syntax:
   </tr>
   <tr>
     <td>token</td>
-    <td>Example: `T_INTEGER`, `T_ERROR_LEADING_ZERO`</td>
-    <td>Must be defined for final states only. Otherwise it will be ignored.</td>
+    <td>Token name. Example: `T_INTEGER`, `T_ERROR_LEADING_ZERO`, ...</td>
+    <td>A Token name is very important for the next phase of the compiler which is the syntax analyzer. The grammar will be constructed based on a sequence of token names. This must be defined for final states only.</td>
   </tr>
   <tr>
     <td>backtrack</td>
     <td>`true` or `false`</td>
-    <td>Must be defined for final states only. Otherwise it will be ignored.</td>
+    <td>Backtrack is required when the only possible way to know that the token value has ended is by reading a character that is not part of the token value. This must be defined for final states only.</td>
   </tr>
   <tr>
     <td rowspan="3">transition</td>
     <td>from</td>
     <td>State id</td>
-    <td>State id must exist</td>
+    <td>Transition starting state. State id must exist</td>
   </tr>
   <tr>
     <td>to</td>
     <td>State id</td>
-    <td>State id must exist</td>
+    <td>Transition ending state. State id must exist</td>
   </tr>
   <tr>
     <td>chars</td>
@@ -88,3 +88,80 @@ The state machine is provided as a json file with the follwoing syntax:
     </td>
   </tr>
 </table>
+
+### Configuration
+
+#### JSON
+
+```
+{
+    "ignore": {
+        "prefix": ...,
+        "suffix": ...,
+        "include": [...],
+        "exclude": [...]
+    },
+
+    "error": {
+        "prefix": ...,
+        "suffix": ...,
+        "include": [...],
+        "exclude": [...]
+    }
+}
+```
+
+#### Explanation
+
+<table>
+  <tr>
+    <th>Object</th>
+    <th>Data</th>
+    <th>Value</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td rowspan="4">ignore</td>
+    <td>prefix</td>
+    <td>Prefix of token names</td>
+    <td>Ignore token names starting with `prefix`</td>
+  </tr>
+  <tr>
+    <td>suffix</td>
+    <td>Suffix of token names</td>
+    <td>Ignore token names ending with `suffix`</td>
+  </tr>
+  <tr>
+    <td>include</td>
+    <td>List of token names</td>
+    <td>Ignore token names that exist in the array</td>
+  </tr>
+  <tr>
+    <td>exclude</td>
+    <td>List of token names</td>
+    <td>Don't ignore token names that exist in the array, even if they appear in `prefix`, `suffix` or `include`</td>
+  </tr>
+  <tr>
+    <td rowspan="4">error</td>
+    <td>prefix</td>
+    <td>Prefix of token names</td>
+    <td>Consider token names starting with `prefix` as error tokens</td>
+  </tr>
+  <tr>
+    <td>suffix</td>
+    <td>Suffix of token names</td>
+    <td>Consider token names ending with `suffix` as error tokens</td>
+  </tr>
+  <tr>
+    <td>include</td>
+    <td>List of token names</td>
+    <td>Consider token names that exist in the array as error tokens</td>
+  </tr>
+  <tr>
+    <td>exclude</td>
+    <td>List of token names</td>
+    <td>Don't consider token names that exist in the array as error tokens, even if they appear in `prefix`, `suffix` or `include`</td>
+  </tr>
+  
+    
+    
