@@ -11,7 +11,7 @@ The state machine is provided as a json file with the follwoing syntax:
       "type": "...",
       "id": "...",
       "token": "...",
-      "backtrack": "..."
+      "backtrack": ...
     },
     ...
   ],

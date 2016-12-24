@@ -12,7 +12,7 @@
             "type": "FINAL",
             "id": "2",
             "token": "T_WORD",
-            "backtrack": "true"
+            "backtrack": true
         },
         {
             "type": "NORMAL",
@@ -22,13 +22,13 @@
             "type": "FINAL",
             "id": "4",
             "token": "T_NUMBER",
-            "backtrack": "true"
+            "backtrack": true
         },
         {
             "type": "FINAL",
             "id": "5",
             "token": "T_INVALID_CHAR",
-            "backtrack": "false"
+            "backtrack": false
         }
     ],
     "transitions": [
