@@ -1,24 +1,23 @@
 #include "Lexical.h"
 #include "../rapidjson/document.h"
 #include "../rapidjson/writer.h"
-#include <iostream>
 #include <fstream>
 #include <sstream>
 
 namespace ecc {
 
-    // State machine JSON format
-    const char* STATES = "states";
-    const char* TRANSITIONS = "transitions";
-    const char* TYPE = "type";
-    const char* ID = "id";
-    const char* TOKEN = "token";
-    const char* BACKTRACK = "backtrack";
-    const char* FROM = "from";
-    const char* TO = "to";
-    const char* CHARS = "chars";
-
     std::shared_ptr<Graph> Lexical::buildGraph(std::string fileName) {
+
+        // State machine JSON format
+        const char* STATES = "states";
+        const char* TRANSITIONS = "transitions";
+        const char* TYPE = "type";
+        const char* ID = "id";
+        const char* TOKEN = "token";
+        const char* BACKTRACK = "backtrack";
+        const char* FROM = "from";
+        const char* TO = "to";
+        const char* CHARS = "chars";
 
         // Load file into string stream
         std::ifstream file(fileName);
@@ -32,13 +31,16 @@ namespace ecc {
         rapidjson::Document d;
         d.Parse(buffer.str().c_str());
 
-        // TODO create all states first, then loop again to set their information
+        // Create all states first
+        for(size_t i=0; i < d[STATES].Size(); i++) {
+            graph->addState();
+        }
 
         // Loop on all states
         for(auto i=d[STATES].Begin(); i != d[STATES].End(); i++) {
 
             // Create state
-            int stateId = graph->addState();
+            int stateId = (*i)[ID].GetInt();
             std::shared_ptr<State> state = graph->getStateById(stateId);
             const char* type = (*i)[TYPE].GetString();
 
@@ -73,7 +75,17 @@ namespace ecc {
             int fromStateId = (*i)[FROM].GetInt();
             int toStateId = (*i)[TO].GetInt();
 
-            // Read the transition labels
+            // State of type initial cannot have incoming transitions
+            if(graph->getStateById(toStateId)->getType() == State::INITIAL && fromStateId != toStateId) {
+                throw std::runtime_error("A state of type initial cannot have incoming transitions (except from itself)");
+            }
+
+            // State of type final cannot have outgoing transitions
+            if(graph->getStateById(fromStateId)->getType() == State::FINAL) {
+                throw std::runtime_error("A state of type final cannot have outgoing transitions");
+            }
+
+            // Read and create the transition labels
             for(auto &v : (*i)[CHARS].GetArray()) {
                 graph->addTransition(fromStateId, toStateId, v.GetString());
             }
