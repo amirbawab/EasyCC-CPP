@@ -9,7 +9,7 @@ The state machine is provided as a json file with the follwoing syntax:
   "states": [
     {
       "type": "...",
-      "id": "...",
+      "id": ...,
       "token": "...",
       "backtrack": ...
     },
@@ -17,8 +17,8 @@ The state machine is provided as a json file with the follwoing syntax:
   ],
   "transitions": [
     {
-      "from": "...",
-      "to": "...",
+      "from": ...,
+      "to": ...,
       "chars": [
         "...", ...
       ]
