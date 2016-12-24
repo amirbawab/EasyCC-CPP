@@ -124,7 +124,7 @@ The state machine is provided as a json file with the follwoing syntax:
   <tr>
     <td rowspan="4">ignore</td>
     <td rowspan="4">
-      Ignored tokens will pass to the next phase of the compiler which is the Syntax analysis. Ignoring tokens is usually useful when parser comments. Such tokens can be placed anywhere in the grammar and should not result in any error.
+      Ignored tokens will not pass to the next phase of the compiler which is the Syntax analysis. Ignoring tokens is usually useful when parsing comments. Such tokens can be placed anywhere in the grammar and should not result in any error.
     </td>
     <td>prefix</td>
     <td>Prefix of token names</td>
