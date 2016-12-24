@@ -11,5 +11,12 @@
         "suffix": "",
         "include": ["T_INVALID_CHAR"],
         "exclude": []
+    },
+
+    "reserved": {
+        "T_WORD": {
+            "hello": "T_HELLO",
+            "easycc": "T_EASYCC"
+        }
     }
 }
