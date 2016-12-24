@@ -10,9 +10,25 @@ namespace ecc {
 
 class Graph {
 public:
+
+	/**
+	 * Get root state
+	 */
 	std::shared_ptr<State> getRoot() const { return root; }
+
+	/**
+	 * Get state and return its id
+	 */
 	int addState();
+
+	/**
+	 * Add transition between two states
+	 */
 	void addTransition(int fromState, int toState, std::string label);
+
+	/**
+	 *
+	 */
 	std::shared_ptr<State> getStateById(int id) const {return this->states[id];}
 private:
 	std::vector<std::shared_ptr<State>> states;
