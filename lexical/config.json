@@ -7,9 +7,9 @@
     },
 
     "error": {
-        "prefix": "T_ERROR_",
+        "prefix": "",
         "suffix": "",
-        "include": [],
+        "include": ["T_INVALID_CHAR"],
         "exclude": []
     }
 }
