@@ -1,4 +1,4 @@
-# Lexial analysis
+# Lexical analysis
 
 ### State machine
 
