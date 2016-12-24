@@ -185,6 +185,7 @@ The state machine is provided as a json file with the follwoing syntax:
     <td>
    Map of keys with their corresponding values. (check next row for more details)
     </td>
+    <td>Mutliple entries can be placed in the scope of the value object. Those information will be validated directly after generating the tokens by the state machine.</td>
   </tr>
   <tr>
     <td>Token name</td>
