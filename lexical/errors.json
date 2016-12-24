@@ -1,0 +1,5 @@
+{
+    "messages": {
+        "T_INVALID_CHAR" : "Invalid character '${lexical.value}' at line ${lexical.line} column ${lexical.column}"
+    }
+}
