@@ -29,9 +29,9 @@ namespace ecc {
         static std::shared_ptr<Graph> buildGraph(std::string fileName);
 
         /**
-         * Get root state
+         * Get initial state
          */
-        std::shared_ptr<State> getRoot() const { return root; }
+        std::shared_ptr<State> getInitialState() const { return initialState; }
 
         /**
          * Get state by id
@@ -48,7 +48,7 @@ namespace ecc {
         std::vector<std::map<std::string, int>> adjacencyList;
 
         // Starting state of the graph
-        std::shared_ptr<State> root;
+        std::shared_ptr<State> initialState;
 
         /**
          * To string

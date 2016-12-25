@@ -10,7 +10,6 @@ namespace ecc {
     const std::string Graph::TRANSITION_EOF = "EOF";
     const std::string Graph::TRANSITION_LOWER_CASE_LETTER = "LOWER_CASE_LETTER";
     const std::string Graph::TRANSITION_UPPER_CASE_LETTER = "UPPER_CASE_LETTER";
-    const std::string Graph::TRANSITION_DIGIT = "DIGIT";
     const std::string Graph::TRANSITION_POSITIVE = "POSITIVE";
     const std::string Graph::TRANSITION_OTHER = "OTHER";
 
@@ -74,6 +73,9 @@ namespace ecc {
 
                 // Mark an initial state
                 hasInitialState = true;
+
+                // Store initial state
+                graph->initialState = graph->states[stateId];
 
             } else if(std::strcmp(type, State::NORMAL.c_str()) == 0) {
                 graph->states[stateId] = std::make_shared<State>(stateId, State::NORMAL);

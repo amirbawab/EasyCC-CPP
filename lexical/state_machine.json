@@ -55,12 +55,12 @@
         {
             "from": 0,
             "to": 3,
-            "chars": ["DIGIT"]
+            "chars": ["POSITIVE","0"]
         },
         {
             "from": 3,
             "to": 3,
-            "chars": ["DIGIT"]
+            "chars": ["POSITIVE","0"]
         },
         {
             "from": 3,
