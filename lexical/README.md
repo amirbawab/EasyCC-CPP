@@ -84,7 +84,7 @@ The state machine is provided as a json file with the follwoing syntax:
     - `UPPER_CASE_LETTER`: A letter from A to Z<br/>
     - `POSITIVE`: A positive digit 1-9<br/>
     - `OTHER`: Any other character which no special path has been defined for it. This is often useful for tokens that need to backtrack on the final state and for detecting syntax errors.<br/>
-    All INITIAL and NORMAL states must have a transition labeled `OTHER`<br/>
+    All INITIAL and NORMAL states must have a transition labeled `OTHER` which handles the case of no match found.<br/>
     If a character was defined as a transition between two states, and a special transition value that includes the same character was also defined between the same two states, then the priority goes to the one defined explicitly.
     </td>
   </tr>
