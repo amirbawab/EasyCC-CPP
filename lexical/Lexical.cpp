@@ -13,6 +13,9 @@ namespace ecc {
             std::string fileName, std::vector<std::shared_ptr<LexicalToken>> &vector) {
 
         // Keep track of file information
+        int tokenLine = 1;
+        int tokenColumn = 1;
+        int tokenPosition = 0;
         int line = 1;
         int column = 1;
         int position = 0;
@@ -33,6 +36,13 @@ namespace ecc {
             // Must be updated by the states
             while(backtrack) {
 
+                // If initial state, update token position
+                if(state->getType() == State::INITIAL) {
+                    tokenLine = line;
+                    tokenColumn = column;
+                    tokenPosition = position;
+                }
+
                 // Jump to the next state
                 state = graph->getStateById(graph->getStateOnRead(state->getId(), ch));
 
@@ -49,7 +59,7 @@ namespace ecc {
 
                     // Create token
                     vector.push_back(
-                            createToken(state->getTokenName(), tokenValueStream.str(), line, column, position));
+                            createToken(state->getTokenName(), tokenValueStream.str(), tokenLine, tokenColumn, tokenPosition));
 
                     // Reset values
                     tokenValueStream.str(std::string());
@@ -65,6 +75,16 @@ namespace ecc {
                     }
                 }
             }
+
+            // TODO Check the case of \r - to test
+            // Check if the read char is a new line
+            if(ch == '\n') {
+                column = 1;
+                line++;
+            } else {
+                column++;
+            }
+            position++;
         }
 
         // One more call for the end of file
@@ -81,18 +101,9 @@ namespace ecc {
 
         // If final state, then create the last token
         if(state->getType() == State::FINAL) {
-            vector.push_back(createToken(state->getTokenName(), tokenValueStream.str(), line, column, position));
+            vector.push_back(
+                    createToken(state->getTokenName(), tokenValueStream.str(), tokenLine, tokenColumn, tokenPosition));
         }
-
-        // TODO Check the case of \r - to test
-        // Check if the read char is a new line
-        if(ch == '\n') {
-            column = 1;
-            line++;
-        } else {
-            column++;
-        }
-        position++;
     }
 
     std::shared_ptr<LexicalToken> Lexical::createToken(
