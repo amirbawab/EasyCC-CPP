@@ -82,8 +82,7 @@ The state machine is provided as a json file with the follwoing syntax:
     - `EOF`: End of file<br/>
     - `LOWER_CASE_LETTER`: A letter from a to z<br/>
     - `UPPER_CASE_LETTER`: A letter from A to Z<br/>
-    - `DIGIT`: A digit between (inclusive) 0 and 9<br/>
-    - `POSITIVE`: A positive digit<br/>
+    - `POSITIVE`: A positive digit 1-9<br/>
     - `OTHER`: Any other character which no special path has been defined for it. This is often useful for tokens that need to backtrack on the final state and for detecting syntax errors. All INITIAL and NORMAL states must have a transition labeled `OTHER`<br/>
     </td>
   </tr>
