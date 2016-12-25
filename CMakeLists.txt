@@ -45,6 +45,6 @@ set(SOURCE_FILES
     rapidjson/stream.h
     rapidjson/stringbuffer.h
     rapidjson/writer.h
-    EasyCC.cpp)
+    EasyCC.cpp lexical/config/Config.cpp lexical/config/Config.h)
 
 add_executable(EasyCC_CPP ${SOURCE_FILES})

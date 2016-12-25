@@ -38,12 +38,14 @@
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/meta.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/stack.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/EasyCC.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/lexical/Lexical.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lexical/Lexical.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lexical/graph/State.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lexical/graph/Graph.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lexical/graph/Graph.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lexical/graph/State.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/lexical/Lexical.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/lexical/config/Config.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/lexical/config/Config.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
