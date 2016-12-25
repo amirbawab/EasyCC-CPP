@@ -3,6 +3,7 @@
 #include "../../rapidjson/writer.h"
 #include <fstream>
 #include <sstream>
+#include <iostream>
 
 namespace ecc {
 
@@ -163,11 +164,11 @@ namespace ecc {
             return this->adjacencyList[stateId][Graph::TRANSITION_UPPER_CASE_LETTER];
 
         } else if(charRead >= '1' && charRead <= '9'
-                && this->adjacencyList[stateId][Graph::TRANSITION_POSITIVE]) {
+                && this->adjacencyList[stateId].count(Graph::TRANSITION_POSITIVE) == 1) {
             return this->adjacencyList[stateId][Graph::TRANSITION_POSITIVE];
 
         } else if(charRead == EOF
-                && this->adjacencyList[stateId][Graph::TRANSITION_EOF]) {
+                && this->adjacencyList[stateId].count(Graph::TRANSITION_EOF) == 1) {
             return this->adjacencyList[stateId][Graph::TRANSITION_EOF];
         }
         return this->adjacencyList[stateId][Graph::TRANSITION_OTHER];

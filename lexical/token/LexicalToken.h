@@ -2,6 +2,7 @@
 #define EASYCC_CPP_LEXICALTOKEN_H
 
 #include <string>
+#include <ostream>
 
 namespace ecc {
     class LexicalToken {
@@ -53,6 +54,14 @@ namespace ecc {
         int column;
         int position;
         LexicalToken::Type type;
+
+        /**
+         * To string
+         */
+        friend std::ostream& operator<<(std::ostream& os, const LexicalToken &lexicalToken) {
+            os << "<" << lexicalToken.name << ">";
+            return os;
+        }
     };
 }
 

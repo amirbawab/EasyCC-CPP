@@ -1,6 +1,7 @@
 #include "Lexical.h"
 #include <fstream>
 #include <sstream>
+#include <iostream>
 
 namespace ecc {
     Lexical::Lexical(std::string stateMachineFileName, std::string configFileName) {
@@ -26,7 +27,6 @@ namespace ecc {
         char ch;
         std::fstream fin(fileName, std::fstream::in);
         while (fin >> std::noskipws >> ch) {
-
             // Backtrack if needed
             bool backtrack = true;
 
@@ -42,31 +42,18 @@ namespace ecc {
                     // Update backtrack according to the state data
                     backtrack = state->mustBacktrack();
 
-                    // Retrieve the token name
-                    std::string tokenName = state->getTokenName();
-
-                    // If shouldn't baktrack, then the current char is part of the token value
+                    // If shouldn't backtrack, then the current char is part of the token value
                     if(!backtrack) {
                         tokenValueStream << ch;
                     }
 
-                    // Construct token value
-                    std::string tokenValue = tokenValueStream.str();
-
-                    // Check the type of the token name
-                    if(config->isErrorToken(tokenName)) {
-                        vector.push_back(std::make_shared<LexicalToken>(
-                                LexicalToken::Type::ERROR_TOKEN, tokenName,
-                                tokenValue, line, column, position));
-                    } else if(!config->mustIgnoreToken(tokenName)) {
-                        tokenName = config->updateTokenName(tokenName, tokenValue);
-                        vector.push_back(std::make_shared<LexicalToken>(
-                                LexicalToken::Type::NORMAL_TOKEN, tokenName,
-                                tokenValue, line, column, position));
-                    }
+                    // Create token
+                    vector.push_back(
+                            createToken(state->getTokenName(), tokenValueStream.str(), line, column, position));
 
                     // Reset values
                     tokenValueStream.str(std::string());
+                    state = graph->getInitialState();
                 } else {
 
                     // Non-final states does need to backtrack
@@ -80,6 +67,23 @@ namespace ecc {
             }
         }
 
+        // One more call for the end of file
+        state = graph->getStateById(graph->getStateOnRead(state->getId(), EOF));
+
+        // After reaching EOF, the current state should be either INITIAL or FINAL
+        if(state->getType() == State::NORMAL) {
+            throw std::runtime_error("Not all input was parsed. Please verify that the "
+                                             "state machine lands on a final state "
+                                             "when reaching EOF. "
+                                             "Error while parsing: "+
+                                             tokenValueStream.str());
+        }
+
+        // If final state, then create the last token
+        if(state->getType() == State::FINAL) {
+            vector.push_back(createToken(state->getTokenName(), tokenValueStream.str(), line, column, position));
+        }
+
         // TODO Check the case of \r - to test
         // Check if the read char is a new line
         if(ch == '\n') {
@@ -89,5 +93,21 @@ namespace ecc {
             column++;
         }
         position++;
+    }
+
+    std::shared_ptr<LexicalToken> Lexical::createToken(
+            std::string tokenName, std::string tokenValue, const int &line, const int &column, const int &position) {
+
+        // Check the type of the token name
+        if(config->isErrorToken(tokenName)) {
+            return std::make_shared<LexicalToken>(
+                    LexicalToken::Type::ERROR_TOKEN, tokenName,
+                    tokenValue, line, column, position);
+        } else if(!config->mustIgnoreToken(tokenName)) {
+            tokenName = config->updateTokenName(tokenName, tokenValue);
+            return std::make_shared<LexicalToken>(
+                    LexicalToken::Type::NORMAL_TOKEN, tokenName,
+                    tokenValue, line, column, position);
+        }
     }
 }

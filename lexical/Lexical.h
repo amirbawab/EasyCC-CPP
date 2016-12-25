@@ -27,6 +27,17 @@ namespace ecc {
 
         // Tokens configuration
         std::shared_ptr<Config> config;
+
+       /**
+        * Create a lexical token
+        * @param token name
+        * @param token value
+        * @param line
+        * @param column
+        * @param position
+        */
+        std::shared_ptr<LexicalToken> createToken(
+               std::string tokenName, std::string tokenValue, const int &line, const int &column, const int &position);
     };
 }
 
