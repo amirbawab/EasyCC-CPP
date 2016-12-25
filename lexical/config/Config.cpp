@@ -4,7 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include <string>
+#include <boost/algorithm/string/predicate.hpp>
 
 namespace ecc{
     std::shared_ptr<Config> Config::buildConfig(std::string configFileName) {
@@ -34,20 +34,20 @@ namespace ecc{
         config->ignorePrefix = d[IGNORE][PREFIX].GetString();
         config->ignoreSuffix = d[IGNORE][SUFFIX].GetString();
         for(auto i=d[IGNORE][INCLUDE].Begin(); i!=d[IGNORE][INCLUDE].End(); i++) {
-            config->ignoreInclude.push_back((*i).GetString());
+            config->ignoreInclude.insert((*i).GetString());
         }
         for(auto i=d[IGNORE][EXCLUDE].Begin(); i!=d[IGNORE][EXCLUDE].End(); i++) {
-            config->ignoreExclude.push_back((*i).GetString());
+            config->ignoreExclude.insert((*i).GetString());
         }
 
         // Error object
         config->errorPrefix = d[ERROR][PREFIX].GetString();
         config->errorSuffix = d[ERROR][SUFFIX].GetString();
         for(auto i=d[ERROR][INCLUDE].Begin(); i!=d[ERROR][INCLUDE].End(); i++) {
-            config->errorInclude.push_back((*i).GetString());
+            config->errorInclude.insert((*i).GetString());
         }
         for(auto i=d[ERROR][EXCLUDE].Begin(); i!=d[ERROR][EXCLUDE].End(); i++) {
-            config->errorExclude.push_back((*i).GetString());
+            config->errorExclude.insert((*i).GetString());
         }
 
         // Reserved object
@@ -58,5 +58,61 @@ namespace ecc{
             }
         }
         return config;
+    }
+
+    bool Config::mustIgnoreToken(std::string tokenName) {
+        // If token name is in the exclude set
+        if(this->ignoreExclude.find(tokenName) != this->ignoreExclude.end()) {
+            return false;
+        }
+
+        // If token name is in the include set
+        if(this->ignoreInclude.find(tokenName) != this->ignoreInclude.end()) {
+            return true;
+        }
+
+        // If token name starts with the prefix
+        if(boost::algorithm::starts_with(tokenName, ignorePrefix)) {
+            return true;
+        }
+
+        // If token name ends with the suffix
+        return boost::algorithm::ends_with(tokenName, ignoreSuffix);
+    }
+
+    bool Config::isErrorToken(std::string tokenName) {
+        // If token name is in the exclude set
+        if(this->errorExclude.find(tokenName) != this->errorExclude.end()) {
+            return false;
+        }
+
+        // If token name is in the include set
+        if(this->errorInclude.find(tokenName) != this->errorInclude.end()) {
+            return true;
+        }
+
+        // If token name starts with the prefix
+        if(boost::algorithm::starts_with(tokenName, errorPrefix)) {
+            return true;
+        }
+
+        // If token name ends with the suffix
+        return boost::algorithm::ends_with(tokenName, errorSuffix);
+    }
+
+    std::string Config::updateTokenName(std::string tokenName, std::string tokenValue) {
+
+        // If token name does not have any check entry
+        if(this->reservedTokens.count(tokenName) == 0) {
+            return tokenName;
+        }
+
+        // If token value exist in the map
+        if(this->reservedTokens[tokenName].count(tokenValue) == 0) {
+            return tokenName;
+        }
+
+        // Return new token name
+        return this->reservedTokens[tokenName][tokenValue];
     }
 }
