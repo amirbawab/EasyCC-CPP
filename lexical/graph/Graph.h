@@ -56,7 +56,10 @@ namespace ecc {
 		friend std::ostream& operator<<(std::ostream& os, const Graph &graph) {
 			os << "Graph has " << graph.states.size() << " states";
 			for(size_t i=0; i < graph.states.size(); i++){
-				os << "\n\t" << *graph.states[i];
+				os << "\n\t" << *graph.states[i] << ":";
+				for(auto pair : graph.adjacencyList[i]) {
+					os << " (" << pair.first  << ", " << pair.second << ")";
+				}
 			}
 			return os;
 		}
