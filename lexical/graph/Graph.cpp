@@ -13,6 +13,7 @@ namespace ecc {
     const std::string Graph::TRANSITION_POSITIVE = "POSITIVE";
     const std::string Graph::TRANSITION_OTHER = "OTHER";
 
+    // TODO Check if transition is more than one character
     std::shared_ptr<Graph> Graph::buildGraph(std::string fileName) {
 
         // State machine JSON format
@@ -130,5 +131,45 @@ namespace ecc {
         }
 
         return graph;
+    }
+
+    int Graph::getStateOnRead(int stateId, char charRead) {
+
+        // Check if state id is correct
+        if(stateId < 0 || stateId >= this->states.size()) {
+            throw std::runtime_error("State id not found!");
+        }
+
+        // Check if state id correspond to a final state
+        if(this->getStateById(stateId)->getType() == State::FINAL) {
+            throw std::runtime_error("Cannot read a char from a final state");
+        }
+
+        // Convert charRead to string
+        std::string charReadStr = std::string(1, charRead);
+
+        // Check if char key is defined
+        if(this->adjacencyList[stateId].count(charReadStr) == 1) {
+            return this->adjacencyList[stateId][charReadStr];
+        }
+
+        // Check if in special transitions
+        if(charRead >= 'a' && charRead <= 'z'
+           && this->adjacencyList[stateId].count(Graph::TRANSITION_LOWER_CASE_LETTER) == 1) {
+            return this->adjacencyList[stateId][Graph::TRANSITION_LOWER_CASE_LETTER];
+
+        } else if(charRead >= 'A' && charRead <= 'Z'
+                && this->adjacencyList[stateId].count(Graph::TRANSITION_UPPER_CASE_LETTER) == 1) {
+            return this->adjacencyList[stateId][Graph::TRANSITION_UPPER_CASE_LETTER];
+
+        } else if(charRead >= '1' && charRead <= '9'
+                && this->adjacencyList[stateId][Graph::TRANSITION_POSITIVE]) {
+            return this->adjacencyList[stateId][Graph::TRANSITION_POSITIVE];
+
+        } else if(charRead == EOF
+                && this->adjacencyList[stateId][Graph::TRANSITION_EOF]) {
+            return this->adjacencyList[stateId][Graph::TRANSITION_EOF];
+        }
+        return this->adjacencyList[stateId][Graph::TRANSITION_OTHER];
     }
 }

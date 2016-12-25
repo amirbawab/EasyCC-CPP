@@ -17,7 +17,6 @@ namespace ecc {
         static const std::string TRANSITION_EOF;
         static const std::string TRANSITION_LOWER_CASE_LETTER;
         static const std::string TRANSITION_UPPER_CASE_LETTER;
-        static const std::string TRANSITION_DIGIT;
         static const std::string TRANSITION_POSITIVE;
         static const std::string TRANSITION_OTHER;
 
@@ -38,6 +37,14 @@ namespace ecc {
          * @return pointer to the state
          */
         std::shared_ptr<State> getStateById(int id) const {return this->states[id];}
+
+        /**
+         * Get the destination sate when reading a label
+         * @param the current state
+         * @param character read. -1 represent EOF
+         * @return state id
+         */
+        int getStateOnRead(int stateId, char charRead);
 
     private:
 

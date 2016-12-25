@@ -1,5 +1,6 @@
 #include "Lexical.h"
 #include <fstream>
+#include <sstream>
 
 namespace ecc {
     Lexical::Lexical(std::string stateMachineFileName, std::string configFileName) {
@@ -20,10 +21,14 @@ namespace ecc {
         // Keep track of the state
         std::shared_ptr<State> state = graph->getInitialState();
 
+        // Keep track of the token value created
+        std::stringstream tokenValueStream;
+
         // Read character by character
         char ch;
         std::fstream fin(fileName, std::fstream::in);
         while (fin >> std::noskipws >> ch) {
+
 
             prevChar = ch;
         }
