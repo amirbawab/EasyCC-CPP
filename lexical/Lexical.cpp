@@ -30,7 +30,6 @@ namespace ecc {
         char ch;
         std::fstream fin(fileName, std::fstream::in);
         while (fin >> std::noskipws >> ch) {
-            std::cout << "ch:" << ch << std::endl;
             // Backtrack if needed
             bool backtrack = true;
 
