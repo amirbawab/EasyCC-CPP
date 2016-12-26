@@ -4,9 +4,10 @@
 #include <iostream>
 
 namespace ecc {
-    Lexical::Lexical(std::string stateMachineFileName, std::string configFileName) {
+    Lexical::Lexical(std::string stateMachineFileName, std::string configFileName, std::string messagesFileName) {
         this->graph = Graph::buildGraph(stateMachineFileName);
         this->config = Config::buildConfig(configFileName);
+        this->messages = Messages::loadMessages(messagesFileName);
     }
 
     void Lexical::generateLexicalTokens(

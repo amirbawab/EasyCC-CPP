@@ -14,12 +14,17 @@ namespace ecc{
          * @param fileName JSON file containing the messages
          * @return pointer to a Messages object
          */
-        std::shared_ptr<Messages> loadMessages(std::string fileName);
+        static std::shared_ptr<Messages> loadMessages(std::string fileName);
 
-        std::string getMessage(std::string key);
+        /**
+         * Get error message
+         * @param error token name
+         * @return specific error message or default one
+         */
+        static std::string getMessage(std::string errorTokenName);
     private:
-        std::map<std::string,std::string> messages;
-        std::string defaultMessage;
+        static std::map<std::string,std::string> errorMessages;
+        static std::string defaultMessage;
     };
 }
 

@@ -7,12 +7,13 @@
 #include "graph/Graph.h"
 #include "config/Config.h"
 #include "token/LexicalToken.h"
+#include "config/Messages.h"
 
 namespace ecc {
 
     class Lexical {
     public:
-        Lexical(std::string stateMachineFileName, std::string configFileName);
+        Lexical(std::string stateMachineFileName, std::string configFileName, std::string messagesFileName);
 
         /**
          * Analyze a text file
@@ -30,6 +31,9 @@ namespace ecc {
 
         // Tokens configuration
         std::shared_ptr<Config> config;
+
+        // Messages
+        std::shared_ptr<Messages> messages;
 
        /**
         * Create a lexical token

@@ -227,7 +227,7 @@ The state machine is provided as a json file with the follwoing syntax:
 ```
 {
     "default_message": "...",
-    "messages": {
+    "error_messages": {
         "..." : "...",
         ...
     }
@@ -253,7 +253,7 @@ The state machine is provided as a json file with the follwoing syntax:
     </td>
   </tr>
  <tr>
-    <td>messages</td>
+    <td>error_messages</td>
     <td>Token name. If the token name does not exist or is not classified as error token, then the message will never be displayed.</td>
     <td>
     Error message. To display information about the token, one can use the following special variables:<br/>

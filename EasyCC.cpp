@@ -8,7 +8,8 @@ using namespace ecc;
 int main() {
 	Lexical lexical(
 			"/home/amir/github/EasyCC-CPP/lexical/state_machine.json",
-			"/home/amir/github/EasyCC-CPP/lexical/config.json");
+			"/home/amir/github/EasyCC-CPP/lexical/config.json",
+            "/home/amir/github/EasyCC-CPP/lexical/errors.json");
 
 	std::vector<std::shared_ptr<LexicalToken>> lexicalTokens;
 	std::vector<std::shared_ptr<LexicalToken>> errorTokens;
