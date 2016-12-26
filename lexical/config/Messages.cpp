@@ -38,7 +38,7 @@ namespace ecc{
         return messages;
     }
 
-    std::string Messages::getMessage(std::string key) {
+    std::string Messages::getErrorMessage(std::string key) {
         if(this->errorMessages.count(key) == 1) {
             return this->errorMessages[key];
         }

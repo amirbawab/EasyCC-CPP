@@ -21,7 +21,7 @@ namespace ecc{
          * @param error token name
          * @return specific error message or default one
          */
-        std::string getMessage(std::string errorTokenName);
+        std::string getErrorMessage(std::string errorTokenName);
     private:
         std::map<std::string,std::string> errorMessages;
         std::string defaultMessage;

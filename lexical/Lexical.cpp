@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <boost/algorithm/string.hpp>
 
 namespace ecc {
     Lexical::Lexical(std::string stateMachineFileName, std::string configFileName, std::string messagesFileName) {
@@ -12,8 +13,8 @@ namespace ecc {
 
     void Lexical::generateLexicalTokens(
             std::string fileName,
-            std::vector<std::shared_ptr<LexicalToken>> &lexical_vector,
-            std::vector<std::shared_ptr<LexicalToken>> &error_vector) {
+            std::vector<std::shared_ptr<LexicalToken>> &lexicalVector,
+            std::vector<std::string> &errorMessages) {
 
         // Keep track of file information
         int tokenLine = 1;
@@ -65,11 +66,11 @@ namespace ecc {
                                                                      tokenLine, tokenColumn, tokenPosition);
 
                     // Add to the vector of lexical token
-                    lexical_vector.push_back(token);
+                    lexicalVector.push_back(token);
 
                     // Check if the token is an error token
                     if(token->getType() == LexicalToken::Type::ERROR_TOKEN) {
-                        error_vector.push_back(token);
+                        errorMessages.push_back(generateErrorMessage(token));
                     }
 
                     // Reset values
@@ -123,11 +124,11 @@ namespace ecc {
                                                               tokenLine, tokenColumn, tokenPosition);
 
             // Add to the vector of lexical token
-            lexical_vector.push_back(token);
+            lexicalVector.push_back(token);
 
             // Check if the token is an error token
             if(token->getType() == LexicalToken::Type::ERROR_TOKEN) {
-                error_vector.push_back(token);
+                errorMessages.push_back(generateErrorMessage(token));
             }
         }
     }
@@ -146,5 +147,13 @@ namespace ecc {
                     LexicalToken::Type::NORMAL_TOKEN, tokenName,
                     tokenValue, line, column, position);
         }
+    }
+
+    std::string Lexical::generateErrorMessage(std::shared_ptr<LexicalToken> lexicalToken) {
+        std::string message = this->messages->getErrorMessage(lexicalToken->getName());
+        boost::replace_all(message, "${value}", lexicalToken->getValue());
+        boost::replace_all(message, "${line}", std::to_string(lexicalToken->getLine()));
+        boost::replace_all(message, "${column}", std::to_string(lexicalToken->getColumn()));
+        return message;
     }
 }

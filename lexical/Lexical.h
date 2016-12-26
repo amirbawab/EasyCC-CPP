@@ -22,8 +22,8 @@ namespace ecc {
          * @param vector which will contain the error tokens
          */
         void generateLexicalTokens(std::string fileName,
-                                   std::vector<std::shared_ptr<LexicalToken>> &lexical_vector,
-                                   std::vector<std::shared_ptr<LexicalToken>> &error_vector);
+                                   std::vector<std::shared_ptr<LexicalToken>> &lexicalVector,
+                                   std::vector<std::string> &errorMessages);
     private:
 
         // State machine
@@ -45,6 +45,13 @@ namespace ecc {
         */
         std::shared_ptr<LexicalToken> createToken(
                std::string tokenName, std::string tokenValue, const int &line, const int &column, const int &position);
+
+        /**
+         * Generate an error message based on the error token name
+         * @param pointer to the lexical token
+         * @return error message
+         */
+        std::string generateErrorMessage(std::shared_ptr<LexicalToken> lexicalToken);
     };
 }
 

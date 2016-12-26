@@ -1,6 +1,6 @@
 {
-    "default_message": "Error token of value '${lexical.value}' found at line ${lexical.line} and column ${lexical.column}",
+    "default_message": "Error token of value '${value}' found at line ${line} and column ${column}",
     "error_messages": {
-        "T_INVALID_CHAR": "Invalid character '${lexical.value}' at line ${lexical.line} column ${lexical.column}"
+        "T_INVALID_CHAR": "Invalid character '${value}' at line ${line} column ${column}"
     }
 }

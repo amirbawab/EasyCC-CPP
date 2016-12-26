@@ -247,9 +247,9 @@ The state machine is provided as a json file with the follwoing syntax:
     <td>default_message</td>
     <td>
     Default message displayed in case no specific message was found for a token name. To display information about the token, one can use the following special variables:<br/>
-    - `${lexical.value}`: Display the value of the token object.<br/>
-    - `${lexical.column}`: Display the column number in the line starting from value 1.<br/>
-    - `${lexical.line}`: Display the line number in the text starting from value 1.<br/>
+    - `${value}`: Display the value of the token object.<br/>
+    - `${column}`: Display the column number in the line starting from value 1.<br/>
+    - `${line}`: Display the line number in the text starting from value 1.<br/>
     </td>
   </tr>
  <tr>
@@ -257,9 +257,9 @@ The state machine is provided as a json file with the follwoing syntax:
     <td>Token name. If the token name does not exist or is not classified as error token, then the message will never be displayed.</td>
     <td>
     Error message. To display information about the token, one can use the following special variables:<br/>
-    - `${lexical.value}`: Display the value of the token object.<br/>
-    - `${lexical.column}`: Display the column number in the line starting from value 1.<br/>
-    - `${lexical.line}`: Display the line number in the text starting from value 1.<br/>    
+    - `${value}`: Display the value of the token object.<br/>
+    - `${column}`: Display the column number in the line starting from value 1.<br/>
+    - `${line}`: Display the line number in the text starting from value 1.<br/>
     </td>
   </tr>
   

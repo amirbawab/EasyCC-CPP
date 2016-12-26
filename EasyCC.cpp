@@ -1,6 +1,7 @@
 #include "lexical/Lexical.h"
 #include <iostream>
 #include <vector>
+#include <string>
 
 using namespace std;
 using namespace ecc;
@@ -12,14 +13,14 @@ int main() {
             "/home/amir/github/EasyCC-CPP/lexical/errors.json");
 
 	std::vector<std::shared_ptr<LexicalToken>> lexicalTokens;
-	std::vector<std::shared_ptr<LexicalToken>> errorTokens;
-	lexical.generateLexicalTokens("/home/amir/github/EasyCC-CPP/input.txt", lexicalTokens, errorTokens);
+	std::vector<std::string> errorMessages;
+	lexical.generateLexicalTokens("/home/amir/github/EasyCC-CPP/input.txt", lexicalTokens, errorMessages);
 
 	for(auto token : lexicalTokens)
 		cout << *token << endl;
 
-	for(auto token : errorTokens)
-		cout << *token << endl;
+	for(auto token : errorMessages)
+		cout << token << endl;
 
 	return 0;
 }
