@@ -10,7 +10,9 @@ namespace ecc {
     }
 
     void Lexical::generateLexicalTokens(
-            std::string fileName, std::vector<std::shared_ptr<LexicalToken>> &vector) {
+            std::string fileName,
+            std::vector<std::shared_ptr<LexicalToken>> &lexical_vector,
+            std::vector<std::shared_ptr<LexicalToken>> &error_vector) {
 
         // Keep track of file information
         int tokenLine = 1;
@@ -58,8 +60,16 @@ namespace ecc {
                     }
 
                     // Create token
-                    vector.push_back(
-                            createToken(state->getTokenName(), tokenValueStream.str(), tokenLine, tokenColumn, tokenPosition));
+                    std::shared_ptr<LexicalToken> token =createToken(state->getTokenName(), tokenValueStream.str(),
+                                                                     tokenLine, tokenColumn, tokenPosition);
+
+                    // Add to the vector of lexical token
+                    lexical_vector.push_back(token);
+
+                    // Check if the token is an error token
+                    if(token->getType() == LexicalToken::Type::ERROR_TOKEN) {
+                        error_vector.push_back(token);
+                    }
 
                     // Reset values
                     tokenValueStream.str(std::string());
@@ -108,8 +118,16 @@ namespace ecc {
 
         // If final state, then create the last token
         if(state->getType() == State::FINAL) {
-            vector.push_back(
-                    createToken(state->getTokenName(), tokenValueStream.str(), tokenLine, tokenColumn, tokenPosition));
+            std::shared_ptr<LexicalToken> token = createToken(state->getTokenName(), tokenValueStream.str(),
+                                                              tokenLine, tokenColumn, tokenPosition);
+
+            // Add to the vector of lexical token
+            lexical_vector.push_back(token);
+
+            // Check if the token is an error token
+            if(token->getType() == LexicalToken::Type::ERROR_TOKEN) {
+                error_vector.push_back(token);
+            }
         }
     }
 

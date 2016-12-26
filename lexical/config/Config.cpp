@@ -88,12 +88,12 @@ namespace ecc{
         }
 
         // If token name starts with the prefix
-        if(boost::algorithm::starts_with(tokenName, ignorePrefix)) {
+        if(ignorePrefix.size() > 0 && boost::algorithm::starts_with(tokenName, ignorePrefix)) {
             return true;
         }
 
         // If token name ends with the suffix
-        return boost::algorithm::ends_with(tokenName, ignoreSuffix);
+        return ignoreSuffix.size() > 0 && boost::algorithm::ends_with(tokenName, ignoreSuffix);
     }
 
     bool Config::isErrorToken(std::string tokenName) {
@@ -108,12 +108,12 @@ namespace ecc{
         }
 
         // If token name starts with the prefix
-        if(boost::algorithm::starts_with(tokenName, errorPrefix)) {
+        if(errorPrefix.size() > 0 && boost::algorithm::starts_with(tokenName, errorPrefix)) {
             return true;
         }
 
         // If token name ends with the suffix
-        return boost::algorithm::ends_with(tokenName, errorSuffix);
+        return errorSuffix.size() > 0 && boost::algorithm::ends_with(tokenName, errorSuffix);
     }
 
     std::string Config::updateTokenName(std::string tokenName, std::string tokenValue) {

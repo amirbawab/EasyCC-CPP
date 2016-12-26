@@ -11,9 +11,13 @@ int main() {
 			"/home/amir/github/EasyCC-CPP/lexical/config.json");
 
 	std::vector<std::shared_ptr<LexicalToken>> lexicalTokens;
-	lexical.generateLexicalTokens("/home/amir/github/EasyCC-CPP/input.txt", lexicalTokens);
+	std::vector<std::shared_ptr<LexicalToken>> errorTokens;
+	lexical.generateLexicalTokens("/home/amir/github/EasyCC-CPP/input.txt", lexicalTokens, errorTokens);
 
 	for(auto token : lexicalTokens)
+		cout << *token << endl;
+
+	for(auto token : errorTokens)
 		cout << *token << endl;
 
 	return 0;

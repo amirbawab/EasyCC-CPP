@@ -47,6 +47,12 @@ namespace ecc {
          */
         int getPosition() const {return this->position;}
 
+        /**
+         * Get lexical token type
+         * @return lexical token type
+         */
+        LexicalToken::Type getType() const {return this->type;}
+
     private:
         std::string name;
         std::string value;
