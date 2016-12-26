@@ -99,6 +99,7 @@ The state machine is provided as a json file with the follwoing syntax:
 
 ```
 {
+    "newline": "...",
     "ignore": {
         "prefix": "...",
         "suffix": "...",
@@ -131,6 +132,18 @@ The state machine is provided as a json file with the follwoing syntax:
     <th>Data</th>
     <th>Value</th>
     <th>Description</th>
+  </tr>
+  <tr>
+    <td>-</td>
+    <td>-</td>
+    <td>newline</td>
+    <td>
+    Line separator can be:<br/>
+    - `CR`: \r<br/>
+    - `LF`: \n<br/>
+    - `CRLF`: \r\n<br/>
+    </td>
+    <td>-</td>
   </tr>
   <tr>
     <td rowspan="4">ignore</td>
