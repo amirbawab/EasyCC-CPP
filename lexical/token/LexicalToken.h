@@ -59,7 +59,7 @@ namespace ecc {
          * To string
          */
         friend std::ostream& operator<<(std::ostream& os, const LexicalToken &lexicalToken) {
-            os << "<" << lexicalToken.name << ": " << lexicalToken.value << "," << lexicalToken.line << "," << lexicalToken.column << "," << lexicalToken.position << ">";
+            os << "<" << lexicalToken.name << ",l:" << lexicalToken.line << ",c:" << lexicalToken.column << ",p:" << lexicalToken.position << ">";
             return os;
         }
     };

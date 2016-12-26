@@ -7,9 +7,16 @@
 #include <boost/algorithm/string/predicate.hpp>
 
 namespace ecc{
+
+    // Define line separators
+    const std::string Config::LF = "LF";
+    const std::string Config::CR = "CR";
+    const std::string Config::CRLF = "CRLF";
+
     std::shared_ptr<Config> Config::buildConfig(std::string configFileName) {
 
         // Configuration JSON format
+        const char* NEWLINE = "newline";
         const char* IGNORE = "ignore";
         const char* ERROR = "error";
         const char* RESERVED = "reserved";
@@ -29,6 +36,15 @@ namespace ecc{
         // Parse json
         rapidjson::Document d;
         d.Parse(buffer.str().c_str());
+
+        // Get the newline separator
+        std::string configNewline = std::string(d[NEWLINE].GetString());
+        if(configNewline != LF && configNewline != CR &&  configNewline != CRLF) {
+            throw std::runtime_error("Configuration error! newline has to be: LF, CR or CRLF");
+        }
+
+        // Store newline
+        config->newLine = configNewline;
 
         // Ignore object
         config->ignorePrefix = d[IGNORE][PREFIX].GetString();

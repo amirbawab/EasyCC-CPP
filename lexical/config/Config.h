@@ -9,6 +9,12 @@
 namespace ecc {
     class Config {
     public:
+
+        // Line separators
+        static const std::string LF;
+        static const std::string CR;
+        static const std::string CRLF;
+
         /**
          * Create a Config based on a JSON file
          * @param config file name
@@ -30,7 +36,12 @@ namespace ecc {
          */
         bool isErrorToken(std::string tokenName);
 
-
+        /**
+         *
+         */
+        std::string getNewLine() const {
+            return this->newLine;
+        }
 
         /**
          * Verify if token value is reserved by another token name
@@ -38,6 +49,9 @@ namespace ecc {
          */
         std::string updateTokenName(std::string tokenName, std::string tokenValue);
     private:
+
+        // Define new line
+        std::string newLine;
 
         // Token names ignored
         std::string ignorePrefix;

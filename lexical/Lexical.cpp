@@ -30,6 +30,7 @@ namespace ecc {
         char ch;
         std::fstream fin(fileName, std::fstream::in);
         while (fin >> std::noskipws >> ch) {
+            std::cout << "ch:" << ch << std::endl;
             // Backtrack if needed
             bool backtrack = true;
 
@@ -76,14 +77,21 @@ namespace ecc {
                 }
             }
 
-            // TODO Check the case of \r - to test
+            // TODO Add "Config::AUTO" to automatically detect
             // Check if the read char is a new line
-            if(ch == '\n') {
+            if(config->getNewLine() == Config::LF && ch == '\n' ||
+               config->getNewLine() == Config::CR && ch == '\r') {
+                column = 1;
+                line++;
+            } else if(config->getNewLine() == Config::CRLF && ch == '\r' && fin.peek() == '\n') {
+                // Skip next character
+                fin >> std::noskipws >> ch;
                 column = 1;
                 line++;
             } else {
                 column++;
             }
+
             position++;
         }
 
