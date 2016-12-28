@@ -20,7 +20,13 @@ int main() {
 		cout << *token << endl;
 
 	for(auto token : errorMessages)
-		cout << token << endl;
+		cerr << token << endl;
+
+    if(errorMessages.size() != 0) {
+        // A lexical error exist, exit
+        cerr << "Exiting program with code 1" << endl;
+        return 1;
+    }
 
 	return 0;
 }
