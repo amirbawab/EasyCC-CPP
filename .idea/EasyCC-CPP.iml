@@ -37,20 +37,22 @@
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/regex.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/itoa.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/stack.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/EasyCC.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/lexical/token/LexicalToken.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/lexical/token/LexicalToken.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lexical/Lexical.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/lexical/config/Config.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/lexical/config/Config.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/lexical/config/Messages.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/lexical/config/Messages.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lexical/Lexical.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lexical/graph/State.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lexical/graph/Graph.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lexical/graph/Graph.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lexical/graph/State.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/lexical/token/LexicalToken.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/lexical/token/LexicalToken.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/lexical/config/Config.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/lexical/config/Config.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/lexical/config/Messages.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/lexical/config/Messages.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/syntax/grammar/Grammar.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/syntax/grammar/Grammar.cpp" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
