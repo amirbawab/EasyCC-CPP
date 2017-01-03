@@ -18,6 +18,7 @@
     "reserved": {
         "T_WORD": {
             "hello": "T_HELLO",
+            "bye": "T_BYE",
             "easycc": "T_EASYCC"
         }
     }
