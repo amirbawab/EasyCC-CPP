@@ -9,10 +9,11 @@ namespace ecc {
     class Grammar {
     public:
         Grammar(std::string grammarFile);
-        static bool isTerminal();
-        static bool isNonTerminal();
+        static bool isTerminal(std::string token);
+        static bool isNonTerminal(std::string token);
     private:
         std::map<std::string,std::vector<std::vector<std::string>>> production;
+        void parseGrammar();
     };
 }
 
