@@ -27,9 +27,13 @@ NONTERMINAL : NONTERMINAL NONTERMINAL ...
 NONTERMINL : 'TERMINAL'
 ```
 
-* A vertical bar followed by a set of non-terminals
+* A vertical bar followed by a set of non-terminals or one trminal
 ```
 | NONTERMINAL NONTERMINAL NONTERMINAL ...
+```
+or 
+```
+| TERMINAL
 ```
 
 #### Definitions
