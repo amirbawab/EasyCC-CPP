@@ -18,17 +18,6 @@ namespace ecc {
         while (std::getline(file, line)) {
             parseGrammarLine(line, lastNonTerminal);
         }
-
-        // Print
-        for(auto entry : productions) {
-            for(auto entryProduction : entry.second) {
-                std::cout << entry.first << ":";
-                for(auto token : entryProduction) {
-                    std::cout << " " << token;
-                }
-                std::cout << std::endl;
-            }
-        }
     }
 
     void Grammar::parseGrammarLine(std::string line, std::string &lastNonTerminal) {
@@ -38,42 +27,70 @@ namespace ecc {
         // If two, then it's a complete definition
         if(words.size() == 2) {
 
-            // Clear whitespaces on both sides
-            boost::trim(words[0]);
-
-            // If non-terminal not defined
-            if (words[0].size() == 0) {
-                throw std::runtime_error("Wrong grammar format: A line cannot start with a delimiter");
-            }
-
-            // Check if non-terminal is composed of upper case alphabets only
-            for (size_t i = 0; i < words[0].size(); i++) {
-                if ((words[0][i] < 'A' || words[0][i] > 'Z') && words[0][i] != '_') {
-                    throw std::runtime_error("Non terminals should be composed of upper case letters only.");
-                }
-            }
-
-            // Check if multiple definition found for the same non-terminal
-            if(productions[words[0]].size() != 0) {
-                throw std::runtime_error("Multiple definition found for the same non-terminal: " + words[0]);
-            }
+            // Process definition
+            processDefinition(words[0], words[1], true);
 
             // Update last non-terminal
             lastNonTerminal = words[0];
 
-            // Check the set of terminals
-            std::vector<std::string> productionVector;
-            boost::split(productionVector, words[1], boost::is_any_of("|"), boost::token_compress_on);
+        } else if(words.size() == 1) {
 
-            // If production found
-            if (productionVector.size() > 0) {
+            // If no last non-terminal defined (wrong format)
+            if(lastNonTerminal.empty()) {
+                throw std::runtime_error("Wrong grammar format. No left-hand side non-terminal "
+                                                 "token defined at line" + line);
+            }
 
-                // Resize corresponding vector
-                productions[words[0]].resize(productionVector.size());
+            // Process definition
+            processDefinition(lastNonTerminal, words[0], false);
+        } else {
+            throw std::runtime_error("Wrong grammar format at line: " + line);
+        }
+    }
 
-                // Split production by spaces
-                for (size_t i = 0; i < productionVector.size(); i++) {
-                    boost::trim(productionVector[i]);
+    void Grammar::processDefinition(std::string &LHS, std::string &RHS, bool completeDefinition) {
+
+        // Clear whitespaces on both sides
+        boost::trim(LHS);
+
+        // If non-terminal not defined
+        if (LHS.size() == 0) {
+            throw std::runtime_error("Wrong grammar format: A line cannot start with a delimiter");
+        }
+
+        // Check if non-terminal is composed of upper case alphabets only
+        for (size_t i = 0; i < LHS.size(); i++) {
+            if ((LHS[i] < 'A' || LHS[i] > 'Z') && LHS[i] != '_') {
+                throw std::runtime_error("Non terminals should be composed of upper case letters only.");
+            }
+        }
+
+        // Check the set of terminals
+        std::vector<std::string> productionVector;
+        boost::split(productionVector, RHS, boost::is_any_of("|"), boost::token_compress_on);
+
+        // If production found
+        if (productionVector.size() > 0) {
+
+            // If not a complete definition remove the first element
+            if(!completeDefinition) {
+                if(productionVector[0].size() != 0) {
+                    throw std::runtime_error("Wrong grammar format. Expecting a delimiter before " + RHS);
+                }
+                productionVector.erase(productionVector.begin());
+            }
+
+            // Resize corresponding vector
+            size_t prevSize = productions[LHS].size();
+            productions[LHS].resize(prevSize + productionVector.size());
+
+            // Split production by spaces
+            for (size_t i = 0; i < productionVector.size(); i++) {
+                boost::trim(productionVector[i]);
+
+                if(productionVector[i].size() == 0) {
+                    throw std::runtime_error("A production cannot be empty.");
+                } else {
                     std::istringstream productionss(productionVector[i]);
 
                     // Read word by word
@@ -82,22 +99,17 @@ namespace ecc {
 
                         // Check if a terminal is defined correctly
                         if(Grammar::isTerminal(word) &&
-                                    (productions[words[0]][i].size() != 0 ||
-                                    productionss.rdbuf()->in_avail() != 0)) {
+                           (productions[LHS][i + prevSize].size() != 0 ||
+                            productionss.rdbuf()->in_avail() != 0)) {
                             throw std::runtime_error("A production containing a terminal token cannot be followed "
                                                              "or preceded by other tokens.");
                         }
-                        productions[words[0]][i].push_back(word);
+                        productions[LHS][i + prevSize].push_back(word);
                     }
                 }
-            } else {
-                throw std::runtime_error("Wrong grammar format at line: " + line);
             }
-
-        } else if(words.size() == 1) {
-
         } else {
-            throw std::runtime_error("Wrong grammar format at line: " + line);
+            throw std::runtime_error("Wrong grammar format at the definition of: " + LHS);
         }
     }
 
