@@ -11,6 +11,7 @@ namespace ecc {
         Grammar(std::string grammarFile);
         static bool isTerminal(std::string token);
         static bool isNonTerminal(std::string token);
+        static bool isEpsilon(std::string token);
     private:
         std::map<std::string,std::vector<std::vector<std::string>>> productions;
 

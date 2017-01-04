@@ -97,12 +97,12 @@ namespace ecc {
                     std::string word;
                     while (productionss >> word) {
 
-                        // Check if a terminal is defined correctly
-                        if(Grammar::isTerminal(word) &&
+                        // Check if a terminal or an epsilon is defined correctly
+                        if((Grammar::isTerminal(word) || Grammar::isEpsilon(word)) &&
                            (productions[LHS][i + prevSize].size() != 0 ||
                             productionss.rdbuf()->in_avail() != 0)) {
-                            throw std::runtime_error("A production containing a terminal token cannot be followed "
-                                                             "or preceded by other tokens.");
+                            throw std::runtime_error("A production containing a terminal or an epsilon token "
+                                                             "cannot be followed or preceded by other tokens.");
                         }
                         productions[LHS][i + prevSize].push_back(word);
                     }
@@ -118,6 +118,10 @@ namespace ecc {
     }
 
     bool Grammar::isNonTerminal(std::string token) {
-        return !isTerminal(token);
+        return !Grammar::isTerminal(token) && !Grammar::isEpsilon(token);
+    }
+
+    bool Grammar::isEpsilon(std::string token) {
+        return token == "EPSILON";
     }
 }
