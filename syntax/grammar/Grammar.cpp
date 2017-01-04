@@ -14,12 +14,24 @@ namespace ecc {
 
         // Read line by line
         std::string line;
+        std::string lastNonTerminal;
         while (std::getline(file, line)) {
-            parseGrammar(line);
+            parseGrammarLine(line, lastNonTerminal);
+        }
+
+        // Print
+        for(auto entry : productions) {
+            for(auto entryProduction : entry.second) {
+                std::cout << entry.first << ":";
+                for(auto token : entryProduction) {
+                    std::cout << " " << token;
+                }
+                std::cout << std::endl;
+            }
         }
     }
 
-    void Grammar::parseGrammar(std::string line) {
+    void Grammar::parseGrammarLine(std::string line, std::string &lastNonTerminal) {
         std::vector<std::string> words;
         boost::split(words, line, boost::is_any_of(":"), boost::token_compress_on);
 
@@ -46,6 +58,9 @@ namespace ecc {
                 throw std::runtime_error("Multiple definition found for the same non-terminal: " + words[0]);
             }
 
+            // Update last non-terminal
+            lastNonTerminal = words[0];
+
             // Check the set of terminals
             std::vector<std::string> productionVector;
             boost::split(productionVector, words[1], boost::is_any_of("|"), boost::token_compress_on);
@@ -53,19 +68,32 @@ namespace ecc {
             // If production found
             if (productionVector.size() > 0) {
 
+                // Resize corresponding vector
+                productions[words[0]].resize(productionVector.size());
+
                 // Split production by spaces
                 for (size_t i = 0; i < productionVector.size(); i++) {
+                    boost::trim(productionVector[i]);
                     std::istringstream productionss(productionVector[i]);
 
                     // Read word by word
                     std::string word;
                     while (productionss >> word) {
+
+                        // Check if a terminal is defined correctly
+                        if(Grammar::isTerminal(word) &&
+                                    (productions[words[0]][i].size() != 0 ||
+                                    productionss.rdbuf()->in_avail() != 0)) {
+                            throw std::runtime_error("A production containing a terminal token cannot be followed "
+                                                             "or preceded by other tokens.");
+                        }
                         productions[words[0]][i].push_back(word);
                     }
                 }
             } else {
                 throw std::runtime_error("Wrong grammar format at line: " + line);
             }
+
         } else if(words.size() == 1) {
 
         } else {

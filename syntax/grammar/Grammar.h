@@ -13,7 +13,7 @@ namespace ecc {
         static bool isNonTerminal(std::string token);
     private:
         std::map<std::string,std::vector<std::vector<std::string>>> productions;
-        void parseGrammar(std::string line);
+        void parseGrammarLine(std::string line, std::string &lastNonTerminal);
     };
 }
 
