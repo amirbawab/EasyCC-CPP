@@ -41,4 +41,5 @@ or
 * `|` is an `or` symbol. To avoid writting the same left-hand side non-terminal for different productions, the `|` allows defining another set of non-terminal for the same non-terminal
 * `NONTERMINAL` can be compsed of upper case letters and underscores only
 * `TERMINAL` must begin and end with a single quote. The text in between the single quotes must be a defined lexical token name (case sensitive).
+* `EPSILON` represents an epsilon production
 * Whitespaces between tokens are ignored
