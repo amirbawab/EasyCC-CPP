@@ -27,7 +27,7 @@ NONTERMINAL : NONTERMINAL NONTERMINAL ...
 NONTERMINL : 'TERMINAL'
 ```
 
-* A vertical bar followed by a set of non-terminals or one trminal
+* A vertical bar followed by a set of non-terminals or one terminal
 ```
 | NONTERMINAL NONTERMINAL NONTERMINAL ...
 ```
