@@ -12,8 +12,8 @@ namespace ecc {
         static bool isTerminal(std::string token);
         static bool isNonTerminal(std::string token);
     private:
-        std::map<std::string,std::vector<std::vector<std::string>>> production;
-        void parseGrammar();
+        std::map<std::string,std::vector<std::vector<std::string>>> productions;
+        void parseGrammar(std::string line);
     };
 }
 
