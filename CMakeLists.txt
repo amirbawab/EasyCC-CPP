@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 3.5)
 project(EasyCC_CPP)
 
+ADD_SUBDIRECTORY (gtest-1.6.0)
+enable_testing()
+include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+
+add_executable(runUnitTests test/EasyCC_test.cpp)
+target_link_libraries(runUnitTests gtest gtest_main)
+add_test( runUnitTests runUnitTests )
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 set(SOURCE_FILES
@@ -45,6 +53,6 @@ set(SOURCE_FILES
     rapidjson/stream.h
     rapidjson/stringbuffer.h
     rapidjson/writer.h
-    EasyCC.cpp lexical/config/Config.cpp lexical/config/Config.h lexical/token/LexicalToken.cpp lexical/token/LexicalToken.h lexical/config/Messages.cpp lexical/config/Messages.h syntax/grammar/Grammar.cpp syntax/grammar/Grammar.h syntax/Syntax.cpp syntax/Syntax.h)
+        src/EasyCC.cpp lexical/config/Config.cpp lexical/config/Config.h lexical/token/LexicalToken.cpp lexical/token/LexicalToken.h lexical/config/Messages.cpp lexical/config/Messages.h syntax/grammar/Grammar.cpp syntax/grammar/Grammar.h syntax/Syntax.cpp syntax/Syntax.h)
 
 add_executable(EasyCC_CPP ${SOURCE_FILES})
