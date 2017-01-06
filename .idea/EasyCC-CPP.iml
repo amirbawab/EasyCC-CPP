@@ -14,13 +14,9 @@
       <sourceFolder url="file://$MODULE_DIR$/lexical/graph/State.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lexical/token/LexicalToken.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lexical/token/LexicalToken.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/syntax/Syntax.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/syntax/grammar/Grammar.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/syntax/grammar/Grammar.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/syntax/Syntax.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/test/EasyCC_test.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/EasyCC.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/test/lexical/token/LexicalTokenTest.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/EasyCC.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/gtest-1.6.0/src/gtest_main.cc" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/gtest-1.6.0/src/gtest-all.cc" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/gtest-1.6.0/CMakeLists.txt" isTestSource="false" />
@@ -28,11 +24,11 @@
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/prettywriter.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/document.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/stream.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/rapidjson/fwd.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/rapidjson/ostreamwrapper.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/msinttypes/stdint.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/msinttypes/inttypes.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/memorystream.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/rapidjson/reader.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/rapidjson/fwd.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/encodedstream.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/allocators.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/stringbuffer.h" isTestSource="false" />
@@ -44,22 +40,26 @@
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/error/en.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/error/error.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/filewritestream.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/rapidjson/ostreamwrapper.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/rapidjson/reader.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/writer.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/encodings.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/filereadstream.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/diyfp.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/strtod.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/dtoa.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/meta.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/swap.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/biginteger.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/pow10.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/swap.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/strfunc.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/ieee754.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/regex.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/itoa.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/meta.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/stack.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/syntax/Syntax.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/syntax/grammar/Grammar.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/syntax/grammar/Grammar.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/syntax/Syntax.h" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">

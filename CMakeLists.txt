@@ -1,14 +1,21 @@
 cmake_minimum_required(VERSION 3.5)
 project(EasyCC_CPP)
 
+##### TEST ######
 ADD_SUBDIRECTORY (gtest-1.6.0)
 enable_testing()
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
-add_executable(runUnitTests test/EasyCC_test.cpp)
-target_link_libraries(runUnitTests gtest gtest_main)
-add_test( runUnitTests runUnitTests )
+file(GLOB_RECURSE easycctests_SRC
+    "test/*.h"
+    "test/*.cpp"
+)
 
+add_executable(easycctests ${easycctests_SRC})
+target_link_libraries(easycctests gtest gtest_main)
+add_test(easycctests easycctests)
+
+##### APP #####
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 set(SOURCE_FILES
