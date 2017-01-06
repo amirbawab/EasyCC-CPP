@@ -1,5 +1,5 @@
-#include "lexical/Lexical.h"
-#include "syntax/Syntax.h"
+#include "../lexical/Lexical.h"
+#include "../syntax/Syntax.h"
 #include <iostream>
 #include <vector>
 #include <string>
