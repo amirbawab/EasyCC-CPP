@@ -14,9 +14,15 @@
       <sourceFolder url="file://$MODULE_DIR$/lexical/graph/State.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lexical/token/LexicalToken.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lexical/token/LexicalToken.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/syntax/Syntax.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/syntax/grammar/Grammar.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/syntax/grammar/Grammar.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/syntax/Syntax.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/test/lexical/graph/StateTest.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/test/lexical/graph/GraphTest.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test/lexical/token/LexicalTokenTest.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/EasyCC.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/gtest-1.6.0/src/gtest_main.cc" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/gtest-1.6.0/src/gtest-all.cc" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/gtest-1.6.0/CMakeLists.txt" isTestSource="false" />
@@ -47,19 +53,15 @@
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/diyfp.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/strtod.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/dtoa.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/swap.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/meta.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/biginteger.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/pow10.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/swap.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/strfunc.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/ieee754.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/regex.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/itoa.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/meta.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rapidjson/internal/stack.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/syntax/Syntax.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/syntax/grammar/Grammar.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/syntax/grammar/Grammar.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/syntax/Syntax.h" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">

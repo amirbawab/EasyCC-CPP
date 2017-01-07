@@ -11,13 +11,13 @@ int main() {
 
     // Lexical analysis phase
     Lexical lexical(
-			"/home/amir/github/EasyCC-CPP/lexical/state_machine.json",
-			"/home/amir/github/EasyCC-CPP/lexical/config.json",
-            "/home/amir/github/EasyCC-CPP/lexical/errors.json");
+			"resources/src/state_machine.json",
+			"resources/src/config.json",
+            "resources/src/errors.json");
 
 	std::vector<std::shared_ptr<LexicalToken>> lexicalTokens;
 	std::vector<std::string> errorMessages;
-	lexical.generateLexicalTokens("/home/amir/github/EasyCC-CPP/input.txt", lexicalTokens, errorMessages);
+	lexical.generateLexicalTokens("resources/src/input.txt", lexicalTokens, errorMessages);
 
     // Logging
 	for(auto token : lexicalTokens)
@@ -31,7 +31,7 @@ int main() {
     }
 
     // Syntax analysis phase
-    Syntax syntax("/home/amir/github/EasyCC-CPP/syntax/grammar.txt");
+    Syntax syntax("resources/src/grammar.txt");
 
 	return 0;
 }

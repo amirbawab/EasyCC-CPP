@@ -1,5 +1,17 @@
 cmake_minimum_required(VERSION 3.5)
 project(EasyCC_CPP)
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
+##### RESOURCES #####
+file(GLOB resources_SRC "resources/src/*")
+file(GLOB resources_TEST "resources/test/*")
+file(COPY ${resources_SRC} DESTINATION ${CMAKE_BINARY_DIR}/bin/resources/src/)
+file(COPY ${resources_TEST} DESTINATION ${CMAKE_BINARY_DIR}/bin/resources/test/)
+
+#### OUTPUT ####
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 ##### TEST ######
 ADD_SUBDIRECTORY (gtest-1.6.0)
@@ -63,3 +75,4 @@ set(SOURCE_FILES
         src/EasyCC.cpp lexical/config/Config.cpp lexical/config/Config.h lexical/token/LexicalToken.cpp lexical/token/LexicalToken.h lexical/config/Messages.cpp lexical/config/Messages.h syntax/grammar/Grammar.cpp syntax/grammar/Grammar.h syntax/Syntax.cpp syntax/Syntax.h)
 
 add_executable(EasyCC_CPP ${SOURCE_FILES})
+
