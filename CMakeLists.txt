@@ -5,8 +5,8 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 ##### RESOURCES #####
 file(GLOB resources_SRC "resources/src/*")
 file(GLOB resources_TEST "resources/test/*")
-file(COPY ${resources_SRC} DESTINATION ${CMAKE_BINARY_DIR}/bin/resources/src/)
-file(COPY ${resources_TEST} DESTINATION ${CMAKE_BINARY_DIR}/bin/resources/test/)
+file(COPY ${resources_SRC} DESTINATION "${CMAKE_BINARY_DIR}/bin/resources/src/")
+file(COPY ${resources_TEST} DESTINATION "${CMAKE_BINARY_DIR}/bin/resources/test/")
 
 #### OUTPUT ####
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
