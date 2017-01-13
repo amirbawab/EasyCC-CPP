@@ -1,4 +1,6 @@
 {
+    "description":"Multiple definition for state with same id",
+
     "states": [
         {
             "type": "INITIAL",
@@ -6,71 +8,14 @@
         },
         {
             "type": "NORMAL",
-            "id": 1
+            "id": 0
         },
         {
             "type": "FINAL",
-            "id": 2,
-            "token": "T_WORD",
-            "backtrack": true
-        },
-        {
-            "type": "NORMAL",
-            "id": 3
-        },
-        {
-            "type": "FINAL",
-            "id": 4,
-            "token": "T_NUMBER",
-            "backtrack": true
-        },
-        {
-            "type": "FINAL",
-            "id": 5,
-            "token": "T_INVALID_CHAR",
+            "id": 0,
+            "token": "",
             "backtrack": false
         }
     ],
-    "transitions": [
-        {
-            "from": 0,
-            "to": 0,
-            "chars": [" ","\n","\r","\t","EOF"]
-        },
-        {
-            "from": 0,
-            "to": 1,
-            "chars": ["LOWER_CASE_LETTER","UPPER_CASE_LETTER"]
-        },
-        {
-            "from": 1,
-            "to": 1,
-            "chars": ["LOWER_CASE_LETTER","UPPER_CASE_LETTER"]
-        },
-        {
-            "from": 1,
-            "to": 2,
-            "chars": ["OTHER"]
-        },
-        {
-            "from": 0,
-            "to": 3,
-            "chars": ["POSITIVE","0"]
-        },
-        {
-            "from": 3,
-            "to": 3,
-            "chars": ["POSITIVE","0"]
-        },
-        {
-            "from": 3,
-            "to": 4,
-            "chars": ["OTHER"]
-        },
-        {
-            "from": 0,
-            "to": 5,
-            "chars": ["OTHER"]
-        }
-    ]
+    "transitions": []
 }

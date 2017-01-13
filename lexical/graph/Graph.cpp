@@ -96,6 +96,18 @@ namespace ecc {
             int fromStateId = (*i)[FROM].GetInt();
             int toStateId = (*i)[TO].GetInt();
 
+            // If from state id is outside bound
+            if(fromStateId < 0 || fromStateId >= graph->states.size()) {
+                throw std::runtime_error("A transition must have a defined source and destination states: "
+                                                 "from state " + fromStateId);
+            }
+
+            // If to state id is outside bound
+            if(toStateId < 0 || toStateId >= graph->states.size()) {
+                throw std::runtime_error("A transition must have a defined source and destination states: "
+                                                 "to state " + toStateId);
+            }
+
             // State of type initial cannot have incoming transitions
             if(graph->getStateById(toStateId)->getType() == State::INITIAL && fromStateId != toStateId) {
                 throw std::runtime_error("A state of type initial cannot have incoming transitions (except from itself)");

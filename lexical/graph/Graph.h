@@ -70,7 +70,7 @@ namespace ecc {
             }
             return os;
         }
-};
+    };
 }
 
 #endif
