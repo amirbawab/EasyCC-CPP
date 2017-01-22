@@ -4,4 +4,5 @@
 TEST(GraphTest, buildGraph_graph_test1) {
     ecc::Graph::buildGraph("resources/test/lexical/graph/graph_test1.json");
 
+    
 }

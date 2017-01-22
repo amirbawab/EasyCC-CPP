@@ -13,20 +13,6 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-##### TEST ######
-ADD_SUBDIRECTORY (gtest-1.6.0)
-enable_testing()
-include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
-
-file(GLOB_RECURSE easycctests_SRC
-    "test/*.h"
-    "test/*.cpp"
-)
-
-add_executable(easycctests ${easycctests_SRC})
-target_link_libraries(easycctests gtest gtest_main)
-add_test(easycctests easycctests)
-
 ##### APP #####
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
@@ -72,7 +58,20 @@ set(SOURCE_FILES
     rapidjson/stream.h
     rapidjson/stringbuffer.h
     rapidjson/writer.h
-        src/EasyCC.cpp lexical/config/Config.cpp lexical/config/Config.h lexical/token/LexicalToken.cpp lexical/token/LexicalToken.h lexical/config/Messages.cpp lexical/config/Messages.h syntax/grammar/Grammar.cpp syntax/grammar/Grammar.h syntax/Syntax.cpp syntax/Syntax.h)
+         lexical/config/Config.cpp lexical/config/Config.h lexical/token/LexicalToken.cpp lexical/token/LexicalToken.h lexical/config/Messages.cpp lexical/config/Messages.h syntax/grammar/Grammar.cpp syntax/grammar/Grammar.h syntax/Syntax.cpp syntax/Syntax.h)
 
-add_executable(EasyCC_CPP ${SOURCE_FILES})
+add_executable(EasyCC_CPP ${SOURCE_FILES} src/EasyCC.cpp)
 
+##### TEST ######
+ADD_SUBDIRECTORY (gtest-1.6.0)
+enable_testing()
+include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+
+file(GLOB_RECURSE easycctests_SRC
+        "test/*.h"
+        "test/*.cpp"
+        )
+
+add_executable(easycctests ${SOURCE_FILES} ${easycctests_SRC})
+target_link_libraries(easycctests gtest gtest_main)
+add_test(easycctests easycctests)
