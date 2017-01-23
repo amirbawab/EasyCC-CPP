@@ -131,6 +131,11 @@ namespace ecc {
                 errorMessages.push_back(generateErrorMessage(token));
             }
         }
+
+        // Add final token
+        lexicalVector.push_back(std::make_shared<LexicalToken>(
+                LexicalToken::Type::NORMAL_FINAL_TOKEN, "$",
+                "$", line, column, position));
     }
 
     std::shared_ptr<LexicalToken> Lexical::createToken(

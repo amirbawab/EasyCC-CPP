@@ -11,7 +11,8 @@ namespace ecc {
         // Set the token types
         enum Type {
             ERROR_TOKEN,
-            NORMAL_TOKEN
+            NORMAL_TOKEN,
+            NORMAL_FINAL_TOKEN
         };
 
         LexicalToken(LexicalToken::Type type,std::string name, std::string value, int line, int column, int position) :
