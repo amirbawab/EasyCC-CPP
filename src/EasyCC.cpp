@@ -11,9 +11,9 @@ int main() {
 
     // Lexical analysis phase
     Lexical lexical(
-			"resources/src/state_machine.json",
-			"resources/src/config.json",
-            "resources/src/errors.json");
+			"resources/src/lexical_state_machine.json",
+			"resources/src/lexical_config.json",
+            "resources/src/lexical_errors.json");
 
 	std::vector<std::shared_ptr<LexicalToken>> lexicalTokens;
 	std::vector<std::string> errorMessages;
@@ -31,7 +31,7 @@ int main() {
     }
 
     // Syntax analysis phase
-    Syntax syntax("resources/src/grammar.txt");
+    Syntax syntax("resources/src/syntax_grammar.txt");
 
 	return 0;
 }
