@@ -100,6 +100,7 @@ The state machine is provided as a json file with the follwoing syntax:
 ```
 {
     "newline": "...",
+    "end_of_file": "...",
     "ignore": {
         "prefix": "...",
         "suffix": "...",
@@ -142,6 +143,17 @@ The state machine is provided as a json file with the follwoing syntax:
     - `CR`: \r<br/>
     - `LF`: \n<br/>
     - `CRLF`: \r\n<br/>
+    </td>
+    <td>-</td>
+  </tr>
+  <tr>
+    <td>-</td>
+    <td>-</td>
+    <td>end_of_file</td>
+    <td>
+    At the end of the lexical analysis, the program injects an end of file symbol in the generated lexical tokens.
+    This is useful in the syntax analysis when the error messages at that level are defined, the user can refer to the
+    end of file symbol using the written value in this configuration file.
     </td>
     <td>-</td>
   </tr>
