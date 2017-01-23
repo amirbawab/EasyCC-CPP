@@ -7,6 +7,9 @@
 #include <boost/algorithm/string/trim.hpp>
 
 namespace ecc {
+
+    const std::string Grammar::EPSILON = "EPSILON";
+
     Grammar::Grammar(std::string grammarFile) {
 
         // Load file
@@ -17,6 +20,18 @@ namespace ecc {
         std::string lastNonTerminal;
         while (std::getline(file, line)) {
             parseGrammarLine(line, lastNonTerminal);
+        }
+
+        // Construct the first set
+        computeFirstSet();
+
+        // Print first set
+        for(auto entry : firstSet) {
+            std::cout << entry.first << ": ";
+            for(auto token : *entry.second) {
+                std::cout << token << ", ";
+            }
+            std::cout << std::endl;
         }
     }
 
@@ -80,9 +95,14 @@ namespace ecc {
                 productionVector.erase(productionVector.begin());
             }
 
+            // If production of LHS was not created, create one
+            if(!productions[LHS]) {
+                productions[LHS] = std::make_shared<std::vector<std::shared_ptr<std::vector<std::string>>>>();
+            }
+
             // Resize corresponding vector
-            size_t prevSize = productions[LHS].size();
-            productions[LHS].resize(prevSize + productionVector.size());
+            size_t prevSize = productions[LHS]->size();
+            productions[LHS]->resize(prevSize + productionVector.size());
 
             // Split production by spaces
             for (size_t i = 0; i < productionVector.size(); i++) {
@@ -93,18 +113,23 @@ namespace ecc {
                 } else {
                     std::istringstream productionss(productionVector[i]);
 
+                    // If production not created, create it
+                    if(!(*productions[LHS])[i + prevSize]) {
+                        (*productions[LHS])[i + prevSize] = std::make_shared<std::vector<std::string>>();
+                    }
+
                     // Read word by word
                     std::string word;
                     while (productionss >> word) {
 
                         // Check if a terminal or an epsilon is defined correctly
                         if((Grammar::isTerminal(word) || Grammar::isEpsilon(word)) &&
-                           (productions[LHS][i + prevSize].size() != 0 ||
+                           ((*productions[LHS])[i + prevSize]->size() != 0 ||
                             productionss.rdbuf()->in_avail() != 0)) {
                             throw std::runtime_error("A production containing a terminal or an epsilon token "
                                                              "cannot be followed or preceded by other tokens.");
                         }
-                        productions[LHS][i + prevSize].push_back(word);
+                        (*productions[LHS])[i + prevSize]->push_back(word);
                     }
                 }
             }
@@ -122,6 +147,69 @@ namespace ecc {
     }
 
     bool Grammar::isEpsilon(std::string token) {
-        return token == "EPSILON";
+        return token == Grammar::EPSILON;
+    }
+
+    void Grammar::computeFirstSet() {
+
+        // Compute the first set multiple times
+        for(int z=0; z<productions.size(); z++) {
+
+            // Loop on all definitions
+            for(auto definition : productions) {
+
+                // If first set for a LHS is not defined
+                if(!firstSet[definition.first]) {
+                    firstSet[definition.first] = std::make_shared<std::set<std::string>>();
+                }
+
+                // Loop on all productions of a definition
+                for(auto production : *definition.second) {
+
+                    // If set not created for a production, create it
+                    if(!productionFirstSet[production]) {
+                        productionFirstSet[production] = std::make_shared<std::set<std::string>>();
+                    }
+
+                    // Loop on all tokens of a production
+                    for(auto const &token : *production) {
+
+                        // If terminal
+                        if(Grammar::isTerminal(token) || Grammar::isEpsilon(token)) {
+                            productionFirstSet[production]->insert(token);
+                            firstSet[definition.first]->insert(token);
+
+                        } else if(Grammar::isNonTerminal(token)) {
+                            std::shared_ptr<std::set<std::string>> tokenFirstSet = getFirstSet(token);
+
+                            // If set was defined previously
+                            if(tokenFirstSet) {
+                                // If epsilon not found in the first set of the token or it's the last token
+                                if(tokenFirstSet->find(Grammar::EPSILON) == tokenFirstSet->end() || token == production->back()) {
+                                    productionFirstSet[production]->insert(tokenFirstSet->begin(), tokenFirstSet->end());
+                                    firstSet[definition.first]->insert(tokenFirstSet->begin(), tokenFirstSet->end());
+                                    break;
+                                } else {
+                                    // Add everything except the epsilon
+                                    for(auto firstSetToken : *tokenFirstSet) {
+                                        if(!Grammar::isEpsilon(firstSetToken)) {
+                                            productionFirstSet[production]->insert(firstSetToken);
+                                            firstSet[definition.first]->insert(firstSetToken);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    std::shared_ptr<std::set<std::string>> Grammar::getFirstSet(std::string token) {
+        if(Grammar::isNonTerminal(token)) {
+            return firstSet[token];
+        }
+        return nullptr;
     }
 }
