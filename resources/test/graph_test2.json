@@ -1,0 +1,21 @@
+{
+    "description":"ID Order matter",
+
+    "states": [
+        {
+            "type": "INITIAL",
+            "id": 0
+        },
+        {
+            "type": "NORMAL",
+            "id": 2
+        },
+        {
+            "type": "FINAL",
+            "id": 3,
+            "token": "",
+            "backtrack": false
+        }
+    ],
+    "transitions": []
+}

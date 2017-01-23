@@ -1,0 +1,27 @@
+{
+    "description":"Outgoing edge for the final state",
+
+    "states": [
+        {
+            "type": "INITIAL",
+            "id": 0
+        },
+        {
+            "type": "NORMAL",
+            "id": 1
+        },
+        {
+            "type": "FINAL",
+            "id": 2,
+            "token": "",
+            "backtrack": false
+        }
+    ],
+    "transitions": [
+        {
+          "from": 2,
+          "to": 2,
+          "chars": []
+        }
+    ]
+}

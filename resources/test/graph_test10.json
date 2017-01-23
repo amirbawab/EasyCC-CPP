@@ -1,0 +1,21 @@
+{
+    "description":"No initial state",
+
+    "states": [
+        {
+            "type": "NORMAL",
+            "id": 0
+        },
+        {
+            "type": "NORMAL",
+            "id": 1
+        },
+        {
+            "type": "FINAL",
+            "id": 2,
+            "token": "",
+            "backtrack": false
+        }
+    ],
+    "transitions": []
+}

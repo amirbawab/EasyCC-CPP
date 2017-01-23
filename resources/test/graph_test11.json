@@ -1,0 +1,27 @@
+{
+    "description":"No OTHER label for initial",
+
+    "states": [
+        {
+            "type": "INITIAL",
+            "id": 0
+        },
+        {
+            "type": "NORMAL",
+            "id": 1
+        },
+        {
+            "type": "FINAL",
+            "id": 2,
+            "token": "",
+            "backtrack": false
+        }
+    ],
+    "transitions": [
+        {
+          "from": 1,
+          "to": 2,
+          "chars": ["OTHER"]
+        }
+    ]
+}

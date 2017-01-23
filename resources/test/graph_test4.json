@@ -1,0 +1,21 @@
+{
+    "description":"Undefined state type",
+
+    "states": [
+        {
+            "type": "INITIAL",
+            "id": 0
+        },
+        {
+            "type": "UNDEFINED_TYPE_HERE",
+            "id": 1
+        },
+        {
+            "type": "FINAL",
+            "id": 2,
+            "token": "",
+            "backtrack": false
+        }
+    ],
+    "transitions": []
+}

@@ -54,14 +54,14 @@ namespace ecc {
             int stateId = (*i)[ID].GetInt();
             const char* type = (*i)[TYPE].GetString();
 
-            // If id already used before
-            if(graph->states[stateId]) {
-                throw std::runtime_error("Multiple definition for the state: " + std::to_string(stateId));
-            }
-
             // If id is outside bound
             if(stateId < 0 || stateId >= graph->states.size()) {
                 throw std::runtime_error("State id must be consecutive (order does not matter) starting from 0");
+            }
+
+            // If id already used before
+            if(graph->states[stateId]) {
+                throw std::runtime_error("Multiple definition for the state: " + std::to_string(stateId));
             }
 
             // Check the type
@@ -98,14 +98,14 @@ namespace ecc {
 
             // If from state id is outside bound
             if(fromStateId < 0 || fromStateId >= graph->states.size()) {
-                throw std::runtime_error("A transition must have a defined source and destination states: "
-                                                 "from state " + fromStateId);
+                throw std::runtime_error(std::string("A transition must have a defined source and destination states: "
+                                                 "from state ") + std::to_string(fromStateId));
             }
 
             // If to state id is outside bound
             if(toStateId < 0 || toStateId >= graph->states.size()) {
-                throw std::runtime_error("A transition must have a defined source and destination states: "
-                                                 "to state " + toStateId);
+                throw std::runtime_error(std::string("A transition must have a defined source and destination states: "
+                                                 "to state ") + std::to_string(toStateId));
             }
 
             // State of type initial cannot have incoming transitions

@@ -1,0 +1,21 @@
+{
+    "description":"Can't have more than one initial",
+
+    "states": [
+        {
+            "type": "INITIAL",
+            "id": 0
+        },
+        {
+            "type": "INITIAL",
+            "id": 1
+        },
+        {
+            "type": "FINAL",
+            "id": 2,
+            "token": "",
+            "backtrack": false
+        }
+    ],
+    "transitions": []
+}

@@ -1,0 +1,27 @@
+{
+    "description":"No OTHER transition label for normal",
+
+    "states": [
+        {
+            "type": "INITIAL",
+            "id": 0
+        },
+        {
+            "type": "NORMAL",
+            "id": 1
+        },
+        {
+            "type": "FINAL",
+            "id": 2,
+            "token": "",
+            "backtrack": false
+        }
+    ],
+    "transitions": [
+        {
+          "from": 0,
+          "to": 1,
+          "chars": ["OTHER"]
+        }
+    ]
+}
