@@ -24,15 +24,6 @@ namespace ecc {
 
         // Construct the first set
         computeFirstSet();
-
-        // Print first set
-        for(auto entry : firstSet) {
-            std::cout << entry.first << ": ";
-            for(auto token : *entry.second) {
-                std::cout << token << ", ";
-            }
-            std::cout << std::endl;
-        }
     }
 
     void Grammar::parseGrammarLine(std::string line, std::string &lastNonTerminal) {
@@ -198,6 +189,11 @@ namespace ecc {
                                         }
                                     }
                                 }
+                            } else {
+                                // This is important because the order of non-terminals matter
+                                // especially if we don't know if there's epsilon or not
+                                // so the next one should not be evaluated until the current is ready
+                                break;
                             }
                         }
                     }
