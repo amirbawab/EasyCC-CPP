@@ -25,6 +25,19 @@ namespace ecc {
 
         // Construct the first set
         computeFirstSet();
+
+        // Construct the follow set
+        computFollowSet();
+
+        // Print follow set
+        for(auto entry : followSet) {
+            std::cout << entry.first << ": ";
+            for(auto val : *entry.second) {
+                std::cout << val << ", ";
+            }
+            std::cout << std::endl;
+        }
+        std::cout << "DONE" << std::endl;
     }
 
     void Grammar::parseGrammarLine(std::string line, std::string &lastNonTerminal) {
@@ -93,7 +106,7 @@ namespace ecc {
             }
 
             // If production of LHS was not created, create one
-            if(!productions[LHS]) {
+            if(productions.count(LHS) == 0) {
                 productions[LHS] = std::make_shared<std::vector<std::shared_ptr<std::vector<std::string>>>>();
             }
 
@@ -156,7 +169,7 @@ namespace ecc {
             for(auto &definition : productions) {
 
                 // If first set for a LHS is not defined
-                if(!firstSet[definition.first]) {
+                if(firstSet.count(definition.first) == 0) {
                     firstSet[definition.first] = std::make_shared<std::set<std::string>>();
                 }
 
@@ -164,7 +177,7 @@ namespace ecc {
                 for(auto &production : *definition.second) {
 
                     // If set not created for a production, create it
-                    if(!productionFirstSet[production]) {
+                    if(productionFirstSet.count(production) == 0) {
                         productionFirstSet[production] = std::make_shared<std::set<std::string>>();
                     }
 
@@ -209,7 +222,7 @@ namespace ecc {
     }
 
     std::shared_ptr<std::set<std::string>> Grammar::getFirstSet(std::string token) {
-        if(Grammar::isNonTerminal(token)) {
+        if(Grammar::isNonTerminal(token) && firstSet.count(token)) {
             return firstSet[token];
         }
         return nullptr;
@@ -218,7 +231,7 @@ namespace ecc {
     void Grammar::computFollowSet() {
 
         // Add end of stack to the follow set of the start grammar
-        followSet[start] =std::make_shared<std::shared_ptr<std::set<std::string>>>();
+        followSet[start] = std::make_shared<std::set<std::string>>();
         followSet[start]->insert(Grammar::END_OF_STACK);
 
         // Compute the follow set multiple times
@@ -236,13 +249,13 @@ namespace ecc {
                         // Store current token
                         std::string current = (*production)[0];
 
-                        // If set not created, create it
-                        if(followSet.count(current) == 0) {
-                            followSet[current] = std::make_shared<std::shared_ptr<std::set<std::string>>>();
-                        }
-
                         // If a non-terminal token, evaluate it
                         if(Grammar::isNonTerminal(current)) {
+                            
+                            // If set not created, create it
+                            if(followSet.count(current) == 0) {
+                                followSet[current] = std::make_shared<std::set<std::string>>();
+                            }
 
                             int j = i;
                             while(++j < production->size()) {
