@@ -9,6 +9,7 @@
 namespace ecc {
 
     const std::string Grammar::EPSILON = "EPSILON";
+    const std::string Grammar::END_OF_STACK = "END_OF_STACK";
 
     Grammar::Grammar(std::string grammarFile) {
 
@@ -38,6 +39,11 @@ namespace ecc {
 
             // Update last non-terminal
             lastNonTerminal = words[0];
+
+            // Update start token
+            if(start.empty()) {
+                start = lastNonTerminal;
+            }
 
         } else if(words.size() == 1) {
 
@@ -147,7 +153,7 @@ namespace ecc {
         for(int z=0; z<productions.size(); z++) {
 
             // Loop on all definitions
-            for(auto definition : productions) {
+            for(auto &definition : productions) {
 
                 // If first set for a LHS is not defined
                 if(!firstSet[definition.first]) {
@@ -155,7 +161,7 @@ namespace ecc {
                 }
 
                 // Loop on all productions of a definition
-                for(auto production : *definition.second) {
+                for(auto &production : *definition.second) {
 
                     // If set not created for a production, create it
                     if(!productionFirstSet[production]) {
@@ -207,5 +213,75 @@ namespace ecc {
             return firstSet[token];
         }
         return nullptr;
+    }
+
+    void Grammar::computFollowSet() {
+
+        // Add end of stack to the follow set of the start grammar
+        followSet[start] =std::make_shared<std::shared_ptr<std::set<std::string>>>();
+        followSet[start]->insert(Grammar::END_OF_STACK);
+
+        // Compute the follow set multiple times
+        for(int z=0; z <productions.size(); z++) {
+
+            // Loop on definitions
+            for(auto &definition : productions) {
+
+                // Loop on productions
+                for(auto &production : *definition.second) {
+
+                    // Loop on tokens
+                    for(int i=0; i < production->size(); i++) {
+
+                        // Store current token
+                        std::string current = (*production)[0];
+
+                        // If set not created, create it
+                        if(followSet.count(current) == 0) {
+                            followSet[current] = std::make_shared<std::shared_ptr<std::set<std::string>>>();
+                        }
+
+                        // If a non-terminal token, evaluate it
+                        if(Grammar::isNonTerminal(current)) {
+
+                            int j = i;
+                            while(++j < production->size()) {
+
+                                // Get token
+                                std::string token = (*production)[j];
+
+                                // Get first set
+                                std::shared_ptr<std::set<std::string>> tokenFirstSet = getFirstSet(token);
+
+                                // If first set defined
+                                if(tokenFirstSet) {
+
+                                    // Check if there's an epsilon
+                                    bool noEpsilon = true;
+
+                                    // Copy the tokens
+                                    for(auto value : *tokenFirstSet) {
+                                        noEpsilon &= !Grammar::isEpsilon(value);
+                                        followSet[current]->insert(value);
+                                    }
+
+                                    // Break on epsilon
+                                    if(noEpsilon) {
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if(j == production->size()) {
+                                if(followSet.count(definition.first) == 1) {
+                                    followSet[current]->insert(followSet[definition.first]->begin(),
+                                                               followSet[definition.first]->end());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

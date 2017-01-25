@@ -11,6 +11,7 @@ namespace ecc {
     class Grammar {
     public:
         static const std::string EPSILON;
+        static const std::string END_OF_STACK;
         Grammar(std::string grammarFile);
         static bool isTerminal(std::string token);
         static bool isNonTerminal(std::string token);
@@ -24,9 +25,11 @@ namespace ecc {
         std::shared_ptr<std::set<std::string>> getFirstSet(std::string token);
 
     private:
+        std::string start;
         std::map<std::string, std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::string>>>>> productions;
         std::map<std::shared_ptr<std::vector<std::string>>, std::shared_ptr<std::set<std::string>>> productionFirstSet;
         std::map<std::string, std::shared_ptr<std::set<std::string>>> firstSet;
+        std::map<std::string, std::shared_ptr<std::set<std::string>>> followSet;
 
         /**
          * Parse one line of the grammar file
@@ -43,10 +46,14 @@ namespace ecc {
         void processDefinition(std::string &LHS, std::string &RHS, bool completeDefinition);
 
         /**
-         * Computer the first set
+         * Compute the first set
          */
         void computeFirstSet();
 
+        /**
+         * Compute the follow set
+         */
+        void computFollowSet();
     };
 }
 
