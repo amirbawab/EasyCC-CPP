@@ -29,6 +29,9 @@ namespace ecc {
         // Construct the follow set
         computFollowSet();
 
+        // Validate LL conditions
+        validate();
+
         // Print follow set
         for(auto entry : followSet) {
             std::cout << entry.first << ": ";
@@ -251,7 +254,7 @@ namespace ecc {
 
                         // If a non-terminal token, evaluate it
                         if(Grammar::isNonTerminal(current)) {
-                            
+
                             // If set not created, create it
                             if(followSet.count(current) == 0) {
                                 followSet[current] = std::make_shared<std::set<std::string>>();
@@ -296,5 +299,81 @@ namespace ecc {
                 }
             }
         }
+    }
+
+    void Grammar::validate() {
+
+        // Cond 1
+        for(auto definition : productions) {
+            std::string leftRecusiveToken = getLeftRecursion(definition.first, std::set<std::string>());
+            if (!leftRecusiveToken.empty()) {
+                throw std::runtime_error("Left hand side: " + leftRecusiveToken + " has a left recursion");
+            }
+        }
+
+        // Loop on non-terminal
+        for(auto definition : productions) {
+
+            // Cond 2
+            std::set<std::string> uniqueFirstSetValues;
+            for(auto production : *productions[definition.first]) {
+                for(auto token : *productionFirstSet[production]) {
+                    if(uniqueFirstSetValues.find(token) != uniqueFirstSetValues.end()) {
+                        throw std::runtime_error("The first set of the rules of the non-terminal: " +
+                                                         definition.first + " intersect at " + token);
+                    } else {
+                        uniqueFirstSetValues.insert(token);
+                    }
+                }
+            }
+
+            // Cond 3
+            if(uniqueFirstSetValues.find(Grammar::EPSILON) != uniqueFirstSetValues.end()) {
+                // Get the follow set
+                std::shared_ptr<std::set<std::string>> tokenFollowSet = followSet[definition.first];
+                for(std::string token : uniqueFirstSetValues) {
+                    if(tokenFollowSet->find(token) != tokenFollowSet->end()) {
+                        std::stringstream intersection;
+                        std::copy(uniqueFirstSetValues.begin(), uniqueFirstSetValues.end(), std::ostream_iterator<std::string>(intersection, " "));
+                        throw std::runtime_error("The first and follow sets of the non-terminal: " + definition.first + " intersect at " + intersection.str());
+                    }
+                }
+            }
+        }
+    }
+
+    std::string Grammar::getLeftRecursion(std::string token, std::set<std::string> visited) {
+
+        // If visited more than once
+        if(visited.find(token) != visited.end()) {
+            return token;
+        }
+
+        // Mark non terminal as visited
+        visited.insert(token);
+
+        for(auto production : *productions[token]) {
+            for(std::string syntaxToken : *production) {
+                if(Grammar::isNonTerminal(syntaxToken)) {
+
+                    // Check recursively for left-recursion
+                    std::string result = getLeftRecursion(syntaxToken, visited);
+                    if(!result.empty()) {
+                        return result;
+                    }
+
+                    // Stop checking when the first set of non-terminal does not contain epsilon
+                    if(firstSet[syntaxToken]->find(Grammar::EPSILON) == firstSet[syntaxToken]->end()) {
+                        break;
+                    }
+                } else if(Grammar::isTerminal(syntaxToken)) {
+                    // Stop checking if token is a terminal
+                    break;
+                }
+            }
+        }
+
+        // No left recursion found
+        return "";
     }
 }

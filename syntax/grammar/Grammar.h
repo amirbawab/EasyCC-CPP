@@ -54,6 +54,23 @@ namespace ecc {
          * Compute the follow set
          */
         void computFollowSet();
+
+        /**
+        * Check if the grammar is LL
+        * A -> B | C
+        * Cond 1: No left recursion
+        * Cond 2: First(B) ^ First(C) = {}
+        * Cond 3: If First(A) contains "", then First(A) & Follow(A) = {}
+        */
+        void validate();
+
+        /**
+         * Checks if the grammar has left recursion
+         * @param token
+         * @param visitedNonTerminals
+         * @return token if left recursion detected. Otherwise return null
+         */
+        std::string getLeftRecursion(std::string token, std::set<std::string> visited);
     };
 }
 
