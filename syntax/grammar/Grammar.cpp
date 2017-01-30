@@ -281,8 +281,11 @@ namespace ecc {
 
                                     // Copy the tokens
                                     for(auto value : *tokenFirstSet) {
-                                        noEpsilon &= !Grammar::isEpsilon(value);
-                                        followSet[current]->insert(value);
+                                        if(!Grammar::isEpsilon(value)) {
+                                            followSet[current]->insert(value);
+                                        } else {
+                                            noEpsilon = false;
+                                        }
                                     }
 
                                     // Break on epsilon
@@ -306,10 +309,6 @@ namespace ecc {
     }
 
     void Grammar::validate() {
-
-        // TODO: Test the following grammar, must give left-recursion:
-        // A -> B A | a
-        // B -> EPSILON | b
 
         // Cond 1
         for(auto definition : productions) {
