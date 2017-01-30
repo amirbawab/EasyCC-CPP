@@ -28,9 +28,9 @@ void init_log() {
             boost::log::keywords::format = "[%TimeStamp%]: %Message%"
     );
     logging::add_file_log(
-            keywords::file_name = "sample_%N.log",
-            keywords::rotation_size = 10 * 1024 * 1024,                                   /* rotate files every 10 MiB... */
-            keywords::time_based_rotation = sinks::file::rotation_at_time_point(0, 0, 0), /* ...or at midnight            */
+            keywords::file_name = "logs_%N.log",
+            keywords::rotation_size = 10 * 1024 * 1024,
+            keywords::time_based_rotation = sinks::file::rotation_at_time_point(0, 0, 0),
             keywords::auto_flush = true,
             keywords::format = "[%TimeStamp%]: %Message%"
     );
@@ -41,10 +41,6 @@ int main() {
 
     // Configure the logger
     init_log();
-
-    // Test logging system
-    src::logger_mt& lg = ecc_logger::get();
-    BOOST_LOG(lg) << "Hello world";
 
     // Lexical analysis phase
     Lexical lexical(
