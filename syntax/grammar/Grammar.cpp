@@ -245,16 +245,16 @@ namespace ecc {
         for(int z=0; z <productions.size(); z++) {
 
             // Loop on definitions
-            for(auto &definition : productions) {
+            for(auto definition : productions) {
 
                 // Loop on productions
-                for(auto &production : *definition.second) {
+                for(auto production : *definition.second) {
 
                     // Loop on tokens
                     for(int i=0; i < production->size(); i++) {
 
                         // Store current token
-                        std::string current = (*production)[0];
+                        std::string current = (*production)[i];
 
                         // If a non-terminal token, evaluate it
                         if(Grammar::isNonTerminal(current)) {
