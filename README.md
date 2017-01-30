@@ -4,7 +4,7 @@ EasyCC C++
 ### Requirements
 * Boost 1.63.0
 ```
-# Remove old bootstrap (Optional)
+# Remove old Boost (Optional)
 sudo apt-get autoremove libboost1.58-dev
 
 # Start a new installation
