@@ -6,6 +6,12 @@
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/trim.hpp>
 
+#include <boost/log/sources/logger.hpp>
+#include <boost/log/sources/record_ostream.hpp>
+#include <boost/log/sources/global_logger_storage.hpp>
+namespace src = boost::log::sources;
+BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(ecc_logger, src::logger_mt)
+
 namespace ecc {
 
     const std::string Grammar::EPSILON = "EPSILON";
@@ -23,24 +29,22 @@ namespace ecc {
             parseGrammarLine(line, lastNonTerminal);
         }
 
+        BOOST_LOG(ecc_logger::get()) << "Computing first set ...";
+
         // Construct the first set
         computeFirstSet();
+
+        BOOST_LOG(ecc_logger::get()) << "Computing follow set ...";
 
         // Construct the follow set
         computFollowSet();
 
+        BOOST_LOG(ecc_logger::get()) << "Checking if the grammar satisfies the LL conditions ...";
+
         // Validate LL conditions
         validate();
 
-        // Print follow set
-        for(auto entry : followSet) {
-            std::cout << entry.first << ": ";
-            for(auto val : *entry.second) {
-                std::cout << val << ", ";
-            }
-            std::cout << std::endl;
-        }
-        std::cout << "DONE" << std::endl;
+        BOOST_LOG(ecc_logger::get()) << "Grammar parsed successfully!";
     }
 
     void Grammar::parseGrammarLine(std::string line, std::string &lastNonTerminal) {
@@ -303,6 +307,10 @@ namespace ecc {
 
     void Grammar::validate() {
 
+        // TODO: Test the following grammar, must give left-recursion:
+        // A -> B A | a
+        // B -> EPSILON | b
+
         // Cond 1
         for(auto definition : productions) {
             std::string leftRecusiveToken = getLeftRecursion(definition.first, std::set<std::string>());
@@ -311,10 +319,8 @@ namespace ecc {
             }
         }
 
-        // Loop on non-terminal
+        // Cond 2
         for(auto definition : productions) {
-
-            // Cond 2
             std::set<std::string> uniqueFirstSetValues;
             for(auto production : *productions[definition.first]) {
                 for(auto token : *productionFirstSet[production]) {
@@ -326,16 +332,20 @@ namespace ecc {
                     }
                 }
             }
+        }
 
-            // Cond 3
-            if(uniqueFirstSetValues.find(Grammar::EPSILON) != uniqueFirstSetValues.end()) {
+        // Cond 3
+        for(auto definition : productions) {
+            if (firstSet[definition.first]->find(Grammar::EPSILON) != firstSet[definition.first]->end()) {
                 // Get the follow set
                 std::shared_ptr<std::set<std::string>> tokenFollowSet = followSet[definition.first];
-                for(std::string token : uniqueFirstSetValues) {
-                    if(tokenFollowSet->find(token) != tokenFollowSet->end()) {
+                for (std::string token : *firstSet[definition.first]) {
+                    if (tokenFollowSet->find(token) != tokenFollowSet->end()) {
                         std::stringstream intersection;
-                        std::copy(uniqueFirstSetValues.begin(), uniqueFirstSetValues.end(), std::ostream_iterator<std::string>(intersection, " "));
-                        throw std::runtime_error("The first and follow sets of the non-terminal: " + definition.first + " intersect at " + intersection.str());
+                        std::copy(firstSet[definition.first]->begin(), firstSet[definition.first]->end(),
+                                  std::ostream_iterator<std::string>(intersection, " "));
+                        throw std::runtime_error("The first and follow sets of the non-terminal: " + definition.first +
+                                                 " intersect at " + intersection.str());
                     }
                 }
             }
