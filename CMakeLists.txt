@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(EasyCC_CPP)
 set(CMAKE_VERBOSE_MAKEFILE ON)
+set(PROJECT_TEST "easycctests")
 
 ##### RESOURCES #####
 file(GLOB resources_SRC "resources/src/*")
@@ -14,7 +15,9 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 ##### APP #####
-find_package(Boost COMPONENTS system filesystem REQUIRED)
+ADD_DEFINITIONS(-DBOOST_LOG_DYN_LINK)
+find_package(Boost 1.63.0 COMPONENTS log log_setup thread date_time filesystem system REQUIRED)
+link_libraries(${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES} ${Boost_LIBRARIES})
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 set(SOURCE_FILES
@@ -61,8 +64,9 @@ set(SOURCE_FILES
     rapidjson/writer.h
          lexical/config/Config.cpp lexical/config/Config.h lexical/token/LexicalToken.cpp lexical/token/LexicalToken.h lexical/config/Messages.cpp lexical/config/Messages.h syntax/grammar/Grammar.cpp syntax/grammar/Grammar.h syntax/Syntax.cpp syntax/Syntax.h)
 
-add_executable(EasyCC_CPP ${SOURCE_FILES} src/EasyCC.cpp)
-target_link_libraries(EasyCC_CPP
+add_executable(${PROJECT_NAME} ${SOURCE_FILES} src/EasyCC.cpp)
+target_link_libraries(${PROJECT_NAME} -lpthread)
+target_link_libraries(${PROJECT_NAME}
         ${Boost_FILESYSTEM_LIBRARY}
         ${Boost_SYSTEM_LIBRARY}
         )
