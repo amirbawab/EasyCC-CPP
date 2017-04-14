@@ -11,24 +11,270 @@
         {
             "type": "FINAL",
             "id": 2,
-            "token": "T_WORD",
+            "token": "T_ASSIGN",
             "backtrack": true
-        },
-        {
-            "type": "NORMAL",
-            "id": 3
         },
         {
             "type": "FINAL",
-            "id": 4,
-            "token": "T_NUMBER",
-            "backtrack": true
+            "id": 3,
+            "token": "T_IS_EQUAL",
+            "backtrack": false
+        },
+        {
+            "type": "NORMAL",
+            "id": 4
         },
         {
             "type": "FINAL",
             "id": 5,
-            "token": "T_INVALID_CHAR",
+            "token": "T_LESS_THAN",
+            "backtrack": true
+        },
+        {
+            "type": "FINAL",
+            "id": 6,
+            "token": "T_LESS_OR_EQUAL",
             "backtrack": false
+        },
+        {
+            "type": "FINAL",
+            "id": 7,
+            "token": "T_IS_NOT_EQUAL",
+            "backtrack": false
+        },
+        {
+            "type": "NORMAL",
+            "id": 8
+        },
+        {
+            "type": "FINAL",
+            "id": 9,
+            "token": "T_GREATER_THAN",
+            "backtrack": true
+        },
+        {
+            "type": "FINAL",
+            "id": 10,
+            "token": "T_GREATER_OR_EQUAL",
+            "backtrack": false
+        },
+        {
+            "type": "FINAL",
+            "id": 11,
+            "token": "T_SEMICOLON",
+            "backtrack": false
+        },
+        {
+            "type": "FINAL",
+            "id": 12,
+            "token": "T_COMMA",
+            "backtrack": false
+        },
+        {
+            "type": "FINAL",
+            "id": 13,
+            "token": "T_DOT",
+            "backtrack": false
+        },
+        {
+            "type": "FINAL",
+            "id": 14,
+            "token": "T_PLUS",
+            "backtrack": false
+        },
+        {
+            "type": "FINAL",
+            "id": 15,
+            "token": "T_MINUS",
+            "backtrack": false
+        },
+        {
+            "type": "FINAL",
+            "id": 16,
+            "token": "T_MULTIPLY",
+            "backtrack": false
+        },
+        {
+            "type": "NORMAL",
+            "id": 17
+        },
+        {
+            "type": "FINAL",
+            "id": 18,
+            "token": "T_DIVIDE",
+            "backtrack": true
+        },
+        {
+            "type": "NORMAL",
+            "id": 19
+        },
+        {
+            "type": "NORMAL",
+            "id": 20
+        },
+        {
+            "type": "NORMAL",
+            "id": 21
+        },
+        {
+            "type": "FINAL",
+            "id": 22,
+            "token": "T_BLOCK_COMMENT",
+            "backtrack": false
+        },
+        {
+            "type": "FINAL",
+            "id": 23,
+            "token": "T_OPEN_PAREN",
+            "backtrack": false
+        },
+        {
+            "type": "FINAL",
+            "id": 24,
+            "token": "T_CLOSE_PAREN",
+            "backtrack": false
+        },
+        {
+            "type": "FINAL",
+            "id": 25,
+            "token": "T_OPEN_CURLY",
+            "backtrack": false
+        },
+        {
+            "type": "FINAL",
+            "id": 26,
+            "token": "T_CLOSE_CURLY",
+            "backtrack": false
+        },
+        {
+            "type": "FINAL",
+            "id": 27,
+            "token": "T_OPEN_SQUARE",
+            "backtrack": false
+        },
+        {
+            "type": "FINAL",
+            "id": 28,
+            "token": "T_CLOSE_SQUARE",
+            "backtrack": false
+        },
+        {
+            "type": "NORMAL",
+            "id": 29
+        },
+        {
+            "type": "FINAL",
+            "id": 30,
+            "token": "T_IDENTIFIER",
+            "backtrack": true
+        },
+        {
+            "type": "NORMAL",
+            "id": 31
+        },
+        {
+            "type": "NORMAL",
+            "id": 32
+        },
+        {
+            "type": "NORMAL",
+            "id": 33
+        },
+        {
+            "type": "FINAL",
+            "id": 34,
+            "token": "T_FLOAT",
+            "backtrack": true
+        },
+        {
+            "type": "NORMAL",
+            "id": 35
+        },
+        {
+            "type": "FINAL",
+            "id": 36,
+            "token": "T_ERR_TRAILING_ZERO",
+            "backtrack": true
+        },
+        {
+            "type": "NORMAL",
+            "id": 37
+        },
+        {
+            "type": "FINAL",
+            "id": 38,
+            "token": "T_INTEGER",
+            "backtrack": true
+        },
+        {
+            "type": "NORMAL",
+            "id": 39
+        },
+        {
+            "type": "FINAL",
+            "id": 40,
+            "token": "T_ERR_LEADING_ZERO",
+            "backtrack": true
+        },
+        {
+            "type": "FINAL",
+            "id": 41,
+            "token": "T_ERR_INVALID_CHAR",
+            "backtrack": false
+        },
+        {
+            "type": "FINAL",
+            "id": 42,
+            "token": "T_INTEGER",
+            "backtrack": true
+        },
+        {
+            "type": "NORMAL",
+            "id": 43
+        },
+        {
+            "type": "NORMAL",
+            "id": 44
+        },
+        {
+            "type": "FINAL",
+            "id": 45,
+            "token": "T_FLOAT",
+            "backtrack": true
+        },
+        {
+            "type": "NORMAL",
+            "id": 46
+        },
+        {
+            "type": "FINAL",
+            "id": 47,
+            "token": "T_ERR_TRAILING_ZERO",
+            "backtrack": true
+        },
+        {
+            "type": "FINAL",
+            "id": 48,
+            "token": "T_ERR_FLOAT_FORMAT",
+            "backtrack": true
+        },
+        {
+            "type": "FINAL",
+            "id": 49,
+            "token": "T_ERR_FLOAT_FORMAT",
+            "backtrack": true
+        },
+        {
+            "type": "FINAL",
+            "id": 50,
+            "token": "T_INLINE_COMMENT",
+            "backtrack": true
+        },
+        {
+            "type": "FINAL",
+            "id": 51,
+            "token": "T_ERR_BLOCK_COMMENT",
+            "backtrack": true
         }
     ],
     "transitions": [
@@ -40,12 +286,102 @@
         {
             "from": 0,
             "to": 1,
+            "chars": ["="]
+        },
+        {
+            "from": 0,
+            "to": 4,
+            "chars": ["<"]
+        },
+        {
+            "from": 0,
+            "to": 8,
+            "chars": [">"]
+        },
+        {
+            "from": 0,
+            "to": 11,
+            "chars": [";"]
+        },
+        {
+            "from": 0,
+            "to": 12,
+            "chars": [","]
+        },
+        {
+            "from": 0,
+            "to": 13,
+            "chars": ["."]
+        },
+        {
+            "from": 0,
+            "to": 14,
+            "chars": ["+"]
+        },
+        {
+            "from": 0,
+            "to": 15,
+            "chars": ["-"]
+        },
+        {
+            "from": 0,
+            "to": 16,
+            "chars": ["*"]
+        },
+        {
+            "from": 0,
+            "to": 17,
+            "chars": ["/"]
+        },
+        {
+            "from": 0,
+            "to": 23,
+            "chars": ["("]
+        },
+        {
+            "from": 0,
+            "to": 24,
+            "chars": [")"]
+        },
+        {
+            "from": 0,
+            "to": 25,
+            "chars": ["{"]
+        },
+        {
+            "from": 0,
+            "to": 26,
+            "chars": ["}"]
+        },
+        {
+            "from": 0,
+            "to": 27,
+            "chars": ["["]
+        },
+        {
+            "from": 0,
+            "to": 28,
+            "chars": ["]"]
+        },
+        {
+            "from": 0,
+            "to": 29,
             "chars": ["LOWER_CASE_LETTER","UPPER_CASE_LETTER"]
         },
         {
-            "from": 1,
-            "to": 1,
-            "chars": ["LOWER_CASE_LETTER","UPPER_CASE_LETTER"]
+            "from": 0,
+            "to": 31,
+            "chars": ["POSITIVE"]
+        },
+        {
+            "from": 0,
+            "to": 37,
+            "chars": ["0"]
+        },
+        {
+            "from": 0,
+            "to": 41,
+            "chars": ["OTHER"]
         },
         {
             "from": 1,
@@ -53,23 +389,229 @@
             "chars": ["OTHER"]
         },
         {
-            "from": 0,
+            "from": 1,
             "to": 3,
-            "chars": ["POSITIVE","0"]
+            "chars": ["="]
         },
         {
-            "from": 3,
-            "to": 3,
-            "chars": ["POSITIVE","0"]
-        },
-        {
-            "from": 3,
-            "to": 4,
+            "from": 4,
+            "to": 5,
             "chars": ["OTHER"]
         },
         {
-            "from": 0,
-            "to": 5,
+            "from": 4,
+            "to": 6,
+            "chars": ["="]
+        },
+        {
+            "from": 4,
+            "to": 7,
+            "chars": [">"]
+        },
+        {
+            "from": 8,
+            "to": 9,
+            "chars": ["OTHER"]
+        },
+        {
+            "from": 8,
+            "to": 10,
+            "chars": ["="]
+        },
+        {
+            "from": 17,
+            "to": 18,
+            "chars": ["OTHER"]
+        },
+        {
+            "from": 17,
+            "to": 19,
+            "chars": ["/"]
+        },
+        {
+            "from": 17,
+            "to": 20,
+            "chars": ["*"]
+        },
+        {
+            "from": 19,
+            "to": 19,
+            "chars": ["OTHER"]
+        },
+        {
+            "from": 19,
+            "to": 50,
+            "chars": ["EOF","\n","\r"]
+        },
+        {
+            "from": 20,
+            "to": 20,
+            "chars": ["OTHER"]
+        },
+        {
+            "from": 20,
+            "to": 21,
+            "chars": ["*"]
+        },
+        {
+            "from": 20,
+            "to": 51,
+            "chars": ["EOF"]
+        },
+        {
+            "from": 21,
+            "to": 20,
+            "chars": ["OTHER"]
+        },
+        {
+            "from": 21,
+            "to": 21,
+            "chars": ["*"]
+        },
+        {
+            "from": 21,
+            "to": 22,
+            "chars": ["/"]
+        },
+        {
+            "from": 21,
+            "to": 51,
+            "chars": ["EOF"]
+        },
+        {
+            "from": 29,
+            "to": 29,
+            "chars": [
+                "LOWER_CASE_LETTER",
+                "UPPER_CASE_LETTER",
+                "POSITIVE",
+                "0",
+                "_"
+            ]
+        },
+        {
+            "from": 29,
+            "to": 30,
+            "chars": ["OTHER"]
+        },
+        {
+            "from": 31,
+            "to": 31,
+            "chars": ["POSITIVE","0"]
+        },
+        {
+            "from": 31,
+            "to": 32,
+            "chars": ["."]
+        },
+        {
+            "from": 31,
+            "to": 38,
+            "chars": ["OTHER"]
+        },
+        {
+            "from": 32,
+            "to": 33,
+            "chars": ["POSITIVE","0"]
+        },
+        {
+            "from": 32,
+            "to": 48,
+            "chars": ["OTHER"]
+        },
+        {
+            "from": 33,
+            "to": 33,
+            "chars": ["POSITIVE"]
+        },
+        {
+            "from": 33,
+            "to": 34,
+            "chars": ["OTHER"]
+        },
+        {
+            "from": 33,
+            "to": 35,
+            "chars": ["0"]
+        },
+        {
+            "from": 35,
+            "to": 33,
+            "chars": ["POSITIVE"]
+        },
+        {
+            "from": 35,
+            "to": 35,
+            "chars": ["0"]
+        },
+        {
+            "from": 35,
+            "to": 36,
+            "chars": ["OTHER"]
+        },
+        {
+            "from": 37,
+            "to": 39,
+            "chars": ["POSITIVE","0"]
+        },
+        {
+            "from": 37,
+            "to": 42,
+            "chars": ["OTHER"]
+        },
+        {
+            "from": 37,
+            "to": 43,
+            "chars": ["."]
+        },
+        {
+            "from": 39,
+            "to": 39,
+            "chars": ["POSITIVE","0"]
+        },
+        {
+            "from": 39,
+            "to": 40,
+            "chars": ["OTHER"]
+        },
+        {
+            "from": 43,
+            "to": 44,
+            "chars": ["POSITIVE","0"]
+        },
+        {
+            "from": 43,
+            "to": 49,
+            "chars": ["OTHER"]
+        },
+        {
+            "from": 44,
+            "to": 44,
+            "chars": ["POSITIVE"]
+        },
+        {
+            "from": 44,
+            "to": 45,
+            "chars": ["OTHER"]
+        },
+        {
+            "from": 44,
+            "to": 46,
+            "chars": ["0"]
+        },
+        {
+            "from": 46,
+            "to": 44,
+            "chars": ["POSITIVE"]
+        },
+        {
+            "from": 46,
+            "to": 46,
+            "chars": ["0"]
+        },
+        {
+            "from": 46,
+            "to": 47,
             "chars": ["OTHER"]
         }
     ]
