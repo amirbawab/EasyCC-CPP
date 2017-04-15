@@ -65,12 +65,15 @@ namespace ecc {
                     std::shared_ptr<LexicalToken> token =createToken(state->getTokenName(), tokenValueStream.str(),
                                                                      tokenLine, tokenColumn, tokenPosition);
 
-                    // Add to the vector of lexical token
-                    lexicalVector.push_back(token);
+                    // If token created
+                    if(token) {
+                        // Add to the vector of lexical token
+                        lexicalVector.push_back(token);
 
-                    // Check if the token is an error token
-                    if(token->getType() == LexicalToken::Type::ERROR_TOKEN) {
-                        errorMessages.push_back(generateErrorMessage(token));
+                        // Check if the token is an error token
+                        if(token->getType() == LexicalToken::Type::ERROR_TOKEN) {
+                            errorMessages.push_back(generateErrorMessage(token));
+                        }
                     }
 
                     // Reset values
@@ -123,12 +126,15 @@ namespace ecc {
             std::shared_ptr<LexicalToken> token = createToken(state->getTokenName(), tokenValueStream.str(),
                                                               tokenLine, tokenColumn, tokenPosition);
 
-            // Add to the vector of lexical token
-            lexicalVector.push_back(token);
+            // If token created
+            if(token) {
+                // Add to the vector of lexical token
+                lexicalVector.push_back(token);
 
-            // Check if the token is an error token
-            if(token->getType() == LexicalToken::Type::ERROR_TOKEN) {
-                errorMessages.push_back(generateErrorMessage(token));
+                // Check if the token is an error token
+                if(token->getType() == LexicalToken::Type::ERROR_TOKEN) {
+                    errorMessages.push_back(generateErrorMessage(token));
+                }
             }
         }
 
@@ -138,6 +144,10 @@ namespace ecc {
                 config->getEndOfFile(), line, column, position));
     }
 
+    /**
+     * Create and customize a token based on the lexical configuration
+     * @return object | null if the token should be ignored
+     */
     std::shared_ptr<LexicalToken> Lexical::createToken(
             std::string tokenName, std::string tokenValue, const int &line, const int &column, const int &position) {
 
@@ -152,6 +162,7 @@ namespace ecc {
                     LexicalToken::Type::NORMAL_TOKEN, tokenName,
                     tokenValue, line, column, position);
         }
+        return nullptr;
     }
 
     std::string Lexical::generateErrorMessage(std::shared_ptr<LexicalToken> lexicalToken) {

@@ -5,22 +5,33 @@
     "ignore": {
         "prefix": "",
         "suffix": "",
-        "include": [],
+        "include": ["T_BLOCK_COMMENT","T_INLINE_COMMENT"],
         "exclude": []
     },
 
     "error": {
-        "prefix": "",
+        "prefix": "T_ERR_",
         "suffix": "",
-        "include": ["T_INVALID_CHAR"],
+        "include": [],
         "exclude": []
     },
 
     "reserved": {
-        "T_WORD": {
-            "hello": "T_HELLO",
-            "bye": "T_BYE",
-            "easycc": "T_EASYCC"
+        "T_IDENTIFIER": {
+            "if": "T_IF",
+            "then": "T_THEN",
+            "else": "T_ELSE",
+            "for": "T_FOR",
+            "class": "T_CLASS",
+            "int": "T_INT_TYPE",
+            "float": "T_FLOAT_TYPE",
+            "get": "T_GET",
+            "put": "T_PUT",
+            "return": "T_RETURN",
+            "and": "T_AND",
+            "not": "T_NOT",
+            "or": "T_OR",
+            "program": "T_PROGRAM"
         }
     }
 }
