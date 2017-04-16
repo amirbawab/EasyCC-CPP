@@ -34,10 +34,16 @@ namespace ecc {
         // Construct the first set
         computeFirstSet();
 
+        // Print the logs for the first set
+        logFirstSet();
+
         BOOST_LOG(ecc_logger::get()) << "Computing follow set ...";
 
         // Construct the follow set
         computFollowSet();
+
+        // Print the logs for the follow set
+        logFollowSet();
 
         BOOST_LOG(ecc_logger::get()) << "Checking if the grammar satisfies the LL conditions ...";
 
@@ -49,7 +55,7 @@ namespace ecc {
 
     void Grammar::parseGrammarLine(std::string line, std::string &lastNonTerminal) {
         std::vector<std::string> words;
-        boost::split(words, line, boost::is_any_of(":"), boost::token_compress_on);
+        boost::split(words, line, boost::is_any_of("->"), boost::token_compress_on);
 
         // If two, then it's a complete definition
         if(words.size() == 2) {
@@ -106,6 +112,7 @@ namespace ecc {
 
             // If not a complete definition remove the first element
             if(!completeDefinition) {
+                boost::trim(productionVector[0]);
                 if(productionVector[0].size() != 0) {
                     throw std::runtime_error("Wrong grammar format. Expecting a delimiter before " + RHS);
                 }
@@ -152,6 +159,30 @@ namespace ecc {
             }
         } else {
             throw std::runtime_error("Wrong grammar format at the definition of: " + LHS);
+        }
+    }
+
+    void Grammar::logFirstSet() {
+        BOOST_LOG(ecc_logger::get()) << "Computed First Set:";
+        std::string result;
+        for(auto i = firstSet.begin(); i != firstSet.end(); i++) {
+            result = i->first + ": ";
+            for(auto j : *i->second) {
+                result += j + " ";
+            }
+            BOOST_LOG(ecc_logger::get()) << result;
+        }
+    }
+
+    void Grammar::logFollowSet() {
+        BOOST_LOG(ecc_logger::get()) << "Computed Follow Set:";
+        std::string result;
+        for(auto i = followSet.begin(); i != followSet.end(); i++) {
+             result = i->first + ": ";
+            for(auto j : *i->second) {
+                result += j + " ";
+            }
+            BOOST_LOG(ecc_logger::get()) << result;
         }
     }
 

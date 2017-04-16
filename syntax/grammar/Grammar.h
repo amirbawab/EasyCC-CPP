@@ -71,6 +71,16 @@ namespace ecc {
          * @return token if left recursion detected. Otherwise return null
          */
         std::string getLeftRecursion(std::string token, std::set<std::string> visited);
+
+        /**
+         * Log first set
+         */
+        void logFirstSet();
+
+        /**
+         * Log follow set
+         */
+        void logFollowSet();
     };
 }
 
