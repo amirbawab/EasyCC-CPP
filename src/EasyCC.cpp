@@ -66,5 +66,8 @@ int main() {
     // Syntax analysis phase
     Syntax syntax("resources/src/syntax_grammar.txt");
 
+    // Parse the generated lexical tokens
+    syntax.parseTokens(lexicalTokens);
+
 	return 0;
 }
