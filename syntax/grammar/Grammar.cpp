@@ -474,7 +474,7 @@ namespace ecc {
     }
 
     std::string Grammar::extractTerminal(std::string terminal) {
-        if(terminal.length() > 1 && terminal[0] == '\'' && terminal[terminal.length()-1] == '\'') {
+        if(terminal.length() > 2 && terminal[0] == '\'' && terminal[terminal.length()-1] == '\'') {
             return terminal.substr(1,terminal.length()-2);
         }
         std::runtime_error("String '" + terminal + "' is not a terminal");
