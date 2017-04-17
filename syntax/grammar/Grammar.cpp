@@ -50,6 +50,11 @@ namespace ecc {
         // Validate LL conditions
         validate();
 
+        BOOST_LOG(ecc_logger::get()) << "Building parsing table ...";
+
+        // Build the parsing table
+        buildParseTable();
+
         BOOST_LOG(ecc_logger::get()) << "Grammar parsed successfully!";
     }
 
@@ -223,10 +228,13 @@ namespace ecc {
                     for(auto const &token : *production) {
 
                         // If terminal
-                        if(Grammar::isTerminal(token) || Grammar::isEpsilon(token)) {
+                        if(Grammar::isTerminal(token)) {
+                            std::string extractedTerminal = extractTerminal(token);
+                            productionFirstSet[production]->insert(extractedTerminal);
+                            firstSet[definition.first]->insert(extractedTerminal);
+                        } else if(Grammar::isEpsilon(token)) {
                             productionFirstSet[production]->insert(token);
                             firstSet[definition.first]->insert(token);
-
                         } else if(Grammar::isNonTerminal(token)) {
                             std::shared_ptr<std::set<std::string>> tokenFirstSet = getFirstSet(token);
 
@@ -415,5 +423,60 @@ namespace ecc {
 
         // No left recursion found
         return "";
+    }
+
+    void Grammar::buildParseTable() {
+
+        // Loop on all definitions
+        for(auto &definition : productions) {
+
+            // Create map
+            parseTableMap[definition.first] =
+                    std::make_shared<std::map<std::string, std::shared_ptr<std::vector<std::string>>>>();
+
+            // Loop on all productions
+            for(auto &production : *definition.second) {
+
+                // Get the first set of the production
+                std::shared_ptr<std::set<std::string>> pFirstSet = productionFirstSet[production];
+
+                // The map key will always be unique since the grammar
+                // passed the LL condition tests
+
+                // Check if first set contains epsilon
+                if(pFirstSet->find(Grammar::EPSILON) != pFirstSet->end()) {
+                    // Get the follow set of the production
+                    std::shared_ptr<std::set<std::string>> pFollowSet = followSet[definition.first];
+
+                    // Couple each token in the follow set to the production
+                    for(std::string token : *pFollowSet) {
+                        (*parseTableMap[definition.first])[token] = production;
+                    }
+
+                } else {
+
+                    // Couple each token in the first set to the production
+                    for(std::string token : *pFirstSet) {
+                        (*parseTableMap[definition.first])[token] = production;
+                    }
+                }
+            }
+        }
+    }
+
+    std::shared_ptr<std::vector<std::string>> Grammar::getProductionOnNonTerminalAndInput(
+            const std::string &nonTerminal, const std::string &input) {
+        if(parseTableMap.find(nonTerminal) != parseTableMap.end() &&
+                    (*parseTableMap[nonTerminal]).find(input) != (*parseTableMap[nonTerminal]).end()) {
+            return (*parseTableMap[nonTerminal])[input];
+        }
+        return nullptr;
+    }
+
+    std::string Grammar::extractTerminal(std::string terminal) {
+        if(terminal.length() > 1 && terminal[0] == '\'' && terminal[terminal.length()-1] == '\'') {
+            return terminal.substr(1,terminal.length()-2);
+        }
+        std::runtime_error("String '" + terminal + "' is not a terminal");
     }
 }

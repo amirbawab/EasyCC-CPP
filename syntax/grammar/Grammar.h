@@ -24,12 +24,25 @@ namespace ecc {
          */
         std::shared_ptr<std::set<std::string>> getFirstSet(std::string token);
 
+        /**
+         * Get production stored in the parsing table
+         * This function behaves like a lookup table where the row key is the non terminal
+         * and the column key is the input.
+         * @param nonTerminal Row key
+         * @param input Column key
+         * @return If combination of keys was found, then return the production,
+         * otherwise return nullptr
+         */
+        std::shared_ptr<std::vector<std::string>>
+                getProductionOnNonTerminalAndInput(const std::string &nonTerminal, const std::string &input);
+
     private:
         std::string start;
         std::map<std::string, std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::string>>>>> productions;
         std::map<std::shared_ptr<std::vector<std::string>>, std::shared_ptr<std::set<std::string>>> productionFirstSet;
         std::map<std::string, std::shared_ptr<std::set<std::string>>> firstSet;
         std::map<std::string, std::shared_ptr<std::set<std::string>>> followSet;
+        std::map<std::string, std::shared_ptr<std::map<std::string, std::shared_ptr<std::vector<std::string>>>>> parseTableMap;
 
         /**
          * Parse one line of the grammar file
@@ -81,6 +94,20 @@ namespace ecc {
          * Log follow set
          */
         void logFollowSet();
+
+        /**
+         * Extract token from a terminal token
+         * 'TERMINAL' becomes TERMINAL
+         * @param terminal
+         * @return extracted token
+         */
+        std::string extractTerminal(std::string terminal);
+
+        /**
+         * Build a parsing table using a map
+         * TT[NT][Input[0]] = production | not found
+         */
+        void buildParseTable();
     };
 }
 
