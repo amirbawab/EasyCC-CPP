@@ -53,7 +53,7 @@ namespace ecc {
         /**
          * Compute the follow set
          */
-        void computFollowSet();
+        void computeFollowSet();
 
         /**
         * Check if the grammar is LL

@@ -40,7 +40,7 @@ namespace ecc {
         BOOST_LOG(ecc_logger::get()) << "Computing follow set ...";
 
         // Construct the follow set
-        computFollowSet();
+        computeFollowSet();
 
         // Print the logs for the follow set
         logFollowSet();
@@ -266,7 +266,7 @@ namespace ecc {
         return nullptr;
     }
 
-    void Grammar::computFollowSet() {
+    void Grammar::computeFollowSet() {
 
         // Add end of stack to the follow set of the start grammar
         followSet[start] = std::make_shared<std::set<std::string>>();
