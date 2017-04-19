@@ -34,7 +34,7 @@ namespace ecc {
          * otherwise return nullptr
          */
         std::shared_ptr<std::vector<std::string>>
-                getProductionOnNonTerminalAndInput(const std::string &nonTerminal, const std::string &input);
+                getParseTabel(const std::string &nonTerminal, const std::string &input);
 
     private:
         std::string start;
