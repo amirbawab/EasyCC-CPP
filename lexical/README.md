@@ -92,6 +92,8 @@ The state machine is provided as a json file with the follwoing syntax:
 
 #### Additional details
 - A token value contains only characters that appear on a transition from any source state to any non-initial state. For example, if the initial state has a transition on letter `A` that goes to itself. Then `A` will never appear at the beginning of any token value. However, if the initial state have a transition on letter `B` that goes to another normal state, then `B` will be recorded as part of the token value.
+- The folloing tokens names are reserved and should not be used by the user:
+  * `:any`
 
 ### Configuration
 
