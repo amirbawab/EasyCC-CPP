@@ -50,11 +50,14 @@ namespace ecc{
         // Store lexical tokens
         std::shared_ptr<LexicalToken> lexicalToken = nextToken(lexicalTokens, inputIndex);
 
+        // Add the end of stack
+        parseStack.push(Grammar::END_OF_STACK);
+
         // Add grammar start
         parseStack.push(grammar->getStart());
 
         // While more non-terminals are in the parse stack
-        while(!parseStack.empty()) {
+        while(parseStack.top() != Grammar::END_OF_STACK) {
 
             // Get the top token from the parser stack
             std::string top = parseStack.top();

@@ -15,7 +15,9 @@ BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(ecc_logger, src::logger_mt)
 namespace ecc {
 
     const std::string Grammar::EPSILON = "EPSILON";
-    const std::string Grammar::END_OF_STACK = "END_OF_STACK";
+
+    // FIXME: Hardcoded to match lexical config, maybe remove it from lexical config?
+    const std::string Grammar::END_OF_STACK = "$";
 
     Grammar::Grammar(std::string grammarFile) {
 
