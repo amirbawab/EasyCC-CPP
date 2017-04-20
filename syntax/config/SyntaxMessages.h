@@ -15,9 +15,19 @@ namespace ecc{
          * @return pointer to a SyntaxMessages object
          */
         static std::shared_ptr<SyntaxMessages> loadMessages(std::string fileName);
+
+        /**
+         * Get error message
+         * @param error token name
+         * @return specific error message or default one
+         */
+        std::string getErrorMessage(std::string nonTerminal, std::string terminal);
     private:
         std::string defaultMessage;
         std::map<std::string, std::map<std::string, std::string>> errorMessages;
+
+        // Reserved token names
+        const std::string NON_TERMINAL_DEFAULT_TERMINAL = ":any";
     };
 }
 

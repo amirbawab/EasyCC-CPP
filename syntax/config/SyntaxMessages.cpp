@@ -51,4 +51,16 @@ namespace ecc {
         }
         return messages;
     }
+
+    std::string SyntaxMessages::getErrorMessage(std::string nonTerminal, std::string terminal) {
+        if(errorMessages.find(nonTerminal) != errorMessages.end()) {
+                if(errorMessages[nonTerminal].find(terminal) != errorMessages[nonTerminal].end()) {
+                    return errorMessages[nonTerminal][terminal];
+                } else if(errorMessages[nonTerminal].find(NON_TERMINAL_DEFAULT_TERMINAL) !=
+                        errorMessages[nonTerminal].end()) {
+                    return errorMessages[nonTerminal][NON_TERMINAL_DEFAULT_TERMINAL];
+                }
+        }
+        return this->defaultMessage;
+    }
 }
