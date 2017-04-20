@@ -1,8 +1,10 @@
 {
     "default_message": "Error found",
-    "error_messages": {
-        "non-terminal": "T_CLASS",
-        "terminal": "T_SEMICLON",
-        "message": "Missing class name before '${lexical.value}' and after ${lexical.previous.value} at line ${lexical.line} column ${lexical.column}"
-    }
+    "error_messages": [
+        {
+            "non_terminal": "T_CLASS",
+            "terminal": "T_SEMICLON",
+            "message": "Missing class name before '${lexical.value}' and after ${lexical.previous.value} at line ${lexical.line} column ${lexical.column}"
+        }
+    ]
 }
