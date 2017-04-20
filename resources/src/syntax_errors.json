@@ -2,9 +2,14 @@
     "default_message": "Error found",
     "error_messages": [
         {
-            "non_terminal": "T_CLASS",
-            "terminal": "T_SEMICLON",
-            "message": "Missing class name before '${lexical.value}' and after ${lexical.previous.value} at line ${lexical.line} column ${lexical.column}"
+            "non_terminal": "CLASSIDEN",
+            "terminal": "T_OPEN_CURLY",
+            "message": "Missing class name before the curly bracket and after ${lexical.previous.value} at line ${lexical.line} and column ${lexical.column}"
+        },
+        {
+            "non_terminal": "CLASSIDEN",
+            "terminal": ":any",
+            "message": "Expecting a class name instead of ${lexical.value} at line ${lexical.line} and column ${lexical.column}"
         }
     ]
 }
