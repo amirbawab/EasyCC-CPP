@@ -5,6 +5,8 @@
 #include <boost/log/sources/global_logger_storage.hpp>
 #include <stack>
 
+#include <iostream>
+
 namespace ecc{
 
     namespace src = boost::log::sources;
@@ -48,6 +50,9 @@ namespace ecc{
         // Store lexical tokens
         std::shared_ptr<LexicalToken> lexicalToken = nextToken(lexicalTokens, inputIndex);
 
+        // Add grammar start
+        parseStack.push(grammar->getStart());
+
         // While more non-terminals are in the parse stack
         while(!parseStack.empty()) {
 
@@ -58,14 +63,14 @@ namespace ecc{
             if(Grammar::isTerminal(top)) {
 
                 // If there is a match
-                if(top == lexicalToken->getName()) {
+                if(Grammar::extractTerminal(top) == lexicalToken->getName()) {
 
                     // Start over by scanning new input and processing a new top
                     parseStack.pop();
                     lexicalToken = nextToken(lexicalTokens, inputIndex);
 
                 } else {
-                    std::runtime_error(
+                    throw std::runtime_error(
                             "Failed to process the input: "
                             "In the Syntax analysis phase, the stack top terminal "
                             "and the lexical input terminal token did not match! "
@@ -82,15 +87,18 @@ namespace ecc{
                     parseStack.pop();
 
                     // Insert the new production right to left
-                    for(size_t i=production->size()-1; i >= 0; --i) {
+                    for(auto i=0; i < production->size(); ++i) {
 
                         // If not epsilon
-                        if(!Grammar::isEpsilon((*production)[i])){
-                            parseStack.push((*production)[i]);
+                        if(!Grammar::isEpsilon((*production)[production->size()-1-i])){
+                            parseStack.push((*production)[production->size()-1-i]);
                         }
                     }
                 } else { // Error found
 
+                    // Load error message
+                    std::string message = messages->getErrorMessage(top, lexicalToken->getName());
+                    std::cout << message << std::endl;
                 }
             }
         }

@@ -36,6 +36,20 @@ namespace ecc {
         std::shared_ptr<std::vector<std::string>>
                 getParseTabel(const std::string &nonTerminal, const std::string &input);
 
+        /**
+         * Get the root of any grammar derivation tree
+         * @return start token
+         */
+        std::string getStart() const{ return this->start;}
+
+        /**
+         * Extract token from a terminal token
+         * 'TERMINAL' becomes TERMINAL
+         * @param terminal
+         * @return extracted token
+         */
+        static std::string extractTerminal(std::string terminal);
+
     private:
         std::string start;
         std::map<std::string, std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::string>>>>> productions;
@@ -94,14 +108,6 @@ namespace ecc {
          * Log follow set
          */
         void logFollowSet();
-
-        /**
-         * Extract token from a terminal token
-         * 'TERMINAL' becomes TERMINAL
-         * @param terminal
-         * @return extracted token
-         */
-        std::string extractTerminal(std::string terminal);
 
         /**
          * Build a parsing table using a map

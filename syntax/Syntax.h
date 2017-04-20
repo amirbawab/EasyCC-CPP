@@ -11,6 +11,11 @@ namespace ecc{
     class Syntax {
     public:
         Syntax(std::string grammarFile, std::string messagesFileName);
+
+        /**
+         * Parse lexical tokens
+         * @param lexicalTokens
+         */
         void parseTokens(std::vector<std::shared_ptr<LexicalToken>> &lexicalTokens);
     private:
         std::shared_ptr<Grammar> grammar;
