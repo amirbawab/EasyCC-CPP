@@ -270,7 +270,7 @@ namespace ecc {
     }
 
     std::shared_ptr<std::set<std::string>> Grammar::getFirstSet(std::string token) {
-        if(Grammar::isNonTerminal(token) && firstSet.count(token)) {
+        if(Grammar::isNonTerminal(token) && firstSet.find(token) != firstSet.end()) {
             return firstSet[token];
         }
         return nullptr;
