@@ -445,20 +445,23 @@ namespace ecc {
                 // The map key will always be unique since the grammar
                 // passed the LL condition tests
 
-                // Check if first set contains epsilon
-                if(pFirstSet->find(Grammar::EPSILON) != pFirstSet->end()) {
+                // Couple each token in the first set to the production, except for epsilon
+                bool hasEpsilon = false;
+                for(std::string token : *pFirstSet) {
+                    if(!Grammar::isEpsilon(token)) {
+                        (*parseTableMap[definition.first])[token] = production;
+                    } else {
+                        hasEpsilon = true;
+                    }
+                }
+
+                // Check if first set contains epsilon, then map the follow set
+                if(hasEpsilon) {
                     // Get the follow set of the production
                     std::shared_ptr<std::set<std::string>> pFollowSet = followSet[definition.first];
 
                     // Couple each token in the follow set to the production
                     for(std::string token : *pFollowSet) {
-                        (*parseTableMap[definition.first])[token] = production;
-                    }
-
-                } else {
-
-                    // Couple each token in the first set to the production
-                    for(std::string token : *pFirstSet) {
                         (*parseTableMap[definition.first])[token] = production;
                     }
                 }
