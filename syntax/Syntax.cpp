@@ -102,6 +102,15 @@ namespace ecc{
                     // Load error message
                     std::string message = messages->getErrorMessage(top, lexicalToken->getName());
                     std::cout << message << std::endl;
+
+                    // If terminal is in the follow set or it is the End of the stack, then pop stack
+                    std::shared_ptr<std::set<std::string>> firstSet = grammar->getFirstSet(top);
+                    if(firstSet->find(lexicalToken->getName()) != firstSet->end() ||
+                            lexicalToken->getName() == Grammar::END_OF_STACK) {
+                        parseStack.pop();
+                    } else {
+                        lexicalToken = nextToken(lexicalTokens, inputIndex);
+                    }
                 }
             }
         }
