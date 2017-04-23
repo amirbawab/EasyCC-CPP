@@ -3,7 +3,10 @@
 #include <boost/log/sources/logger.hpp>
 #include <boost/log/sources/record_ostream.hpp>
 #include <boost/log/sources/global_logger_storage.hpp>
+#include <boost/regex.hpp>
 #include <stack>
+#include <regex>
+#include <boost/algorithm/string.hpp>
 
 #include <iostream>
 
@@ -31,7 +34,8 @@ namespace ecc{
         return lexicalToken[index++];
     }
 
-    void Syntax::parseTokens(std::vector<std::shared_ptr<LexicalToken>> &lexicalTokens) {
+    void Syntax::parseTokens(std::vector<std::shared_ptr<LexicalToken>> &lexicalTokens,
+                             std::vector<std::string> &errorMessages) {
 
         BOOST_LOG(ecc_logger::get()) << "Started parsing the lexical tokens ...";
 
@@ -99,9 +103,8 @@ namespace ecc{
                     }
                 } else { // Error found
 
-                    // Load error message
-                    std::string message = messages->getErrorMessage(top, lexicalToken->getName());
-                    std::cout << message << std::endl;
+                    // Generate error message
+                    errorMessages.push_back(generateErrorMessage(top, lexicalTokens, inputIndex-1));
 
                     // If terminal is in the follow set or it is the End of the stack, then pop stack
                     std::shared_ptr<std::set<std::string>> firstSet = grammar->getFirstSet(top);
@@ -114,5 +117,58 @@ namespace ecc{
                 }
             }
         }
+    }
+
+    std::string Syntax::generateErrorMessage(std::string nonTerminal,
+                                             std::vector<std::shared_ptr<LexicalToken>> &lexicalTokens,
+                                             int index) {
+        // Load error message
+        std::string message = messages->getErrorMessage(nonTerminal, lexicalTokens[index]->getName());
+        std::string messageCopy = message;
+
+        // Match error messages
+        std::regex exp("(\\$\\{lexical(\\.(?:next|previous))*\\.(?:value|name|line|column)\\})");
+        std::smatch match;
+
+        while(std::regex_search(messageCopy, match, exp)) {
+
+            // Split by dot
+            std::vector<std::string> words;
+            std::string matchValue = match[0].str();
+            boost::split(words, matchValue, boost::is_any_of("."), boost::token_compress_on);
+
+            // Navigate to the correct token
+            int newIndex = index;
+            for(size_t i=1; i < words.size()-1; i++) {
+                if(words[i] == "next") {
+                    newIndex++;
+                } else if(words[i] == "previous") {
+                    newIndex--;
+                }
+            }
+
+            std::string newValue;
+
+            // If new index is not found
+            if(newIndex < 0 || newIndex >= lexicalTokens.size()) {
+                newValue = "undefined";
+            } else {
+                std::string type = words[words.size() - 1].substr(0, words[words.size() - 1].length() - 1);
+                if (type == "value") {
+                    newValue = lexicalTokens[newIndex]->getValue();
+                } else if (type == "name") {
+                    newValue = lexicalTokens[newIndex]->getName();
+                } else if (type == "line") {
+                    newValue = std::to_string(lexicalTokens[newIndex]->getLine());
+                } else if (type == "column") {
+                    newValue = std::to_string(lexicalTokens[newIndex]->getColumn());
+                }
+            }
+
+            boost::replace_all(message, matchValue, newValue);
+            messageCopy = match.suffix();
+        }
+
+        return message;
     }
 }

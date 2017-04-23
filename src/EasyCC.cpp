@@ -49,15 +49,16 @@ int main() {
             "resources/src/lexical_errors.json");
 
 	std::vector<std::shared_ptr<LexicalToken>> lexicalTokens;
-	std::vector<std::string> errorMessages;
-	lexical.generateLexicalTokens("resources/src/input.txt", lexicalTokens, errorMessages);
+	std::vector<std::string> lexicalErrorMessages;
+    std::vector<std::string> syntaxErrorMessages;
+	lexical.generateLexicalTokens("resources/src/input.txt", lexicalTokens, lexicalErrorMessages);
 
     // Logging
 	for(auto token : lexicalTokens)
 		cout << *token << endl;
-	for(auto token : errorMessages)
-		cerr << token << endl;
-    if(errorMessages.size() != 0) {
+	for(auto message : lexicalErrorMessages)
+		cerr << message << endl;
+    if(lexicalErrorMessages.size() != 0) {
         // A lexical error exist, exit
         cerr << "Exiting program with code 1" << endl;
         return 1;
@@ -69,7 +70,16 @@ int main() {
             "resources/src/syntax_errors.json");
 
     // Parse the generated lexical tokens
-    syntax.parseTokens(lexicalTokens);
+    syntax.parseTokens(lexicalTokens, syntaxErrorMessages);
+
+    // Logging syntax phase
+    for(auto message : syntaxErrorMessages)
+        cerr << message << endl;
+    if(syntaxErrorMessages.size() != 0) {
+        // A syntax error exist, exit
+        cerr << "Exiting program with code 2" << endl;
+        return 2;
+    }
 
 	return 0;
 }

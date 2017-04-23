@@ -16,10 +16,22 @@ namespace ecc{
          * Parse lexical tokens
          * @param lexicalTokens
          */
-        void parseTokens(std::vector<std::shared_ptr<LexicalToken>> &lexicalTokens);
+        void parseTokens(std::vector<std::shared_ptr<LexicalToken>> &lexicalTokens,
+                         std::vector<std::string> &errorMessages);
     private:
         std::shared_ptr<Grammar> grammar;
         std::shared_ptr<SyntaxMessages> messages;
+
+        /**
+         * Generate an error message
+         * @param nonTerminal A non terminal string
+         * @param pointer to the lexical token
+         * @param index Index of the current lexical token
+         * @return error message
+         */
+        std::string generateErrorMessage(std::string nonTerminal,
+                                         std::vector<std::shared_ptr<LexicalToken>> &lexicalToken,
+                                         int index);
     };
 }
 
