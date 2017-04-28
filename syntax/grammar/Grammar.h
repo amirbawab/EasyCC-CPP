@@ -13,10 +13,10 @@ namespace ecc {
         static const std::string EPSILON;
         static const std::string END_OF_STACK;
         Grammar(std::string grammarFile);
-        static bool isTerminal(std::string token);
-        static bool isNonTerminal(std::string token);
-        static bool isEpsilon(std::string token);
-        static bool isSemanticAction(std::string token);
+        static bool isTerminal(const std::string &token);
+        static bool isNonTerminal(const std::string &token);
+        static bool isEpsilon(const std::string &token);
+        static bool isSemanticAction(const std::string &token);
 
         /**
          * Get first set of a token

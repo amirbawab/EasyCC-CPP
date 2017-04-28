@@ -93,6 +93,17 @@ namespace ecc {
         }
     }
 
+    bool isEmptyWithIgnoreExceptions(std::shared_ptr<std::vector<std::string>> production) {
+        for(auto &token : *production) {
+
+            // Semantic action is an exception
+            if(!Grammar::isSemanticAction(token)){
+                return false;
+            }
+        }
+        return true;
+    }
+
     void Grammar::processDefinition(std::string &LHS, std::string &RHS, bool completeDefinition) {
 
         // Clear whitespaces on both sides
@@ -153,10 +164,10 @@ namespace ecc {
                     std::string word;
                     while (productionss >> word) {
 
-                        // Check if a terminal or an epsilon is defined correctly
+                        // Terminal and epsilon tokens cannot be mixed with other tokens except the ones
+                        // specified in the isEmptyWithIgnoreExceptions() function
                         if((Grammar::isTerminal(word) || Grammar::isEpsilon(word)) &&
-                           ((*productions[LHS])[i + prevSize]->size() != 0 ||
-                            productionss.rdbuf()->in_avail() != 0)) {
+                                !isEmptyWithIgnoreExceptions((*productions[LHS])[i+prevSize])) {
                             throw std::runtime_error("A production containing a terminal or an epsilon token "
                                                              "cannot be followed or preceded by other tokens.");
                         }
@@ -193,20 +204,32 @@ namespace ecc {
         }
     }
 
-    bool Grammar::isTerminal(std::string token) {
+    bool Grammar::isTerminal(const std::string &token) {
         return token[0] == '\'' && token[token.size()-1] == '\'';
     }
 
-    bool Grammar::isSemanticAction(std::string token) {
+    bool Grammar::isSemanticAction(const std::string &token) {
         return token[0] == '#' && token[token.size()-1] == '#';
     }
 
-    bool Grammar::isNonTerminal(std::string token) {
+    bool Grammar::isNonTerminal(const std::string &token) {
         return !Grammar::isTerminal(token) && !Grammar::isSemanticAction(token) && !Grammar::isEpsilon(token);
     }
 
-    bool Grammar::isEpsilon(std::string token) {
+    bool Grammar::isEpsilon(const std::string &token) {
         return token == Grammar::EPSILON;
+    }
+
+    /**
+     * Get the last non-terminal from a production.
+     */
+    std::string lastNonTerminal(std::shared_ptr<std::vector<std::string>> production) {
+        for(auto rit = production->rbegin(); rit != production->rend(); ++rit) {
+            if(Grammar::isNonTerminal(*rit)) {
+                return *rit;
+            }
+        }
+        throw std::runtime_error("Production does not contain any non-terminal");
     }
 
     void Grammar::computeFirstSet() {
@@ -233,7 +256,10 @@ namespace ecc {
                     // Loop on all tokens of a production
                     for(auto const &token : *production) {
 
-                        // If terminal
+                        /**
+                         * Check the type of the current token, if terminal or epsilon then add them.
+                         * If it's a non-terminal then it needs to be processed.
+                         */
                         if(Grammar::isTerminal(token)) {
                             std::string extractedTerminal = extractTerminal(token);
                             productionFirstSet[production]->insert(extractedTerminal);
@@ -270,7 +296,7 @@ namespace ecc {
                                 // Then First(A) contains First(B)-{EPSILON} U First(C)-{EPSILON} U First(D).
                                 // Note that in Example 3, EPSILON will be in First(A)
                                 if(tokenFirstSet->find(Grammar::EPSILON) == tokenFirstSet->end() ||
-                                        token == production->back()) {
+                                        token == lastNonTerminal(production)) {
                                     productionFirstSet[production]->insert(tokenFirstSet->begin(), tokenFirstSet->end());
                                     firstSet[definition.first]->insert(tokenFirstSet->begin(), tokenFirstSet->end());
                                     break;
