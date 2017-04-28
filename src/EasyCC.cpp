@@ -2,6 +2,7 @@
 #include "../syntax/Syntax.h"
 #include "../semantic/Semantic.h"
 #include <iostream>
+#include <getopt.h>
 #include <vector>
 #include <string>
 
@@ -23,6 +24,19 @@ using namespace ecc;
 
 BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(ecc_logger, src::logger_mt)
 
+// Configuration files
+std::string lexicalStateMachineFile;
+std::string lexicalConfigFile;
+std::string lexicalErrorsFile;
+std::string syntaxGrammarFile;
+std::string syntaxConfigFile;
+std::string syntaxErrorsFile;
+
+// Error codes
+const int ERR_CODE_PARAMS = 1;
+const int ERR_CODE_LEXICAL = 2;
+const int ERR_CODE_SYNTAX = 3;
+
 void init_log() {
     logging::add_console_log(
             std::cout,
@@ -38,16 +52,95 @@ void init_log() {
     logging::add_common_attributes();
 }
 
-int main() {
+void printUsage() {
+    std::cout
+    << "EasyCC C++ - An easy compiler compiler program" << std::endl
+    << "Usage: easycc [OPTION]... [FILE]..." << std::endl
+    << "\t-s, --lexical_state_machine\tLexical state machine file" << std::endl
+    << "\t-c, --lexical_config\t\tLexical configuration file" << std::endl
+    << "\t-e, --lexical_errors\t\tLexical errors file" << std::endl
+    << "\t-g, --syntax_grammar\t\tSyntax grammar file" << std::endl
+    << "\t-C, --syntax_config\t\tSyntax configuration file" << std::endl
+    << "\t-E, --syntax_errors\t\tSyntax errors file" << std::endl
+    << "\t-v, --verbose\t\t\tVerbose mode" << std::endl
+    << "\t-h, --help\t\t\tDisplay this help message" << endl;
+}
+
+void initParams(int argc, char *argv[]) {
+
+    struct option longOptions[] = {
+
+            // Lexical params
+            {"lexical_state_machine", required_argument, 0, 's'},
+            {"lexical_config", required_argument, 0, 'c'},
+            {"lexical_errors", required_argument, 0, 'e'},
+
+            // Syntax params
+            {"syntax_grammar", required_argument, 0, 'g'},
+            {"syntax_config", required_argument, 0, 'C'},
+            {"syntax_errors", required_argument, 0, 'E'},
+
+            // Other
+            {"verbose", no_argument, 0, 'v'},
+            {"help", no_argument, 0, 'h'},
+            {0, 0, 0, 0}
+    };
+
+    int optionIndex = 0;
+    int c;
+    while ((c = getopt_long(argc, argv, "hvs:c:e:g:C:E:", longOptions, &optionIndex)) != -1) {
+        switch (c) {
+            case 's':
+                lexicalStateMachineFile = optarg;
+                break;
+            case 'c':
+                lexicalConfigFile = optarg;
+                break;
+            case 'e':
+                lexicalErrorsFile = optarg;
+                break;
+            case 'g':
+                syntaxGrammarFile = optarg;
+                break;
+            case 'C':
+                syntaxConfigFile = optarg;
+                break;
+            case 'E':
+                syntaxErrorsFile = optarg;
+                break;
+            case 'h':
+            default:
+                // Print by default
+                break;
+        }
+    }
+}
+
+bool validArguments() {
+    return  !lexicalStateMachineFile.empty() &&
+            !lexicalConfigFile.empty() &&
+            !lexicalErrorsFile.empty() &&
+            !syntaxGrammarFile.empty() &&
+            !syntaxConfigFile.empty() &&
+            !syntaxErrorsFile.empty();
+}
+
+int main(int argc, char *argv[]) {
+
+    // Initialize parameters
+    initParams(argc, argv);
+
+    // Check if required arguments are set
+    if(!validArguments()) {
+        printUsage();
+        return ERR_CODE_PARAMS;
+    }
 
     // Configure the logger
     init_log();
 
     // Lexical analysis phase
-    Lexical lexical(
-			"resources/src/lexical_state_machine.json",
-			"resources/src/lexical_config.json",
-            "resources/src/lexical_errors.json");
+    Lexical lexical(lexicalStateMachineFile, lexicalConfigFile, lexicalErrorsFile);
 
 	std::vector<std::shared_ptr<LexicalToken>> lexicalTokens;
 	std::vector<std::string> lexicalErrorMessages;
@@ -60,16 +153,13 @@ int main() {
 		cerr << message << endl;
     if(lexicalErrorMessages.size() != 0) {
         // A lexical error exist, exit
-        cerr << "Exiting program with code 1" << endl;
-        return 1;
+        cerr << "Exiting program with code " << ERR_CODE_LEXICAL << endl;
+        return ERR_CODE_LEXICAL;
     }
 
     // Syntax analysis phase
     std::vector<std::string> syntaxErrorMessages;
-    Syntax syntax(
-            "resources/src/syntax_grammar.txt",
-            "resources/src/syntax_config.json",
-            "resources/src/syntax_errors.json");
+    Syntax syntax(syntaxGrammarFile, syntaxConfigFile, syntaxErrorsFile);
 
     // Prepare semantic analysis
     Semantic semantic;
@@ -88,8 +178,8 @@ int main() {
         cerr << message << endl;
     if(syntaxErrorMessages.size() != 0) {
         // A syntax error exist, exit
-        cerr << "Exiting program with code 2" << endl;
-        return 2;
+        cerr << "Exiting program with code " << ERR_CODE_SYNTAX << endl;
+        return ERR_CODE_SYNTAX;
     }
 
 	return 0;

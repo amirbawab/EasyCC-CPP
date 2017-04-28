@@ -33,7 +33,6 @@ sudo ./b2 install
 * Draw a UML
 * Replace map.count() with map.find()
 * Fix all FIXME
-* Add m_ prefix to member attributes
 ##### Lexical
 * Import test cases from the AB-Compiler repo
 * Implement the TODO in the code
