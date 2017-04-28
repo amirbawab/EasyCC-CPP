@@ -64,7 +64,7 @@ namespace ecc{
             while(parseStack.top() != Grammar::END_OF_STACK) {
 
                 // Get the top token from the parser stack
-                std::string top = parseStack.top();
+                const std::string &top = parseStack.top();
 
                 // Check the type of the token
                 if(Grammar::isTerminal(top)) {
@@ -111,18 +111,29 @@ namespace ecc{
                         }
                     } else { // Error found
 
-                        // Generate error message
-                        errorMessages.push_back(generateErrorMessage(top, lexicalTokens, inputIndex-1));
+                        // Generate error message in the first parsing phase
+                        if(phase == 1) {
+                            errorMessages.push_back(generateErrorMessage(top, lexicalTokens, inputIndex-1));
+                        }
 
-                        // If terminal is in the follow set or it is the End of the stack, then pop stack
-                        std::shared_ptr<std::set<std::string>> firstSet = grammar->getFirstSet(top);
-                        if(firstSet->find(lexicalToken->getName()) != firstSet->end() ||
+                        // If terminal is in the follow set or there is no more input to process,
+                        // then pop the parse stack
+                        std::shared_ptr<std::set<std::string>> followSet = grammar->getFollowSet(top);
+                        if(followSet->find(lexicalToken->getName()) != followSet->end() ||
                            lexicalToken->getName() == Grammar::END_OF_STACK) {
                             parseStack.pop();
                         } else {
                             lexicalToken = nextToken(lexicalTokens, inputIndex);
                         }
                     }
+                }
+            }
+
+            if(lexicalToken->getName() != Grammar::END_OF_STACK) {
+                // Generate error message in the first parsing phase
+                if(phase == 1) {
+                    errorMessages.push_back(generateErrorMessage(
+                            parseStack.top(), lexicalTokens, inputIndex-1));
                 }
             }
         }

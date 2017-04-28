@@ -26,6 +26,13 @@ namespace ecc {
         std::shared_ptr<std::set<std::string>> getFirstSet(std::string token);
 
         /**
+         * Get follow set of a token
+         * @param token
+         * @return set if the item passed is a non-terminal. Otherwise return nullptr
+         */
+        std::shared_ptr<std::set<std::string>> getFollowSet(std::string token);
+
+        /**
          * Get production stored in the parsing table
          * This function behaves like a lookup table where the row key is the non terminal
          * and the column key is the input.

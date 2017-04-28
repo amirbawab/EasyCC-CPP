@@ -16,7 +16,8 @@ namespace ecc {
 
     const std::string Grammar::EPSILON = "EPSILON";
 
-    // FIXME: Hardcoded to match lexical config, maybe remove it from lexical config?
+    // End of stack symbol informs the parser that the grammar cannot be derived further
+    // This symbol must match the value of END_OF_FILE in lexical analysis
     const std::string Grammar::END_OF_STACK = "$";
 
     Grammar::Grammar(std::string grammarFile) {
@@ -331,6 +332,13 @@ namespace ecc {
     std::shared_ptr<std::set<std::string>> Grammar::getFirstSet(std::string token) {
         if(Grammar::isNonTerminal(token) && firstSet.find(token) != firstSet.end()) {
             return firstSet[token];
+        }
+        return nullptr;
+    }
+
+    std::shared_ptr<std::set<std::string>> Grammar::getFollowSet(std::string token) {
+        if(Grammar::isNonTerminal(token) && followSet.find(token) != followSet.end()) {
+            return followSet[token];
         }
         return nullptr;
     }
