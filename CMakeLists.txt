@@ -74,6 +74,8 @@ set(SOURCE_FILES
         syntax/Syntax.h
         syntax/config/SyntaxMessages.cpp
         syntax/config/SyntaxMessages.h
+        syntax/config/SyntaxConfig.cpp
+        syntax/config/SyntaxConfig.h
         semantic/Semantic.cpp
         semantic/Semantic.h)
 

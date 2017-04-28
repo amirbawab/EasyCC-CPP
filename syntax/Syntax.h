@@ -4,6 +4,7 @@
 #include "grammar/Grammar.h"
 #include "../lexical/token/LexicalToken.h"
 #include "config/SyntaxMessages.h"
+#include "config/SyntaxConfig.h"
 #include <string>
 #include <memory>
 #include <functional>
@@ -11,7 +12,7 @@
 namespace ecc{
     class Syntax {
     public:
-        Syntax(std::string grammarFile, std::string messagesFileName);
+        Syntax(std::string grammarFile, std::string configFileName, std::string messagesFileName);
 
         /**
          * Parse lexical tokens
@@ -30,6 +31,7 @@ namespace ecc{
         }
     private:
         std::shared_ptr<Grammar> grammar;
+        std::shared_ptr<SyntaxConfig> config;
         std::shared_ptr<SyntaxMessages> messages;
         std::function<void(std::string, int, std::vector<std::shared_ptr<LexicalToken>>&, int)> m_semanticAction;
 

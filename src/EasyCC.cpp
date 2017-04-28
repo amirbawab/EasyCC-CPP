@@ -68,6 +68,7 @@ int main() {
     std::vector<std::string> syntaxErrorMessages;
     Syntax syntax(
             "resources/src/syntax_grammar.txt",
+            "resources/src/syntax_config.json",
             "resources/src/syntax_errors.json");
 
     // Prepare semantic analysis

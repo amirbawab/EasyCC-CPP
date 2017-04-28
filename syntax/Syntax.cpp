@@ -15,8 +15,9 @@ namespace ecc{
     namespace src = boost::log::sources;
     BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(ecc_logger, src::logger_mt)
 
-    Syntax::Syntax(std::string grammarFile, std::string messagesFileName) {
+    Syntax::Syntax(std::string grammarFile, std::string configFileName, std::string messagesFileName) {
         this->grammar = std::make_shared<Grammar>(grammarFile);
+        this->config = SyntaxConfig::buildConfig(configFileName);
         this->messages = SyntaxMessages::loadMessages(messagesFileName);
     }
 
@@ -39,83 +40,88 @@ namespace ecc{
 
         BOOST_LOG(ecc_logger::get()) << "Started parsing the lexical tokens ...";
 
-        // Prepare the stack
-        std::stack<std::string> parseStack;
+        for(int phase = 1; phase <= this->config->getParsingPhases(); ++phase) {
 
-        // Keep track if any error occurred
-        bool error = false;
+            // Prepare the stack
+            std::stack<std::string> parseStack;
 
-        // Keep track if parser is in panic mode
-        bool stable = true;
+            // Keep track if parser is in panic mode
+            bool stable = true;
 
-        // Store the current index of the lexical token
-        int inputIndex = 0;
+            // Store the current index of the lexical token
+            int inputIndex = 0;
 
-        // Store lexical tokens
-        std::shared_ptr<LexicalToken> lexicalToken = nextToken(lexicalTokens, inputIndex);
+            // Store lexical tokens
+            std::shared_ptr<LexicalToken> lexicalToken = nextToken(lexicalTokens, inputIndex);
 
-        // Add the end of stack
-        parseStack.push(Grammar::END_OF_STACK);
+            // Add the end of stack
+            parseStack.push(Grammar::END_OF_STACK);
 
-        // Add grammar start
-        parseStack.push(grammar->getStart());
+            // Add grammar start
+            parseStack.push(grammar->getStart());
 
-        // TEST
-        this->m_semanticAction("action", 0, lexicalTokens, inputIndex);
+            // While more non-terminals are in the parse stack
+            while(parseStack.top() != Grammar::END_OF_STACK) {
 
-        // While more non-terminals are in the parse stack
-        while(parseStack.top() != Grammar::END_OF_STACK) {
+                // Get the top token from the parser stack
+                std::string top = parseStack.top();
 
-            // Get the top token from the parser stack
-            std::string top = parseStack.top();
+                // Check the type of the token
+                if(Grammar::isTerminal(top)) {
 
-            // Check the type of the token
-            if(Grammar::isTerminal(top)) {
+                    // If there is a match
+                    if(Grammar::extractTerminal(top) == lexicalToken->getName()) {
 
-                // If there is a match
-                if(Grammar::extractTerminal(top) == lexicalToken->getName()) {
-
-                    // Start over by scanning new input and processing a new top
-                    parseStack.pop();
-                    lexicalToken = nextToken(lexicalTokens, inputIndex);
-
-                } else {
-                    throw std::runtime_error(
-                            "Failed to process the input: "
-                            "In the Syntax analysis phase, the stack top terminal "
-                            "and the lexical input terminal token did not match! "
-                            "Please report this problem.");
-                }
-            } else { // It is a non-terminal
-
-                // Get record from the parse table
-                std::shared_ptr<std::vector<std::string>> production =
-                        grammar->getParseTabel(top, lexicalToken->getName());
-
-                // Check if the record exists or it is an error
-                if(production) {
-                    parseStack.pop();
-
-                    // Insert the new production right to left
-                    for(auto i=0; i < production->size(); ++i) {
-
-                        // If not epsilon
-                        if(!Grammar::isEpsilon((*production)[production->size()-1-i])){
-                            parseStack.push((*production)[production->size()-1-i]);
-                        }
-                    }
-                } else { // Error found
-
-                    // Generate error message
-                    errorMessages.push_back(generateErrorMessage(top, lexicalTokens, inputIndex-1));
-
-                    // If terminal is in the follow set or it is the End of the stack, then pop stack
-                    std::shared_ptr<std::set<std::string>> firstSet = grammar->getFirstSet(top);
-                    if(firstSet->find(lexicalToken->getName()) != firstSet->end() ||
-                            lexicalToken->getName() == Grammar::END_OF_STACK) {
+                        // Start over by scanning new input and processing a new top
                         parseStack.pop();
-                    } else {
                         lexicalToken = nextToken(lexicalTokens, inputIndex);
+
+                    } else {
+                        throw std::runtime_error(
+                                "Failed to process the input: "
+                                        "In the Syntax analysis phase, the stack top terminal "
+                                        "and the lexical input terminal token did not match! "
+                                        "Please report this problem.");
+                    }
+                } else if(Grammar::isSemanticAction(top)) {
+
+                    // Call the semantic action handler
+                    this->m_semanticAction(top, phase, lexicalTokens, inputIndex);
+
+                    // Remove the action from the stack
+                    parseStack.pop();
+
+                } else { // It is a non-terminal
+
+                    // Get record from the parse table
+                    std::shared_ptr<std::vector<std::string>> production =
+                            grammar->getParseTabel(top, lexicalToken->getName());
+
+                    // Check if the record exists or it is an error
+                    if(production) {
+                        parseStack.pop();
+
+                        // Insert the new production right to left
+                        for(auto i=0; i < production->size(); ++i) {
+
+                            // If not epsilon
+                            if(!Grammar::isEpsilon((*production)[production->size()-1-i])){
+                                parseStack.push((*production)[production->size()-1-i]);
+                            }
+                        }
+                    } else { // Error found
+
+                        // Generate error message
+                        errorMessages.push_back(generateErrorMessage(top, lexicalTokens, inputIndex-1));
+
+                        // If terminal is in the follow set or it is the End of the stack, then pop stack
+                        std::shared_ptr<std::set<std::string>> firstSet = grammar->getFirstSet(top);
+                        if(firstSet->find(lexicalToken->getName()) != firstSet->end() ||
+                           lexicalToken->getName() == Grammar::END_OF_STACK) {
+                            parseStack.pop();
+                        } else {
+                            lexicalToken = nextToken(lexicalTokens, inputIndex);
+                        }
                     }
                 }
             }
