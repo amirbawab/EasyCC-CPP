@@ -356,7 +356,24 @@ namespace ecc {
                         // Store current token
                         std::string current = (*production)[i];
 
-                        // If a non-terminal token, evaluate it
+                        // If the current token is a non-terminal then iterate on the next token
+                        // and add its first set to the follow set of the current token except for
+                        // the epsilon value. If the first set had an epsilon value, then the next token
+                        // needs to be evaluated as well. This repeats until no epsilon is found or if
+                        // there are no more tokens in the production, which in that case the follow set
+                        // of the LHS is added to the follow set of the current token.
+                        // Example 1
+                        // A -> B C D
+                        // Follow(A) = {'T1'}
+                        // First(C) = {'T2', EPSILON}
+                        // First(D) = {'T3'}
+                        // Then Follow(B) contains First(C)-{EPSILON} U First(D)
+                        // Example 2
+                        // A -> B C D
+                        // Follow(A) = {'T1'}
+                        // First(C) = {'T2', EPSILON}
+                        // First(D) = {'T3', EPSILON}
+                        // Then Follow(B) contains First(C)-{EPSILON} U First(D)-{EPSILON} U Follow(A)
                         if(Grammar::isNonTerminal(current)) {
 
                             // If set not created, create it
