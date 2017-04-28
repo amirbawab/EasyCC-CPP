@@ -363,16 +363,16 @@ namespace ecc {
                         // there are no more tokens in the production, which in that case the follow set
                         // of the LHS is added to the follow set of the current token.
                         // Example 1
-                        // A -> B C D
-                        // Follow(A) = {'T1'}
-                        // First(C) = {'T2', EPSILON}
-                        // First(D) = {'T3'}
+                        //      A -> B C D
+                        //      Follow(A) = {'T1'}
+                        //      First(C) = {'T2', EPSILON}
+                        //      First(D) = {'T3'}
                         // Then Follow(B) contains First(C)-{EPSILON} U First(D)
                         // Example 2
-                        // A -> B C D
-                        // Follow(A) = {'T1'}
-                        // First(C) = {'T2', EPSILON}
-                        // First(D) = {'T3', EPSILON}
+                        //      A -> B C D
+                        //      Follow(A) = {'T1'}
+                        //      First(C) = {'T2', EPSILON}
+                        //      First(D) = {'T3', EPSILON}
                         // Then Follow(B) contains First(C)-{EPSILON} U First(D)-{EPSILON} U Follow(A)
                         if(Grammar::isNonTerminal(current)) {
 
