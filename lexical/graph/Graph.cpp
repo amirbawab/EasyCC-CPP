@@ -41,8 +41,8 @@ namespace ecc {
         d.Parse(buffer.str().c_str());
 
         // Resize vector of states
-        graph->states.resize(d[STATES].Size());
-        graph->adjacencyList.resize(d[STATES].Size());
+        graph->m_states.resize(d[STATES].Size());
+        graph->m_adjacencyList.resize(d[STATES].Size());
 
         // Store if graph has an initial state
         bool hasInitialState = false;
@@ -55,18 +55,18 @@ namespace ecc {
             const char* type = (*i)[TYPE].GetString();
 
             // If id is outside bound
-            if(stateId < 0 || stateId >= graph->states.size()) {
+            if(stateId < 0 || stateId >= graph->m_states.size()) {
                 throw std::runtime_error("State id must be consecutive (order does not matter) starting from 0");
             }
 
             // If id already used before
-            if(graph->states[stateId]) {
+            if(graph->m_states[stateId]) {
                 throw std::runtime_error("Multiple definition for the state: " + std::to_string(stateId));
             }
 
             // Check the type
             if(std::strcmp(type, State::INITIAL.c_str()) == 0) {
-                graph->states[stateId] = std::make_shared<State>(stateId, State::INITIAL);
+                graph->m_states[stateId] = std::make_shared<State>(stateId, State::INITIAL);
 
                 // If more than one initial state was found, throw an exception
                 if(hasInitialState) {
@@ -77,12 +77,12 @@ namespace ecc {
                 hasInitialState = true;
 
                 // Store initial state
-                graph->initialState = graph->states[stateId];
+                graph->m_initialState = graph->m_states[stateId];
 
             } else if(std::strcmp(type, State::NORMAL.c_str()) == 0) {
-                graph->states[stateId] = std::make_shared<State>(stateId, State::NORMAL);
+                graph->m_states[stateId] = std::make_shared<State>(stateId, State::NORMAL);
             } else if(std::strcmp(type, State::FINAL.c_str()) == 0) {
-                graph->states[stateId] = std::make_shared<State>(
+                graph->m_states[stateId] = std::make_shared<State>(
                         stateId, State::FINAL, (*i)[TOKEN].GetString(), (*i)[BACKTRACK].GetBool());
             } else {
                 throw std::runtime_error(std::string("State type undefined: ") + type);
@@ -97,13 +97,13 @@ namespace ecc {
             int toStateId = (*i)[TO].GetInt();
 
             // If from state id is outside bound
-            if(fromStateId < 0 || fromStateId >= graph->states.size()) {
+            if(fromStateId < 0 || fromStateId >= graph->m_states.size()) {
                 throw std::runtime_error(std::string("A transition must have a defined source and destination states: "
                                                  "from state ") + std::to_string(fromStateId));
             }
 
             // If to state id is outside bound
-            if(toStateId < 0 || toStateId >= graph->states.size()) {
+            if(toStateId < 0 || toStateId >= graph->m_states.size()) {
                 throw std::runtime_error(std::string("A transition must have a defined source and destination states: "
                                                  "to state ") + std::to_string(toStateId));
             }
@@ -120,12 +120,12 @@ namespace ecc {
 
             // Read and create the transition labels
             for(auto &v : (*i)[CHARS].GetArray()) {
-                if(graph->adjacencyList[fromStateId].count(v.GetString()) == 1) {
+                if(graph->m_adjacencyList[fromStateId].count(v.GetString()) == 1) {
                     throw std::runtime_error(
                             std::string("Multiple definition for transition of label ") +
                             v.GetString() + " from state id: " + std::to_string(fromStateId));
                 }
-                graph->adjacencyList[fromStateId][v.GetString()] = toStateId;
+                graph->m_adjacencyList[fromStateId][v.GetString()] = toStateId;
             }
         }
 
@@ -135,9 +135,9 @@ namespace ecc {
         }
 
         // If initial and normal states don't have a transition to OTHER
-        for(size_t i=0; i < graph->states.size(); i++) {
-            if(graph->states[i]->getType() == State::INITIAL || graph->states[i]->getType() == State::NORMAL) {
-                if(graph->adjacencyList[i].count(TRANSITION_OTHER) == 0) {
+        for(size_t i=0; i < graph->m_states.size(); i++) {
+            if(graph->m_states[i]->getType() == State::INITIAL || graph->m_states[i]->getType() == State::NORMAL) {
+                if(graph->m_adjacencyList[i].count(TRANSITION_OTHER) == 0) {
                     throw std::runtime_error("All initial and normal states must have a transition on OTHER");
                 }
             }
@@ -149,7 +149,7 @@ namespace ecc {
     int Graph::getStateOnRead(int stateId, char charRead) {
 
         // Check if state id is correct
-        if(stateId < 0 || stateId >= this->states.size()) {
+        if(stateId < 0 || stateId >= this->m_states.size()) {
             throw std::runtime_error("State id not found!");
         }
 
@@ -162,27 +162,27 @@ namespace ecc {
         std::string charReadStr = std::string(1, charRead);
 
         // Check if char key is defined
-        if(this->adjacencyList[stateId].count(charReadStr) == 1) {
-            return this->adjacencyList[stateId][charReadStr];
+        if(this->m_adjacencyList[stateId].count(charReadStr) == 1) {
+            return this->m_adjacencyList[stateId][charReadStr];
         }
 
         // Check if in special transitions
         if(charRead >= 'a' && charRead <= 'z'
-           && this->adjacencyList[stateId].count(Graph::TRANSITION_LOWER_CASE_LETTER) == 1) {
-            return this->adjacencyList[stateId][Graph::TRANSITION_LOWER_CASE_LETTER];
+           && this->m_adjacencyList[stateId].count(Graph::TRANSITION_LOWER_CASE_LETTER) == 1) {
+            return this->m_adjacencyList[stateId][Graph::TRANSITION_LOWER_CASE_LETTER];
 
         } else if(charRead >= 'A' && charRead <= 'Z'
-                && this->adjacencyList[stateId].count(Graph::TRANSITION_UPPER_CASE_LETTER) == 1) {
-            return this->adjacencyList[stateId][Graph::TRANSITION_UPPER_CASE_LETTER];
+                && this->m_adjacencyList[stateId].count(Graph::TRANSITION_UPPER_CASE_LETTER) == 1) {
+            return this->m_adjacencyList[stateId][Graph::TRANSITION_UPPER_CASE_LETTER];
 
         } else if(charRead >= '1' && charRead <= '9'
-                && this->adjacencyList[stateId].count(Graph::TRANSITION_POSITIVE) == 1) {
-            return this->adjacencyList[stateId][Graph::TRANSITION_POSITIVE];
+                && this->m_adjacencyList[stateId].count(Graph::TRANSITION_POSITIVE) == 1) {
+            return this->m_adjacencyList[stateId][Graph::TRANSITION_POSITIVE];
 
         } else if(charRead == EOF
-                && this->adjacencyList[stateId].count(Graph::TRANSITION_EOF) == 1) {
-            return this->adjacencyList[stateId][Graph::TRANSITION_EOF];
+                && this->m_adjacencyList[stateId].count(Graph::TRANSITION_EOF) == 1) {
+            return this->m_adjacencyList[stateId][Graph::TRANSITION_EOF];
         }
-        return this->adjacencyList[stateId][Graph::TRANSITION_OTHER];
+        return this->m_adjacencyList[stateId][Graph::TRANSITION_OTHER];
     }
 }

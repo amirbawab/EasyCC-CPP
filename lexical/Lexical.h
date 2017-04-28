@@ -27,13 +27,13 @@ namespace ecc {
     private:
 
         // State machine
-        std::shared_ptr<Graph> graph;
+        std::shared_ptr<Graph> m_graph;
 
         // Tokens configuration
-        std::shared_ptr<Config> config;
+        std::shared_ptr<Config> m_config;
 
         // Messages
-        std::shared_ptr<Messages> messages;
+        std::shared_ptr<Messages> m_messages;
 
        /**
         * Create a lexical token

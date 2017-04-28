@@ -16,9 +16,9 @@ namespace ecc{
     BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(ecc_logger, src::logger_mt)
 
     Syntax::Syntax(std::string grammarFile, std::string configFileName, std::string messagesFileName) {
-        this->grammar = std::make_shared<Grammar>(grammarFile);
-        this->config = SyntaxConfig::buildConfig(configFileName);
-        this->messages = SyntaxMessages::loadMessages(messagesFileName);
+        this->m_grammar = std::make_shared<Grammar>(grammarFile);
+        this->m_config = SyntaxConfig::buildConfig(configFileName);
+        this->m_messages = SyntaxMessages::loadMessages(messagesFileName);
     }
 
     /**
@@ -40,7 +40,7 @@ namespace ecc{
 
         BOOST_LOG(ecc_logger::get()) << "Started parsing the lexical tokens ...";
 
-        for(int phase = 1; phase <= this->config->getParsingPhases(); ++phase) {
+        for(int phase = 1; phase <= this->m_config->getParsingPhases(); ++phase) {
 
             // Prepare the stack
             std::stack<std::string> parseStack;
@@ -58,7 +58,7 @@ namespace ecc{
             parseStack.push(Grammar::END_OF_STACK);
 
             // Add grammar start
-            parseStack.push(grammar->getStart());
+            parseStack.push(m_grammar->getStart());
 
             // While more non-terminals are in the parse stack
             while(parseStack.top() != Grammar::END_OF_STACK) {
@@ -95,7 +95,7 @@ namespace ecc{
 
                     // Get record from the parse table
                     std::shared_ptr<std::vector<std::string>> production =
-                            grammar->getParseTabel(top, lexicalToken->getName());
+                            m_grammar->getParseTabel(top, lexicalToken->getName());
 
                     // Check if the record exists or it is an error
                     if(production) {
@@ -118,7 +118,7 @@ namespace ecc{
 
                         // If terminal is in the follow set or there is no more input to process,
                         // then pop the parse stack
-                        std::shared_ptr<std::set<std::string>> followSet = grammar->getFollowSet(top);
+                        std::shared_ptr<std::set<std::string>> followSet = m_grammar->getFollowSet(top);
                         if(followSet->find(lexicalToken->getName()) != followSet->end() ||
                            lexicalToken->getName() == Grammar::END_OF_STACK) {
                             parseStack.pop();
@@ -143,7 +143,7 @@ namespace ecc{
                                              std::vector<std::shared_ptr<LexicalToken>> &lexicalTokens,
                                              int index) {
         // Load error message
-        std::string message = messages->getErrorMessage(nonTerminal, lexicalTokens[index]->getName());
+        std::string message = m_messages->getErrorMessage(nonTerminal, lexicalTokens[index]->getName());
         std::string messageCopy = message;
 
         // Match error messages

@@ -30,13 +30,13 @@ namespace ecc {
         /**
          * Get initial state
          */
-        std::shared_ptr<State> getInitialState() const { return initialState; }
+        std::shared_ptr<State> getInitialState() const { return m_initialState; }
 
         /**
          * Get state by id
          * @return pointer to the state
          */
-        std::shared_ptr<State> getStateById(int id) const {return this->states[id];}
+        std::shared_ptr<State> getStateById(int id) const {return this->m_states[id];}
 
         /**
          * Get the destination sate when reading a label
@@ -49,22 +49,22 @@ namespace ecc {
     private:
 
         // List of all states
-        std::vector<std::shared_ptr<State>> states;
+        std::vector<std::shared_ptr<State>> m_states;
 
         // Store states adjacency
-        std::vector<std::map<std::string, int>> adjacencyList;
+        std::vector<std::map<std::string, int>> m_adjacencyList;
 
         // Starting state of the graph
-        std::shared_ptr<State> initialState;
+        std::shared_ptr<State> m_initialState;
 
         /**
          * To string
          */
         friend std::ostream& operator<<(std::ostream& os, const Graph &graph) {
-            os << "Graph has " << graph.states.size() << " states";
-            for(size_t i=0; i < graph.states.size(); i++){
-                os << "\n\t" << *graph.states[i] << ":";
-                for(auto pair : graph.adjacencyList[i]) {
+            os << "Graph has " << graph.m_states.size() << " states";
+            for(size_t i=0; i < graph.m_states.size(); i++){
+                os << "\n\t" << *graph.m_states[i] << ":";
+                for(auto pair : graph.m_adjacencyList[i]) {
                     os << " (" << pair.first  << ", " << pair.second << ")";
                 }
             }

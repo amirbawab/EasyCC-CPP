@@ -44,33 +44,33 @@ namespace ecc{
         }
 
         // Store newline
-        config->newLine = configNewline;
+        config->m_newLine = configNewline;
 
         // Ignore object
-        config->ignorePrefix = d[IGNORE][PREFIX].GetString();
-        config->ignoreSuffix = d[IGNORE][SUFFIX].GetString();
+        config->m_ignorePrefix = d[IGNORE][PREFIX].GetString();
+        config->m_ignoreSuffix = d[IGNORE][SUFFIX].GetString();
         for(auto i=d[IGNORE][INCLUDE].Begin(); i!=d[IGNORE][INCLUDE].End(); i++) {
-            config->ignoreInclude.insert((*i).GetString());
+            config->m_ignoreInclude.insert((*i).GetString());
         }
         for(auto i=d[IGNORE][EXCLUDE].Begin(); i!=d[IGNORE][EXCLUDE].End(); i++) {
-            config->ignoreExclude.insert((*i).GetString());
+            config->m_ignoreExclude.insert((*i).GetString());
         }
 
         // Error object
-        config->errorPrefix = d[ERROR][PREFIX].GetString();
-        config->errorSuffix = d[ERROR][SUFFIX].GetString();
+        config->m_errorPrefix = d[ERROR][PREFIX].GetString();
+        config->m_errorSuffix = d[ERROR][SUFFIX].GetString();
         for(auto i=d[ERROR][INCLUDE].Begin(); i!=d[ERROR][INCLUDE].End(); i++) {
-            config->errorInclude.insert((*i).GetString());
+            config->m_errorInclude.insert((*i).GetString());
         }
         for(auto i=d[ERROR][EXCLUDE].Begin(); i!=d[ERROR][EXCLUDE].End(); i++) {
-            config->errorExclude.insert((*i).GetString());
+            config->m_errorExclude.insert((*i).GetString());
         }
 
         // Reserved object
         for(auto i=d[RESERVED].MemberBegin(); i!=d[RESERVED].MemberEnd(); i++) {
             const char* tokenName = (*i).name.GetString();
             for(auto j=d[RESERVED][tokenName].MemberBegin(); j!= d[RESERVED][tokenName].MemberEnd(); j++) {
-                config->reservedTokens[tokenName][j->name.GetString()] = j->value.GetString();
+                config->m_reservedTokens[tokenName][j->name.GetString()] = j->value.GetString();
             }
         }
         return config;
@@ -78,57 +78,57 @@ namespace ecc{
 
     bool Config::mustIgnoreToken(std::string tokenName) {
         // If token name is in the exclude set
-        if(this->ignoreExclude.find(tokenName) != this->ignoreExclude.end()) {
+        if(this->m_ignoreExclude.find(tokenName) != this->m_ignoreExclude.end()) {
             return false;
         }
 
         // If token name is in the include set
-        if(this->ignoreInclude.find(tokenName) != this->ignoreInclude.end()) {
+        if(this->m_ignoreInclude.find(tokenName) != this->m_ignoreInclude.end()) {
             return true;
         }
 
         // If token name starts with the prefix
-        if(ignorePrefix.size() > 0 && boost::algorithm::starts_with(tokenName, ignorePrefix)) {
+        if(m_ignorePrefix.size() > 0 && boost::algorithm::starts_with(tokenName, m_ignorePrefix)) {
             return true;
         }
 
         // If token name ends with the suffix
-        return ignoreSuffix.size() > 0 && boost::algorithm::ends_with(tokenName, ignoreSuffix);
+        return m_ignoreSuffix.size() > 0 && boost::algorithm::ends_with(tokenName, m_ignoreSuffix);
     }
 
     bool Config::isErrorToken(std::string tokenName) {
         // If token name is in the exclude set
-        if(this->errorExclude.find(tokenName) != this->errorExclude.end()) {
+        if(this->m_errorExclude.find(tokenName) != this->m_errorExclude.end()) {
             return false;
         }
 
         // If token name is in the include set
-        if(this->errorInclude.find(tokenName) != this->errorInclude.end()) {
+        if(this->m_errorInclude.find(tokenName) != this->m_errorInclude.end()) {
             return true;
         }
 
         // If token name starts with the prefix
-        if(errorPrefix.size() > 0 && boost::algorithm::starts_with(tokenName, errorPrefix)) {
+        if(m_errorPrefix.size() > 0 && boost::algorithm::starts_with(tokenName, m_errorPrefix)) {
             return true;
         }
 
         // If token name ends with the suffix
-        return errorSuffix.size() > 0 && boost::algorithm::ends_with(tokenName, errorSuffix);
+        return m_errorSuffix.size() > 0 && boost::algorithm::ends_with(tokenName, m_errorSuffix);
     }
 
     std::string Config::updateTokenName(std::string tokenName, std::string tokenValue) {
 
         // If token name does not have any check entry
-        if(this->reservedTokens.count(tokenName) == 0) {
+        if(this->m_reservedTokens.count(tokenName) == 0) {
             return tokenName;
         }
 
         // If token value exist in the map
-        if(this->reservedTokens[tokenName].count(tokenValue) == 0) {
+        if(this->m_reservedTokens[tokenName].count(tokenValue) == 0) {
             return tokenName;
         }
 
         // Return new token name
-        return this->reservedTokens[tokenName][tokenValue];
+        return this->m_reservedTokens[tokenName][tokenValue];
     }
 }

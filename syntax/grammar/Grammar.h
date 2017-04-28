@@ -48,7 +48,7 @@ namespace ecc {
          * Get the root of any grammar derivation tree
          * @return start token
          */
-        std::string getStart() const{ return this->start;}
+        std::string getStart() const{ return this->m_start;}
 
         /**
          * Extract token from a terminal token
@@ -59,12 +59,13 @@ namespace ecc {
         static std::string extractTerminal(std::string terminal);
 
     private:
-        std::string start;
-        std::map<std::string, std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::string>>>>> productions;
-        std::map<std::shared_ptr<std::vector<std::string>>, std::shared_ptr<std::set<std::string>>> productionFirstSet;
-        std::map<std::string, std::shared_ptr<std::set<std::string>>> firstSet;
-        std::map<std::string, std::shared_ptr<std::set<std::string>>> followSet;
-        std::map<std::string, std::shared_ptr<std::map<std::string, std::shared_ptr<std::vector<std::string>>>>> parseTableMap;
+        std::string m_start;
+        std::map<std::string, std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::string>>>>> m_productions;
+        std::map<std::shared_ptr<std::vector<std::string>>, std::shared_ptr<std::set<std::string>>> m_productionFirstSet;
+        std::map<std::string, std::shared_ptr<std::set<std::string>>> m_firstSet;
+        std::map<std::string, std::shared_ptr<std::set<std::string>>> m_followSet;
+        std::map<std::string, std::shared_ptr<std::map<std::string,
+                std::shared_ptr<std::vector<std::string>>>>> m_parseTableMap;
 
         /**
          * Parse one line of the grammar file
@@ -126,4 +127,4 @@ namespace ecc {
 }
 
 
-#endif //EASYCC_CPP_GRAMMAR_H
+#endif

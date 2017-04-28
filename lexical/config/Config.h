@@ -41,7 +41,7 @@ namespace ecc {
          * @return new line symbol
          */
         std::string getNewLine() const {
-            return this->newLine;
+            return this->m_newLine;
         }
 
         /**
@@ -52,22 +52,22 @@ namespace ecc {
     private:
 
         // Define new line
-        std::string newLine;
+        std::string m_newLine;
 
         // Token names ignored
-        std::string ignorePrefix;
-        std::string ignoreSuffix;
-        std::set<std::string> ignoreInclude;
-        std::set<std::string> ignoreExclude;
+        std::string m_ignorePrefix;
+        std::string m_ignoreSuffix;
+        std::set<std::string> m_ignoreInclude;
+        std::set<std::string> m_ignoreExclude;
 
         // Token names classified as error tokens
-        std::string errorPrefix;
-        std::string errorSuffix;
-        std::set<std::string> errorInclude;
-        std::set<std::string> errorExclude;
+        std::string m_errorPrefix;
+        std::string m_errorSuffix;
+        std::set<std::string> m_errorInclude;
+        std::set<std::string> m_errorExclude;
 
         // Reserved token names
-        std::map<std::string, std::map<std::string, std::string>> reservedTokens;
+        std::map<std::string, std::map<std::string, std::string>> m_reservedTokens;
     };
 }
 

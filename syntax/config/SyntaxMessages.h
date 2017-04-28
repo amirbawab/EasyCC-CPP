@@ -23,8 +23,8 @@ namespace ecc{
          */
         std::string getErrorMessage(std::string nonTerminal, std::string terminal);
     private:
-        std::string defaultMessage;
-        std::map<std::string, std::map<std::string, std::string>> errorMessages;
+        std::string m_defaultMessage;
+        std::map<std::string, std::map<std::string, std::string>> m_errorMessages;
 
         // Reserved token names
         const std::string DEFAULT_TERMINAL_AND_NON_TERMINAL = ":any";

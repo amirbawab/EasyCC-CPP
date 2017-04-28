@@ -6,9 +6,9 @@
 
 namespace ecc {
     Lexical::Lexical(std::string stateMachineFileName, std::string configFileName, std::string messagesFileName) {
-        this->graph = Graph::buildGraph(stateMachineFileName);
-        this->config = Config::buildConfig(configFileName);
-        this->messages = Messages::loadMessages(messagesFileName);
+        this->m_graph = Graph::buildGraph(stateMachineFileName);
+        this->m_config = Config::buildConfig(configFileName);
+        this->m_messages = Messages::loadMessages(messagesFileName);
     }
 
     void Lexical::generateLexicalTokens(
@@ -25,7 +25,7 @@ namespace ecc {
         int position = 0;
 
         // Keep track of the state
-        std::shared_ptr<State> state = graph->getInitialState();
+        std::shared_ptr<State> state = m_graph->getInitialState();
 
         // Keep track of the token value created
         std::stringstream tokenValueStream;
@@ -48,7 +48,7 @@ namespace ecc {
                 }
 
                 // Jump to the next state
-                state = graph->getStateById(graph->getStateOnRead(state->getId(), ch));
+                state = m_graph->getStateById(m_graph->getStateOnRead(state->getId(), ch));
 
                 // If new state is a final state
                 if (state->getType() == State::FINAL) {
@@ -78,7 +78,7 @@ namespace ecc {
 
                     // Reset values
                     tokenValueStream.str(std::string());
-                    state = graph->getInitialState();
+                    state = m_graph->getInitialState();
                 } else {
 
                     // Non-final states does need to backtrack
@@ -93,11 +93,11 @@ namespace ecc {
 
             // TODO Add "Config::AUTO" to automatically detect
             // Check if the read char is a new line
-            if(config->getNewLine() == Config::LF && ch == '\n' ||
-               config->getNewLine() == Config::CR && ch == '\r') {
+            if(m_config->getNewLine() == Config::LF && ch == '\n' ||
+               m_config->getNewLine() == Config::CR && ch == '\r') {
                 column = 1;
                 line++;
-            } else if(config->getNewLine() == Config::CRLF && ch == '\r' && fin.peek() == '\n') {
+            } else if(m_config->getNewLine() == Config::CRLF && ch == '\r' && fin.peek() == '\n') {
                 // Skip next character
                 fin >> std::noskipws >> ch;
                 column = 1;
@@ -110,7 +110,7 @@ namespace ecc {
         }
 
         // One more call for the end of file
-        state = graph->getStateById(graph->getStateOnRead(state->getId(), EOF));
+        state = m_graph->getStateById(m_graph->getStateOnRead(state->getId(), EOF));
 
         // After reaching EOF, the current state should be either INITIAL or FINAL
         if(state->getType() == State::NORMAL) {
@@ -152,12 +152,12 @@ namespace ecc {
             std::string tokenName, std::string tokenValue, const int &line, const int &column, const int &position) {
 
         // Check the type of the token name
-        if(config->isErrorToken(tokenName)) {
+        if(m_config->isErrorToken(tokenName)) {
             return std::make_shared<LexicalToken>(
                     LexicalToken::Type::ERROR_TOKEN, tokenName,
                     tokenValue, line, column, position);
-        } else if(!config->mustIgnoreToken(tokenName)) {
-            tokenName = config->updateTokenName(tokenName, tokenValue);
+        } else if(!m_config->mustIgnoreToken(tokenName)) {
+            tokenName = m_config->updateTokenName(tokenName, tokenValue);
             return std::make_shared<LexicalToken>(
                     LexicalToken::Type::NORMAL_TOKEN, tokenName,
                     tokenValue, line, column, position);
@@ -166,7 +166,7 @@ namespace ecc {
     }
 
     std::string Lexical::generateErrorMessage(std::shared_ptr<LexicalToken> lexicalToken) {
-        std::string message = this->messages->getErrorMessage(lexicalToken->getName());
+        std::string message = this->m_messages->getErrorMessage(lexicalToken->getName());
         boost::replace_all(message, "${value}", lexicalToken->getValue());
         boost::replace_all(message, "${line}", std::to_string(lexicalToken->getLine()));
         boost::replace_all(message, "${column}", std::to_string(lexicalToken->getColumn()));

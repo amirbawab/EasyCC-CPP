@@ -31,7 +31,7 @@ namespace ecc {
         d.Parse(buffer.str().c_str());
 
         // Default message
-        messages->defaultMessage = d[DEFAULT_MESSAGE].GetString();
+        messages->m_defaultMessage = d[DEFAULT_MESSAGE].GetString();
 
         // Loop on all messages
         for(rapidjson::SizeType i=0; i < d[ERROR_MESSAGES].Size(); i++) {
@@ -42,12 +42,12 @@ namespace ecc {
             std::string message = d[ERROR_MESSAGES][i][MESSAGE].GetString();
 
             // Verify duplicates
-            if(messages->errorMessages.find(nonTerminal) != messages->errorMessages.end() &&
-                    messages->errorMessages[nonTerminal].find(terminal) != messages->errorMessages[nonTerminal].end()) {
+            if(messages->m_errorMessages.find(nonTerminal) != messages->m_errorMessages.end() &&
+                    messages->m_errorMessages[nonTerminal].find(terminal) != messages->m_errorMessages[nonTerminal].end()) {
                 throw std::runtime_error(std::string("Message with non-terminal: ") + nonTerminal +
                                          " and terminal: " + terminal + " is defined multiple times in " + fileName);
             }
-            messages->errorMessages[nonTerminal][terminal] = message;
+            messages->m_errorMessages[nonTerminal][terminal] = message;
         }
         return messages;
     }
@@ -55,21 +55,21 @@ namespace ecc {
     std::string SyntaxMessages::getErrorMessage(std::string nonTerminal, std::string terminal) {
 
         // If non-terminal registered
-        if(errorMessages.find(nonTerminal) != errorMessages.end()) {
+        if(m_errorMessages.find(nonTerminal) != m_errorMessages.end()) {
 
             // If terminal registered in that non-terminal
-            if(errorMessages[nonTerminal].find(terminal) != errorMessages[nonTerminal].end()) {
-                return errorMessages[nonTerminal][terminal];
+            if(m_errorMessages[nonTerminal].find(terminal) != m_errorMessages[nonTerminal].end()) {
+                return m_errorMessages[nonTerminal][terminal];
 
-            } else if(errorMessages[nonTerminal].find(DEFAULT_TERMINAL_AND_NON_TERMINAL) !=
-                        errorMessages[nonTerminal].end()) {
-                return errorMessages[nonTerminal][DEFAULT_TERMINAL_AND_NON_TERMINAL];
+            } else if(m_errorMessages[nonTerminal].find(DEFAULT_TERMINAL_AND_NON_TERMINAL) !=
+                        m_errorMessages[nonTerminal].end()) {
+                return m_errorMessages[nonTerminal][DEFAULT_TERMINAL_AND_NON_TERMINAL];
             }
-        } else if(errorMessages.find(DEFAULT_TERMINAL_AND_NON_TERMINAL) != errorMessages.end() &&
-                errorMessages[DEFAULT_TERMINAL_AND_NON_TERMINAL].find(terminal) !=
-                        errorMessages[DEFAULT_TERMINAL_AND_NON_TERMINAL].end()) {
-            return errorMessages[DEFAULT_TERMINAL_AND_NON_TERMINAL][terminal];
+        } else if(m_errorMessages.find(DEFAULT_TERMINAL_AND_NON_TERMINAL) != m_errorMessages.end() &&
+                m_errorMessages[DEFAULT_TERMINAL_AND_NON_TERMINAL].find(terminal) !=
+                        m_errorMessages[DEFAULT_TERMINAL_AND_NON_TERMINAL].end()) {
+            return m_errorMessages[DEFAULT_TERMINAL_AND_NON_TERMINAL][terminal];
         }
-        return this->defaultMessage;
+        return this->m_defaultMessage;
     }
 }

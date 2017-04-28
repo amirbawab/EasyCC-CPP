@@ -25,23 +25,23 @@ namespace ecc{
         d.Parse(buffer.str().c_str());
 
         // Default message
-        messages->defaultMessage = d[DEFAULT_MESSAGE].GetString();
+        messages->m_defaultMessage = d[DEFAULT_MESSAGE].GetString();
 
         // Loop on all messages
         for(auto i=d[ERROR_MESSAGES].MemberBegin(); i!=d[ERROR_MESSAGES].MemberEnd(); i++) {
-            if(messages->errorMessages.count(i->name.GetString()) == 1) {
+            if(messages->m_errorMessages.count(i->name.GetString()) == 1) {
                 throw std::runtime_error(std::string("Message of key ") + i->value.GetString() +
                                                  " is defined multiple times in " + fileName);
             }
-            messages->errorMessages[i->name.GetString()] = i->value.GetString();
+            messages->m_errorMessages[i->name.GetString()] = i->value.GetString();
         }
         return messages;
     }
 
     std::string Messages::getErrorMessage(std::string key) {
-        if(this->errorMessages.count(key) == 1) {
-            return this->errorMessages[key];
+        if(this->m_errorMessages.count(key) == 1) {
+            return this->m_errorMessages[key];
         }
-        return this->defaultMessage;
+        return this->m_defaultMessage;
     }
 }

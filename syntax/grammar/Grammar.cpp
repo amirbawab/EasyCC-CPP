@@ -50,7 +50,7 @@ namespace ecc {
 
         BOOST_LOG(ecc_logger::get()) << "Checking if the keys size for the first set matches "
                                                 "the keys size for the follow set ...";
-        if(firstSet.size() != followSet.size()) {
+        if(m_firstSet.size() != m_followSet.size()) {
             throw std::runtime_error("Not all non-terminals were assigned a production");
         }
 
@@ -81,8 +81,8 @@ namespace ecc {
             lastNonTerminal = words[0];
 
             // Update start token
-            if(start.empty()) {
-                start = lastNonTerminal;
+            if(m_start.empty()) {
+                m_start = lastNonTerminal;
             }
 
         } else if(words.size() == 1) {
@@ -145,13 +145,13 @@ namespace ecc {
             }
 
             // If production of LHS was not created, create one
-            if(productions.count(LHS) == 0) {
-                productions[LHS] = std::make_shared<std::vector<std::shared_ptr<std::vector<std::string>>>>();
+            if(m_productions.count(LHS) == 0) {
+                m_productions[LHS] = std::make_shared<std::vector<std::shared_ptr<std::vector<std::string>>>>();
             }
 
             // Resize corresponding vector
-            size_t prevSize = productions[LHS]->size();
-            productions[LHS]->resize(prevSize + productionVector.size());
+            size_t prevSize = m_productions[LHS]->size();
+            m_productions[LHS]->resize(prevSize + productionVector.size());
 
             // Split production by spaces
             for (size_t i = 0; i < productionVector.size(); i++) {
@@ -163,8 +163,8 @@ namespace ecc {
                     std::istringstream productionss(productionVector[i]);
 
                     // If production not created, create it
-                    if(!(*productions[LHS])[i + prevSize]) {
-                        (*productions[LHS])[i + prevSize] = std::make_shared<std::vector<std::string>>();
+                    if(!(*m_productions[LHS])[i + prevSize]) {
+                        (*m_productions[LHS])[i + prevSize] = std::make_shared<std::vector<std::string>>();
                     }
 
                     // Read word by word
@@ -174,11 +174,11 @@ namespace ecc {
                         // Terminal and epsilon tokens cannot be mixed with other tokens except the ones
                         // specified in the isEmptyWithIgnoreExceptions() function
                         if((Grammar::isTerminal(word) || Grammar::isEpsilon(word)) &&
-                                !isEmptyWithIgnoreExceptions((*productions[LHS])[i+prevSize])) {
+                                !isEmptyWithIgnoreExceptions((*m_productions[LHS])[i+prevSize])) {
                             throw std::runtime_error("A production containing a terminal or an epsilon token "
                                                              "cannot be followed or preceded by other tokens.");
                         }
-                        (*productions[LHS])[i + prevSize]->push_back(word);
+                        (*m_productions[LHS])[i + prevSize]->push_back(word);
                     }
                 }
             }
@@ -190,7 +190,7 @@ namespace ecc {
     void Grammar::logFirstSet() {
         BOOST_LOG(ecc_logger::get()) << "Computed First Set:";
         std::string result;
-        for(auto i = firstSet.begin(); i != firstSet.end(); i++) {
+        for(auto i = m_firstSet.begin(); i != m_firstSet.end(); i++) {
             result = i->first + ": ";
             for(auto j : *i->second) {
                 result += j + " ";
@@ -202,7 +202,7 @@ namespace ecc {
     void Grammar::logFollowSet() {
         BOOST_LOG(ecc_logger::get()) << "Computed Follow Set:";
         std::string result;
-        for(auto i = followSet.begin(); i != followSet.end(); i++) {
+        for(auto i = m_followSet.begin(); i != m_followSet.end(); i++) {
              result = i->first + ": ";
             for(auto j : *i->second) {
                 result += j + " ";
@@ -242,22 +242,22 @@ namespace ecc {
     void Grammar::computeFirstSet() {
 
         // Compute the first set multiple times
-        for(int z=0; z<productions.size(); z++) {
+        for(int z=0; z<m_productions.size(); z++) {
 
             // Loop on all definitions
-            for(auto &definition : productions) {
+            for(auto &definition : m_productions) {
 
                 // If first set for a LHS is not defined
-                if(firstSet.count(definition.first) == 0) {
-                    firstSet[definition.first] = std::make_shared<std::set<std::string>>();
+                if(m_firstSet.count(definition.first) == 0) {
+                    m_firstSet[definition.first] = std::make_shared<std::set<std::string>>();
                 }
 
                 // Loop on all productions of a definition
                 for(auto &production : *definition.second) {
 
                     // If set not created for a production, create it
-                    if(productionFirstSet.count(production) == 0) {
-                        productionFirstSet[production] = std::make_shared<std::set<std::string>>();
+                    if(m_productionFirstSet.count(production) == 0) {
+                        m_productionFirstSet[production] = std::make_shared<std::set<std::string>>();
                     }
 
                     // Loop on all tokens of a production
@@ -269,11 +269,11 @@ namespace ecc {
                          */
                         if(Grammar::isTerminal(token)) {
                             std::string extractedTerminal = extractTerminal(token);
-                            productionFirstSet[production]->insert(extractedTerminal);
-                            firstSet[definition.first]->insert(extractedTerminal);
+                            m_productionFirstSet[production]->insert(extractedTerminal);
+                            m_firstSet[definition.first]->insert(extractedTerminal);
                         } else if(Grammar::isEpsilon(token)) {
-                            productionFirstSet[production]->insert(token);
-                            firstSet[definition.first]->insert(token);
+                            m_productionFirstSet[production]->insert(token);
+                            m_firstSet[definition.first]->insert(token);
                         } else if(Grammar::isNonTerminal(token)) {
                             std::shared_ptr<std::set<std::string>> tokenFirstSet = getFirstSet(token);
 
@@ -304,15 +304,15 @@ namespace ecc {
                                 // Note that in Example 3, EPSILON will be in First(A)
                                 if(tokenFirstSet->find(Grammar::EPSILON) == tokenFirstSet->end() ||
                                         token == lastNonTerminal(production)) {
-                                    productionFirstSet[production]->insert(tokenFirstSet->begin(), tokenFirstSet->end());
-                                    firstSet[definition.first]->insert(tokenFirstSet->begin(), tokenFirstSet->end());
+                                    m_productionFirstSet[production]->insert(tokenFirstSet->begin(), tokenFirstSet->end());
+                                    m_firstSet[definition.first]->insert(tokenFirstSet->begin(), tokenFirstSet->end());
                                     break;
                                 } else {
                                     // Add everything except the epsilon
                                     for(auto firstSetToken : *tokenFirstSet) {
                                         if(!Grammar::isEpsilon(firstSetToken)) {
-                                            productionFirstSet[production]->insert(firstSetToken);
-                                            firstSet[definition.first]->insert(firstSetToken);
+                                            m_productionFirstSet[production]->insert(firstSetToken);
+                                            m_firstSet[definition.first]->insert(firstSetToken);
                                         }
                                     }
                                 }
@@ -330,15 +330,15 @@ namespace ecc {
     }
 
     std::shared_ptr<std::set<std::string>> Grammar::getFirstSet(std::string token) {
-        if(Grammar::isNonTerminal(token) && firstSet.find(token) != firstSet.end()) {
-            return firstSet[token];
+        if(Grammar::isNonTerminal(token) && m_firstSet.find(token) != m_firstSet.end()) {
+            return m_firstSet[token];
         }
         return nullptr;
     }
 
     std::shared_ptr<std::set<std::string>> Grammar::getFollowSet(std::string token) {
-        if(Grammar::isNonTerminal(token) && followSet.find(token) != followSet.end()) {
-            return followSet[token];
+        if(Grammar::isNonTerminal(token) && m_followSet.find(token) != m_followSet.end()) {
+            return m_followSet[token];
         }
         return nullptr;
     }
@@ -346,14 +346,14 @@ namespace ecc {
     void Grammar::computeFollowSet() {
 
         // Add end of stack to the follow set of the start grammar
-        followSet[start] = std::make_shared<std::set<std::string>>();
-        followSet[start]->insert(Grammar::END_OF_STACK);
+        m_followSet[m_start] = std::make_shared<std::set<std::string>>();
+        m_followSet[m_start]->insert(Grammar::END_OF_STACK);
 
         // Compute the follow set multiple times
-        for(int z=0; z <productions.size(); z++) {
+        for(int z=0; z <m_productions.size(); z++) {
 
             // Loop on definitions
-            for(auto definition : productions) {
+            for(auto definition : m_productions) {
 
                 // Loop on productions
                 for(auto production : *definition.second) {
@@ -385,8 +385,8 @@ namespace ecc {
                         if(Grammar::isNonTerminal(current)) {
 
                             // If set not created, create it
-                            if(followSet.count(current) == 0) {
-                                followSet[current] = std::make_shared<std::set<std::string>>();
+                            if(m_followSet.count(current) == 0) {
+                                m_followSet[current] = std::make_shared<std::set<std::string>>();
                             }
 
                             int j = i;
@@ -407,7 +407,7 @@ namespace ecc {
                                     // Copy the tokens
                                     for(auto value : *tokenFirstSet) {
                                         if(!Grammar::isEpsilon(value)) {
-                                            followSet[current]->insert(value);
+                                            m_followSet[current]->insert(value);
                                         } else {
                                             noEpsilon = false;
                                         }
@@ -421,9 +421,9 @@ namespace ecc {
                             }
 
                             if(j == production->size()) {
-                                if(followSet.count(definition.first) == 1) {
-                                    followSet[current]->insert(followSet[definition.first]->begin(),
-                                                               followSet[definition.first]->end());
+                                if(m_followSet.count(definition.first) == 1) {
+                                    m_followSet[current]->insert(m_followSet[definition.first]->begin(),
+                                                               m_followSet[definition.first]->end());
                                 }
                             }
                         }
@@ -436,7 +436,7 @@ namespace ecc {
     void Grammar::validate() {
 
         // Cond 1
-        for(auto definition : productions) {
+        for(auto definition : m_productions) {
             std::string leftRecursiveToken = getLeftRecursion(definition.first, std::set<std::string>());
             if (!leftRecursiveToken.empty()) {
                 throw std::runtime_error("Left hand side: " + leftRecursiveToken + " has a left recursion");
@@ -444,10 +444,10 @@ namespace ecc {
         }
 
         // Cond 2
-        for(auto definition : productions) {
+        for(auto definition : m_productions) {
             std::set<std::string> uniqueFirstSetValues;
-            for(auto production : *productions[definition.first]) {
-                for(auto token : *productionFirstSet[production]) {
+            for(auto production : *m_productions[definition.first]) {
+                for(auto token : *m_productionFirstSet[production]) {
                     if(uniqueFirstSetValues.find(token) != uniqueFirstSetValues.end()) {
                         throw std::runtime_error("The first set of the rules of the non-terminal: " +
                                                          definition.first + " intersect at " + token);
@@ -459,14 +459,14 @@ namespace ecc {
         }
 
         // Cond 3
-        for(auto definition : productions) {
-            if (firstSet[definition.first]->find(Grammar::EPSILON) != firstSet[definition.first]->end()) {
+        for(auto definition : m_productions) {
+            if (m_firstSet[definition.first]->find(Grammar::EPSILON) != m_firstSet[definition.first]->end()) {
                 // Get the follow set
-                std::shared_ptr<std::set<std::string>> tokenFollowSet = followSet[definition.first];
-                for (std::string token : *firstSet[definition.first]) {
+                std::shared_ptr<std::set<std::string>> tokenFollowSet = m_followSet[definition.first];
+                for (std::string token : *m_firstSet[definition.first]) {
                     if (tokenFollowSet->find(token) != tokenFollowSet->end()) {
                         std::stringstream intersection;
-                        std::copy(firstSet[definition.first]->begin(), firstSet[definition.first]->end(),
+                        std::copy(m_firstSet[definition.first]->begin(), m_firstSet[definition.first]->end(),
                                   std::ostream_iterator<std::string>(intersection, " "));
                         throw std::runtime_error("The first and follow sets of the non-terminal: " + definition.first +
                                                  " intersect at " + intersection.str());
@@ -486,7 +486,7 @@ namespace ecc {
         // Mark non terminal as visited
         visited.insert(token);
 
-        for(auto production : *productions[token]) {
+        for(auto production : *m_productions[token]) {
             for(std::string syntaxToken : *production) {
                 if(Grammar::isNonTerminal(syntaxToken)) {
 
@@ -497,7 +497,7 @@ namespace ecc {
                     }
 
                     // Stop checking when the first set of non-terminal does not contain epsilon
-                    if(firstSet[syntaxToken]->find(Grammar::EPSILON) == firstSet[syntaxToken]->end()) {
+                    if(m_firstSet[syntaxToken]->find(Grammar::EPSILON) == m_firstSet[syntaxToken]->end()) {
                         break;
                     }
                 } else if(Grammar::isTerminal(syntaxToken)) {
@@ -514,17 +514,17 @@ namespace ecc {
     void Grammar::buildParseTable() {
 
         // Loop on all definitions
-        for(auto &definition : productions) {
+        for(auto &definition : m_productions) {
 
             // Create map
-            parseTableMap[definition.first] =
+            m_parseTableMap[definition.first] =
                     std::make_shared<std::map<std::string, std::shared_ptr<std::vector<std::string>>>>();
 
             // Loop on all productions
             for(auto &production : *definition.second) {
 
                 // Get the first set of the production
-                std::shared_ptr<std::set<std::string>> pFirstSet = productionFirstSet[production];
+                std::shared_ptr<std::set<std::string>> pFirstSet = m_productionFirstSet[production];
 
                 // The map key will always be unique since the grammar
                 // passed the LL condition tests
@@ -533,7 +533,7 @@ namespace ecc {
                 bool hasEpsilon = false;
                 for(std::string token : *pFirstSet) {
                     if(!Grammar::isEpsilon(token)) {
-                        (*parseTableMap[definition.first])[token] = production;
+                        (*m_parseTableMap[definition.first])[token] = production;
                     } else {
                         hasEpsilon = true;
                     }
@@ -542,11 +542,11 @@ namespace ecc {
                 // Check if first set contains epsilon, then map the follow set
                 if(hasEpsilon) {
                     // Get the follow set of the production
-                    std::shared_ptr<std::set<std::string>> pFollowSet = followSet[definition.first];
+                    std::shared_ptr<std::set<std::string>> pFollowSet = m_followSet[definition.first];
 
                     // Couple each token in the follow set to the production
                     for(std::string token : *pFollowSet) {
-                        (*parseTableMap[definition.first])[token] = production;
+                        (*m_parseTableMap[definition.first])[token] = production;
                     }
                 }
             }
@@ -555,9 +555,9 @@ namespace ecc {
 
     std::shared_ptr<std::vector<std::string>> Grammar::getParseTabel(
             const std::string &nonTerminal, const std::string &input) {
-        if(parseTableMap.find(nonTerminal) != parseTableMap.end() &&
-                    (*parseTableMap[nonTerminal]).find(input) != (*parseTableMap[nonTerminal]).end()) {
-            return (*parseTableMap[nonTerminal])[input];
+        if(m_parseTableMap.find(nonTerminal) != m_parseTableMap.end() &&
+                    (*m_parseTableMap[nonTerminal]).find(input) != (*m_parseTableMap[nonTerminal]).end()) {
+            return (*m_parseTableMap[nonTerminal])[input];
         }
         return nullptr;
     }

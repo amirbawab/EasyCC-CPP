@@ -26,7 +26,7 @@ namespace ecc{
         d.Parse(buffer.str().c_str());
 
         // Store the number parsing phases required
-        config->parsingPhases = d[PARSING_PHASES].GetInt();
+        config->m_parsingPhases = d[PARSING_PHASES].GetInt();
 
         return config;
     }

@@ -30,9 +30,9 @@ namespace ecc{
             this->m_semanticAction = semanticAction;
         }
     private:
-        std::shared_ptr<Grammar> grammar;
-        std::shared_ptr<SyntaxConfig> config;
-        std::shared_ptr<SyntaxMessages> messages;
+        std::shared_ptr<Grammar> m_grammar;
+        std::shared_ptr<SyntaxConfig> m_config;
+        std::shared_ptr<SyntaxMessages> m_messages;
         std::function<void(std::string, int, std::vector<std::shared_ptr<LexicalToken>>&, int)> m_semanticAction;
 
         /**

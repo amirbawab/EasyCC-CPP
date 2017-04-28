@@ -23,8 +23,8 @@ namespace ecc{
          */
         std::string getErrorMessage(std::string errorTokenName);
     private:
-        std::map<std::string,std::string> errorMessages;
-        std::string defaultMessage;
+        std::map<std::string,std::string> m_errorMessages;
+        std::string m_defaultMessage;
     };
 }
 

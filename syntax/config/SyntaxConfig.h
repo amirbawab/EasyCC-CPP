@@ -17,10 +17,10 @@ namespace ecc {
          */
         static std::shared_ptr<SyntaxConfig> buildConfig(std::string configFileName);
 
-        int getParsingPhases() { return this->parsingPhases;}
+        int getParsingPhases() { return this->m_parsingPhases;}
 
     private:
-        int parsingPhases;
+        int m_parsingPhases;
     };
 }
 
