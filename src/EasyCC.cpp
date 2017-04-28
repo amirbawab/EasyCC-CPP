@@ -31,6 +31,7 @@ std::string lexicalErrorsFile;
 std::string syntaxGrammarFile;
 std::string syntaxConfigFile;
 std::string syntaxErrorsFile;
+std::vector<std::string> inputFiles;
 
 // Error codes
 const int ERR_CODE_PARAMS = 1;
@@ -122,13 +123,23 @@ bool validArguments() {
             !lexicalErrorsFile.empty() &&
             !syntaxGrammarFile.empty() &&
             !syntaxConfigFile.empty() &&
-            !syntaxErrorsFile.empty();
+            !syntaxErrorsFile.empty() &&
+            !inputFiles.empty();
+}
+
+void fetchInputFiles(const int &argc, char *argv[]) {
+    for(int i = optind; i < argc; ++i) {
+        inputFiles.push_back(argv[i]);
+    }
 }
 
 int main(int argc, char *argv[]) {
 
     // Initialize parameters
     initParams(argc, argv);
+
+    // Get files
+    fetchInputFiles(argc, argv);
 
     // Check if required arguments are set
     if(!validArguments()) {
@@ -144,7 +155,7 @@ int main(int argc, char *argv[]) {
 
 	std::vector<std::shared_ptr<LexicalToken>> lexicalTokens;
 	std::vector<std::string> lexicalErrorMessages;
-	lexical.generateLexicalTokens("resources/src/input.txt", lexicalTokens, lexicalErrorMessages);
+	lexical.generateLexicalTokens(inputFiles[0], lexicalTokens, lexicalErrorMessages);
 
     // Logging
 	for(auto token : lexicalTokens)
