@@ -47,6 +47,12 @@ namespace ecc {
         // Print the logs for the follow set
         logFollowSet();
 
+        BOOST_LOG(ecc_logger::get()) << "Checking if the keys size for the first set matches "
+                                                "the keys size for the follow set ...";
+        if(firstSet.size() != followSet.size()) {
+            throw std::runtime_error("Not all non-terminals were assigned a production");
+        }
+
         BOOST_LOG(ecc_logger::get()) << "Checking if the grammar satisfies the LL conditions ...";
 
         // Validate LL conditions
@@ -406,9 +412,9 @@ namespace ecc {
 
         // Cond 1
         for(auto definition : productions) {
-            std::string leftRecusiveToken = getLeftRecursion(definition.first, std::set<std::string>());
-            if (!leftRecusiveToken.empty()) {
-                throw std::runtime_error("Left hand side: " + leftRecusiveToken + " has a left recursion");
+            std::string leftRecursiveToken = getLeftRecursion(definition.first, std::set<std::string>());
+            if (!leftRecursiveToken.empty()) {
+                throw std::runtime_error("Left hand side: " + leftRecursiveToken + " has a left recursion");
             }
         }
 
