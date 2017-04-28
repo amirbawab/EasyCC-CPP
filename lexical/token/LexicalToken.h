@@ -7,6 +7,7 @@
 namespace ecc {
     class LexicalToken {
     public:
+        static const std::string END_OF_FILE;
 
         // Set the token types
         enum Type {

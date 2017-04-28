@@ -140,8 +140,8 @@ namespace ecc {
 
         // Add final token
         lexicalVector.push_back(std::make_shared<LexicalToken>(
-                LexicalToken::Type::NORMAL_FINAL_TOKEN, config->getEndOfFile(),
-                config->getEndOfFile(), line, column, position));
+                LexicalToken::Type::NORMAL_FINAL_TOKEN, LexicalToken::END_OF_FILE,
+                LexicalToken::END_OF_FILE, line, column, position));
     }
 
     /**

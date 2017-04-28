@@ -45,12 +45,6 @@ namespace ecc {
         }
 
         /**
-         * Get end of file symbol
-         * @return end of file symbol
-         */
-        std::string getEndOfFile() const { return this->endOfFile;}
-
-        /**
          * Verify if token value is reserved by another token name
          *
          */
@@ -59,9 +53,6 @@ namespace ecc {
 
         // Define new line
         std::string newLine;
-
-        // Define end of file symbol
-        std::string endOfFile;
 
         // Token names ignored
         std::string ignorePrefix;

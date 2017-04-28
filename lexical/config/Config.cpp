@@ -17,7 +17,6 @@ namespace ecc{
 
         // Configuration JSON format
         const char* NEWLINE = "newline";
-        const char* END_OF_FILE = "end_of_file";
         const char* IGNORE = "ignore";
         const char* ERROR = "error";
         const char* RESERVED = "reserved";
@@ -46,9 +45,6 @@ namespace ecc{
 
         // Store newline
         config->newLine = configNewline;
-
-        // Store end of file
-        config->endOfFile = std::string(d[END_OF_FILE].GetString());
 
         // Ignore object
         config->ignorePrefix = d[IGNORE][PREFIX].GetString();
