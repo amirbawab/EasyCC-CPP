@@ -60,6 +60,9 @@ namespace ecc{
         // Add grammar start
         parseStack.push(grammar->getStart());
 
+        // TEST
+        this->m_semanticAction("action", 0, lexicalTokens, inputIndex);
+
         // While more non-terminals are in the parse stack
         while(parseStack.top() != Grammar::END_OF_STACK) {
 

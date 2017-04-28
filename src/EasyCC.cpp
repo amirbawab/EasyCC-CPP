@@ -1,5 +1,6 @@
 #include "../lexical/Lexical.h"
 #include "../syntax/Syntax.h"
+#include "../semantic/Semantic.h"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -50,7 +51,6 @@ int main() {
 
 	std::vector<std::shared_ptr<LexicalToken>> lexicalTokens;
 	std::vector<std::string> lexicalErrorMessages;
-    std::vector<std::string> syntaxErrorMessages;
 	lexical.generateLexicalTokens("resources/src/input.txt", lexicalTokens, lexicalErrorMessages);
 
     // Logging
@@ -65,9 +65,19 @@ int main() {
     }
 
     // Syntax analysis phase
+    std::vector<std::string> syntaxErrorMessages;
     Syntax syntax(
             "resources/src/syntax_grammar.txt",
             "resources/src/syntax_errors.json");
+
+    // Prepare semantic analysis
+    Semantic semantic;
+
+    // Handle syntax events
+    syntax.setSemanticAction([&](std::string semanticAction, int phase,
+                                std::vector<std::shared_ptr<LexicalToken>> &lexicalTokensParam, int index) -> void {
+        semantic.handle(semanticAction, phase, lexicalTokensParam, index);
+    });
 
     // Parse the generated lexical tokens
     syntax.parseTokens(lexicalTokens, syntaxErrorMessages);

@@ -6,6 +6,7 @@
 #include "config/SyntaxMessages.h"
 #include <string>
 #include <memory>
+#include <functional>
 
 namespace ecc{
     class Syntax {
@@ -18,9 +19,19 @@ namespace ecc{
          */
         void parseTokens(std::vector<std::shared_ptr<LexicalToken>> &lexicalTokens,
                          std::vector<std::string> &errorMessages);
+
+        /**
+         * Set semantic action
+         * @param semanticAction Function to execute on semantic action calls
+         */
+        void setSemanticAction(std::function<void
+                (std::string, int, std::vector<std::shared_ptr<LexicalToken>>&, int)> semanticAction) {
+            this->m_semanticAction = semanticAction;
+        }
     private:
         std::shared_ptr<Grammar> grammar;
         std::shared_ptr<SyntaxMessages> messages;
+        std::function<void(std::string, int, std::vector<std::shared_ptr<LexicalToken>>&, int)> m_semanticAction;
 
         /**
          * Generate an error message

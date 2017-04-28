@@ -73,7 +73,9 @@ set(SOURCE_FILES
         syntax/Syntax.cpp
         syntax/Syntax.h
         syntax/config/SyntaxMessages.cpp
-        syntax/config/SyntaxMessages.h)
+        syntax/config/SyntaxMessages.h
+        semantic/Semantic.cpp
+        semantic/Semantic.h)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES} src/EasyCC.cpp)
 target_link_libraries(${PROJECT_NAME} -lpthread)
