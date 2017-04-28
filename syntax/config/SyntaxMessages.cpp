@@ -53,13 +53,22 @@ namespace ecc {
     }
 
     std::string SyntaxMessages::getErrorMessage(std::string nonTerminal, std::string terminal) {
+
+        // If non-terminal registered
         if(errorMessages.find(nonTerminal) != errorMessages.end()) {
-                if(errorMessages[nonTerminal].find(terminal) != errorMessages[nonTerminal].end()) {
-                    return errorMessages[nonTerminal][terminal];
-                } else if(errorMessages[nonTerminal].find(NON_TERMINAL_DEFAULT_TERMINAL) !=
+
+            // If terminal registered in that non-terminal
+            if(errorMessages[nonTerminal].find(terminal) != errorMessages[nonTerminal].end()) {
+                return errorMessages[nonTerminal][terminal];
+
+            } else if(errorMessages[nonTerminal].find(DEFAULT_TERMINAL_AND_NON_TERMINAL) !=
                         errorMessages[nonTerminal].end()) {
-                    return errorMessages[nonTerminal][NON_TERMINAL_DEFAULT_TERMINAL];
-                }
+                return errorMessages[nonTerminal][DEFAULT_TERMINAL_AND_NON_TERMINAL];
+            }
+        } else if(errorMessages.find(DEFAULT_TERMINAL_AND_NON_TERMINAL) != errorMessages.end() &&
+                errorMessages[DEFAULT_TERMINAL_AND_NON_TERMINAL].find(terminal) !=
+                        errorMessages[DEFAULT_TERMINAL_AND_NON_TERMINAL].end()) {
+            return errorMessages[DEFAULT_TERMINAL_AND_NON_TERMINAL][terminal];
         }
         return this->defaultMessage;
     }

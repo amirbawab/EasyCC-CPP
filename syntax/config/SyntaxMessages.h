@@ -27,7 +27,7 @@ namespace ecc{
         std::map<std::string, std::map<std::string, std::string>> errorMessages;
 
         // Reserved token names
-        const std::string NON_TERMINAL_DEFAULT_TERMINAL = ":any";
+        const std::string DEFAULT_TERMINAL_AND_NON_TERMINAL = ":any";
     };
 }
 
