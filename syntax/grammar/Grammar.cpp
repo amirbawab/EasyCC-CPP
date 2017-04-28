@@ -197,8 +197,12 @@ namespace ecc {
         return token[0] == '\'' && token[token.size()-1] == '\'';
     }
 
+    bool Grammar::isSemanticAction(std::string token) {
+        return token[0] == '#' && token[token.size()-1] == '#';
+    }
+
     bool Grammar::isNonTerminal(std::string token) {
-        return !Grammar::isTerminal(token) && !Grammar::isEpsilon(token);
+        return !Grammar::isTerminal(token) && !Grammar::isSemanticAction(token) && !Grammar::isEpsilon(token);
     }
 
     bool Grammar::isEpsilon(std::string token) {
@@ -242,8 +246,31 @@ namespace ecc {
 
                             // If set was defined previously
                             if(tokenFirstSet) {
-                                // If epsilon not found in the first set of the token or it's the last token
-                                if(tokenFirstSet->find(Grammar::EPSILON) == tokenFirstSet->end() || token == production->back()) {
+
+                                // If epsilon not found in the first set of the current token or
+                                // the current token is the last one in the production, then add all
+                                // the tokens to the first set and don't continue evaluating the next tokens
+                                // Example 1:
+                                //      A -> B C D
+                                //      B -> 'T1' | 'T2'
+                                //      ...
+                                // Then First(A) contains First(B)
+                                // Example 2:
+                                //      A -> B C D
+                                //      B -> EPSILON | 'T1'
+                                //      C -> 'T2' | 'T3'
+                                //      ...
+                                // Then First(A) contains First(B)-{EPSILON} U First(C)
+                                // Example 3:
+                                //      A -> B C D
+                                //      B -> EPSILON | 'T1'
+                                //      C -> EPSILON | 'T2'
+                                //      D -> EPSILON | 'T3'
+                                //      ...
+                                // Then First(A) contains First(B)-{EPSILON} U First(C)-{EPSILON} U First(D).
+                                // Note that in Example 3, EPSILON will be in First(A)
+                                if(tokenFirstSet->find(Grammar::EPSILON) == tokenFirstSet->end() ||
+                                        token == production->back()) {
                                     productionFirstSet[production]->insert(tokenFirstSet->begin(), tokenFirstSet->end());
                                     firstSet[definition.first]->insert(tokenFirstSet->begin(), tokenFirstSet->end());
                                     break;

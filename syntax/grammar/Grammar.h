@@ -16,6 +16,7 @@ namespace ecc {
         static bool isTerminal(std::string token);
         static bool isNonTerminal(std::string token);
         static bool isEpsilon(std::string token);
+        static bool isSemanticAction(std::string token);
 
         /**
          * Get first set of a token
