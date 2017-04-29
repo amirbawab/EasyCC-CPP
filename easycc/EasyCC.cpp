@@ -32,6 +32,7 @@ std::string lexicalErrorsFile;
 std::string syntaxGrammarFile;
 std::string syntaxConfigFile;
 std::string syntaxErrorsFile;
+std::string outputFile;
 std::vector<std::string> inputFiles;
 
 // Error codes
@@ -54,6 +55,7 @@ void printUsage() {
     << "\t-g, --syntax_grammar\t\t[required] Syntax grammar file" << std::endl
     << "\t-C, --syntax_config\t\t[required] Syntax configuration file" << std::endl
     << "\t-E, --syntax_errors\t\t[required] Syntax errors file" << std::endl
+    << "\t-o, --output\t\t\tOutput file" << std::endl
     << "\t-v, --verbose\t\t\tVerbose mode" << std::endl
     << "\t-h, --help\t\t\tDisplay this help message" << endl;
 }
@@ -73,6 +75,7 @@ void initParams(int argc, char *argv[]) {
             {"syntax_errors", required_argument, 0, 'E'},
 
             // Other
+            {"output", required_argument, 0, 'o'},
             {"verbose", no_argument, 0, 'v'},
             {"help", no_argument, 0, 'h'},
             {0, 0, 0, 0}
@@ -80,7 +83,7 @@ void initParams(int argc, char *argv[]) {
 
     int optionIndex = 0;
     int c;
-    while ((c = getopt_long(argc, argv, "hvs:c:e:g:C:E:", longOptions, &optionIndex)) != -1) {
+    while ((c = getopt_long(argc, argv, "hvs:c:e:g:C:E:o:", longOptions, &optionIndex)) != -1) {
         switch (c) {
             case 's':
                 lexicalStateMachineFile = optarg;
@@ -99,6 +102,9 @@ void initParams(int argc, char *argv[]) {
                 break;
             case 'E':
                 syntaxErrorsFile = optarg;
+                break;
+            case 'o':
+                outputFile = optarg;
                 break;
             case 'v':
                 logging::add_console_log(
