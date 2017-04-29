@@ -13,6 +13,7 @@
 #include <boost/log/utility/setup/file.hpp>
 #include <boost/log/utility/setup/common_attributes.hpp>
 #include <boost/log/utility/setup/console.hpp>
+#include <boost/log/core/core.hpp>
 
 namespace logging = boost::log;
 namespace src = boost::log::sources;
@@ -39,30 +40,20 @@ const int ERR_CODE_LEXICAL = 2;
 const int ERR_CODE_SYNTAX = 3;
 
 void init_log() {
-    logging::add_console_log(
-            std::cout,
-            boost::log::keywords::format = "[%TimeStamp%]: %Message%"
-    );
-    logging::add_file_log(
-            keywords::file_name = "logs_%N.log",
-            keywords::rotation_size = 10 * 1024 * 1024,
-            keywords::time_based_rotation = sinks::file::rotation_at_time_point(0, 0, 0),
-            keywords::auto_flush = true,
-            keywords::format = "[%TimeStamp%]: %Message%"
-    );
     logging::add_common_attributes();
+    logging::core::get()->set_logging_enabled(false);
 }
 
 void printUsage() {
     std::cout
     << "EasyCC C++ - An easy compiler compiler program" << std::endl
     << "Usage: easycc [OPTION]... [FILE]..." << std::endl
-    << "\t-s, --lexical_state_machine\tLexical state machine file" << std::endl
-    << "\t-c, --lexical_config\t\tLexical configuration file" << std::endl
-    << "\t-e, --lexical_errors\t\tLexical errors file" << std::endl
-    << "\t-g, --syntax_grammar\t\tSyntax grammar file" << std::endl
-    << "\t-C, --syntax_config\t\tSyntax configuration file" << std::endl
-    << "\t-E, --syntax_errors\t\tSyntax errors file" << std::endl
+    << "\t-s, --lexical_state_machine\t[required] Lexical state machine file" << std::endl
+    << "\t-c, --lexical_config\t\t[required] Lexical configuration file" << std::endl
+    << "\t-e, --lexical_errors\t\t[required] Lexical errors file" << std::endl
+    << "\t-g, --syntax_grammar\t\t[required] Syntax grammar file" << std::endl
+    << "\t-C, --syntax_config\t\t[required] Syntax configuration file" << std::endl
+    << "\t-E, --syntax_errors\t\t[required] Syntax errors file" << std::endl
     << "\t-v, --verbose\t\t\tVerbose mode" << std::endl
     << "\t-h, --help\t\t\tDisplay this help message" << endl;
 }
@@ -109,6 +100,13 @@ void initParams(int argc, char *argv[]) {
             case 'E':
                 syntaxErrorsFile = optarg;
                 break;
+            case 'v':
+                logging::add_console_log(
+                        std::cout,
+                        boost::log::keywords::format = "[%TimeStamp%]: %Message%"
+                );
+                logging::core::get()->set_logging_enabled(true);
+                break;
             case 'h':
             default:
                 // Print by default
@@ -135,6 +133,9 @@ void fetchInputFiles(const int &argc, char *argv[]) {
 
 int main(int argc, char *argv[]) {
 
+    // Configure the logger
+    init_log();
+
     // Initialize parameters
     initParams(argc, argv);
 
@@ -147,9 +148,6 @@ int main(int argc, char *argv[]) {
         return ERR_CODE_PARAMS;
     }
 
-    // Configure the logger
-    init_log();
-
     // Lexical analysis phase
     Lexical lexical(lexicalStateMachineFile, lexicalConfigFile, lexicalErrorsFile);
 
@@ -158,8 +156,6 @@ int main(int argc, char *argv[]) {
 	lexical.generateLexicalTokens(inputFiles[0], lexicalTokens, lexicalErrorMessages);
 
     // Logging
-	for(auto token : lexicalTokens)
-		cout << *token << endl;
 	for(auto message : lexicalErrorMessages)
 		cerr << message << endl;
     if(lexicalErrorMessages.size() != 0) {

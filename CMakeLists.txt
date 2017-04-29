@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(EasyCC_CPP)
+project(easycc)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(PROJECT_TEST "easycctests")
 
@@ -79,7 +79,7 @@ set(SOURCE_FILES
         semantic/Semantic.cpp
         semantic/Semantic.h)
 
-add_executable(${PROJECT_NAME} ${SOURCE_FILES} src/EasyCC.cpp)
+add_executable(${PROJECT_NAME} ${SOURCE_FILES} easycc/EasyCC.cpp)
 target_link_libraries(${PROJECT_NAME} -lpthread)
 target_link_libraries(${PROJECT_NAME}
         ${Boost_FILESYSTEM_LIBRARY}
