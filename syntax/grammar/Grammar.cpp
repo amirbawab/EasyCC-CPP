@@ -32,15 +32,11 @@ namespace ecc {
             parseGrammarLine(line, lastNonTerminal);
         }
 
-        BOOST_LOG(ecc_logger::get()) << "Computing first set ...";
-
         // Construct the first set
         computeFirstSet();
 
         // Print the logs for the first set
         logFirstSet();
-
-        BOOST_LOG(ecc_logger::get()) << "Computing follow set ...";
 
         // Construct the follow set
         computeFollowSet();
@@ -188,7 +184,7 @@ namespace ecc {
     }
 
     void Grammar::logFirstSet() {
-        BOOST_LOG(ecc_logger::get()) << "Computed First Set:";
+        BOOST_LOG(ecc_logger::get()) << "Finished computing first set:";
         std::string result;
         for(auto i = m_firstSet.begin(); i != m_firstSet.end(); i++) {
             result = i->first + ": ";
@@ -197,10 +193,11 @@ namespace ecc {
             }
             BOOST_LOG(ecc_logger::get()) << result;
         }
+        BOOST_LOG(ecc_logger::get()) << "----------";
     }
 
     void Grammar::logFollowSet() {
-        BOOST_LOG(ecc_logger::get()) << "Computed Follow Set:";
+        BOOST_LOG(ecc_logger::get()) << "Finished computing follow set:";
         std::string result;
         for(auto i = m_followSet.begin(); i != m_followSet.end(); i++) {
              result = i->first + ": ";
@@ -209,6 +206,7 @@ namespace ecc {
             }
             BOOST_LOG(ecc_logger::get()) << result;
         }
+        BOOST_LOG(ecc_logger::get()) << "----------";
     }
 
     bool Grammar::isTerminal(const std::string &token) {
@@ -240,6 +238,8 @@ namespace ecc {
     }
 
     void Grammar::computeFirstSet() {
+
+        BOOST_LOG(ecc_logger::get()) << "Computing first set ...";
 
         // Compute the first set multiple times
         for(int z=0; z<m_productions.size(); z++) {
@@ -344,6 +344,8 @@ namespace ecc {
     }
 
     void Grammar::computeFollowSet() {
+
+        BOOST_LOG(ecc_logger::get()) << "Computing follow set ...";
 
         // Add end of stack to the follow set of the start grammar
         m_followSet[m_start] = std::make_shared<std::set<std::string>>();

@@ -146,6 +146,8 @@ namespace ecc{
                 }
             }
         }
+
+        BOOST_LOG(ecc_logger::get()) << "Finished parsing the lexical tokens ...";
     }
 
     std::string Syntax::generateErrorMessage(std::string nonTerminal,

@@ -4,6 +4,14 @@
 #include <iostream>
 #include <boost/algorithm/string.hpp>
 
+#include <boost/log/sources/logger.hpp>
+#include <boost/log/sources/record_ostream.hpp>
+#include <boost/log/sources/global_logger_storage.hpp>
+
+namespace logging = boost::log;
+namespace src = boost::log::sources;
+BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(ecc_logger, src::logger_mt)
+
 namespace ecc {
     Lexical::Lexical(std::string stateMachineFileName, std::string configFileName, std::string messagesFileName) {
         this->m_graph = Graph::buildGraph(stateMachineFileName);
@@ -15,6 +23,7 @@ namespace ecc {
             std::string fileName,
             std::vector<std::shared_ptr<LexicalToken>> &lexicalVector,
             std::vector<std::string> &errorMessages) {
+        BOOST_LOG(ecc_logger::get()) << "Converting content of " << fileName << " into lexical tokens ...";
 
         // Keep track of file information
         int tokenLine = 1;
@@ -142,6 +151,15 @@ namespace ecc {
         lexicalVector.push_back(std::make_shared<LexicalToken>(
                 LexicalToken::Type::NORMAL_FINAL_TOKEN, LexicalToken::END_OF_FILE,
                 LexicalToken::END_OF_FILE, line, column, position));
+
+        // Log generate tokens
+        BOOST_LOG(ecc_logger::get()) << "Finished generating lexical tokens:";
+        if(logging::core::get()->get_logging_enabled()) {
+            for(int i=0; i < lexicalVector.size(); i++) {
+                BOOST_LOG(ecc_logger::get()) << lexicalVector[i]->getString();
+            }
+        }
+        BOOST_LOG(ecc_logger::get()) << "----------";
     }
 
     /**

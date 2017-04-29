@@ -55,6 +55,11 @@ namespace ecc {
          */
         LexicalToken::Type getType() const {return this->m_type;}
 
+        /**
+         * Get a string representation of the lexical token
+         */
+        std::string getString();
+
     private:
         std::string m_name;
         std::string m_value;
@@ -62,15 +67,6 @@ namespace ecc {
         int m_column;
         int m_position;
         LexicalToken::Type m_type;
-
-        /**
-         * To string
-         */
-        friend std::ostream& operator<<(std::ostream& os, const LexicalToken &lexicalToken) {
-            os << "<" << lexicalToken.m_name << ",l:" << lexicalToken.m_line << ",c:"
-            << lexicalToken.m_column << ",p:" << lexicalToken.m_position << ">";
-            return os;
-        }
     };
 }
 
