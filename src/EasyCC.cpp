@@ -177,8 +177,9 @@ int main(int argc, char *argv[]) {
 
     // Handle syntax events
     syntax.setSemanticAction([&](std::string semanticAction, int phase,
-                                std::vector<std::shared_ptr<LexicalToken>> &lexicalTokensParam, int index) -> void {
-        semantic.handle(semanticAction, phase, lexicalTokensParam, index);
+                                std::vector<std::shared_ptr<LexicalToken>> &lexicalTokensParam,
+                                 int index, bool stable) -> void {
+        semantic.handle(semanticAction, phase, lexicalTokensParam, index, stable);
     });
 
     // Parse the generated lexical tokens

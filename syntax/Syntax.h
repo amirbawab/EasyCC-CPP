@@ -26,14 +26,14 @@ namespace ecc{
          * @param semanticAction Function to execute on semantic action calls
          */
         void setSemanticAction(std::function<void
-                (std::string, int, std::vector<std::shared_ptr<LexicalToken>>&, int)> semanticAction) {
+                (std::string, int, std::vector<std::shared_ptr<LexicalToken>>&, int, bool)> semanticAction) {
             this->m_semanticAction = semanticAction;
         }
     private:
         std::shared_ptr<Grammar> m_grammar;
         std::shared_ptr<SyntaxConfig> m_config;
         std::shared_ptr<SyntaxMessages> m_messages;
-        std::function<void(std::string, int, std::vector<std::shared_ptr<LexicalToken>>&, int)> m_semanticAction;
+        std::function<void(std::string, int, std::vector<std::shared_ptr<LexicalToken>>&, int, bool)> m_semanticAction;
 
         /**
          * Generate an error message

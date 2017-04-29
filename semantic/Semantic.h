@@ -10,7 +10,7 @@ namespace ecc {
     class Semantic {
     public:
         void handle(std::string semanticAction, int phase,
-                    std::vector<std::shared_ptr<LexicalToken>> &lexicalTokens, int index);
+                    std::vector<std::shared_ptr<LexicalToken>> &lexicalTokens, int index, bool stable);
     };
 }
 

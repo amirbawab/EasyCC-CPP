@@ -76,6 +76,8 @@ namespace ecc{
                         parseStack.pop();
                         lexicalToken = nextToken(lexicalTokens, inputIndex);
 
+                        // Mark stable
+                        stable = true;
                     } else {
                         throw std::runtime_error(
                                 "Failed to process the input: "
@@ -86,7 +88,7 @@ namespace ecc{
                 } else if(Grammar::isSemanticAction(top)) {
 
                     // Call the semantic action handler
-                    this->m_semanticAction(top, phase, lexicalTokens, inputIndex);
+                    this->m_semanticAction(top, phase, lexicalTokens, inputIndex, stable);
 
                     // Remove the action from the stack
                     parseStack.pop();
@@ -109,6 +111,10 @@ namespace ecc{
                                 parseStack.push((*production)[production->size()-1-i]);
                             }
                         }
+
+                        // Mark stable
+                        stable = true;
+
                     } else { // Error found
 
                         // Generate error message in the first parsing phase
@@ -125,6 +131,9 @@ namespace ecc{
                         } else {
                             lexicalToken = nextToken(lexicalTokens, inputIndex);
                         }
+
+                        // Mark unstable
+                        stable = false;
                     }
                 }
             }
