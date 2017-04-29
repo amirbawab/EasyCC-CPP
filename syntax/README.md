@@ -44,5 +44,5 @@ or
 #### LL(1) - (left to right, leftmost derivation, 1 lookahead)
 The grammar provided by the user should satisfy the following conditions:
 * No left recursion
-* Given a production: `A : B | C`, First(B) ∩ First(C) = {}
-* Given a production: `A : B | C`, if ε ∈ First(A) then First(A) ∩ Follow(A) = {} 
+* Given a production: `A -> B | C`, First(B) ∩ First(C) = {}
+* Given a production: `A -> B | C`, if ε ∈ First(A) then First(A) ∩ Follow(A) = {} 
