@@ -94,6 +94,7 @@ The state machine is provided as a json file with the follwoing syntax:
 - A token value contains only characters that appear on a transition from any source state to any non-initial state. For example, if the initial state has a transition on letter `A` that goes to itself. Then `A` will never appear at the beginning of any token value. However, if the initial state have a transition on letter `B` that goes to another normal state, then `B` will be recorded as part of the token value.
 - The folloing tokens names are reserved and should not be used by the user:
   * `:any`
+  * `$`
 
 ### Configuration
 
@@ -102,7 +103,6 @@ The state machine is provided as a json file with the follwoing syntax:
 ```
 {
     "newline": "...",
-    "end_of_file": "...",
     "ignore": {
         "prefix": "...",
         "suffix": "...",
@@ -145,17 +145,6 @@ The state machine is provided as a json file with the follwoing syntax:
     - `CR`: \r<br/>
     - `LF`: \n<br/>
     - `CRLF`: \r\n<br/>
-    </td>
-    <td>-</td>
-  </tr>
-  <tr>
-    <td>-</td>
-    <td>-</td>
-    <td>end_of_file</td>
-    <td>
-    At the end of the lexical analysis, the program injects an end of file symbol in the generated lexical tokens.
-    This is useful in the syntax analysis when the error messages at that level are defined, the user can refer to the
-    end of file symbol using the written value in this configuration file.
     </td>
     <td>-</td>
   </tr>
