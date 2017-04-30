@@ -77,9 +77,11 @@ set(SOURCE_FILES
         syntax/config/SyntaxConfig.cpp
         syntax/config/SyntaxConfig.h
         semantic/Semantic.cpp
-        semantic/Semantic.h)
+        semantic/Semantic.h
+        easycc/EasyCC.cpp
+        easycc/EasyCC.h)
 
-add_executable(${PROJECT_NAME} ${SOURCE_FILES} easycc/EasyCC.cpp)
+add_executable(${PROJECT_NAME} ${SOURCE_FILES} main.cpp)
 target_link_libraries(${PROJECT_NAME} -lpthread)
 target_link_libraries(${PROJECT_NAME}
         ${Boost_FILESYSTEM_LIBRARY}
