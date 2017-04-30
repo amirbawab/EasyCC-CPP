@@ -1,5 +1,5 @@
-#ifndef EASYCC_CPP_CONFIG_H
-#define EASYCC_CPP_CONFIG_H
+#ifndef EASYCC_CPP_LEXICALCONFIG_H
+#define EASYCC_CPP_LEXICALCONFIG_H
 
 #include <memory>
 #include <string>
@@ -7,7 +7,7 @@
 #include <map>
 
 namespace ecc {
-    class Config {
+    class LexicalConfig {
     public:
 
         // Line separators
@@ -16,11 +16,11 @@ namespace ecc {
         static const std::string CRLF;
 
         /**
-         * Create a Config based on a JSON file
+         * Create a LexicalConfig based on a JSON file
          * @param config file name
-         * @return pointer to Config object
+         * @return pointer to LexicalConfig object
          */
-        static std::shared_ptr<Config> buildConfig(std::string configFileName);
+        static std::shared_ptr<LexicalConfig> buildConfig(std::string configFileName);
 
         /**
          * Check if token must be ignored

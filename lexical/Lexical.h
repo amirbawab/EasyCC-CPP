@@ -5,9 +5,9 @@
 #include <string>
 #include <vector>
 #include "graph/Graph.h"
-#include "config/Config.h"
+#include "config/LexicalConfig.h"
 #include "token/LexicalToken.h"
-#include "config/Messages.h"
+#include "config/LexicalMessages.h"
 
 namespace ecc {
 
@@ -30,10 +30,10 @@ namespace ecc {
         std::shared_ptr<Graph> m_graph;
 
         // Tokens configuration
-        std::shared_ptr<Config> m_config;
+        std::shared_ptr<LexicalConfig> m_config;
 
         // Messages
-        std::shared_ptr<Messages> m_messages;
+        std::shared_ptr<LexicalMessages> m_messages;
 
        /**
         * Create a lexical token

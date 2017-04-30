@@ -62,12 +62,12 @@ set(SOURCE_FILES
         rapidjson/stream.h
         rapidjson/stringbuffer.h
         rapidjson/writer.h
-        lexical/config/Config.cpp
-        lexical/config/Config.h
+        lexical/config/LexicalConfig.cpp
+        lexical/config/LexicalConfig.h
         lexical/token/LexicalToken.cpp
         lexical/token/LexicalToken.h
-        lexical/config/Messages.cpp
-        lexical/config/Messages.h
+        lexical/config/LexicalMessages.cpp
+        lexical/config/LexicalMessages.h
         syntax/grammar/Grammar.cpp
         syntax/grammar/Grammar.h
         syntax/Syntax.cpp

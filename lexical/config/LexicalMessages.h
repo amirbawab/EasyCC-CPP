@@ -1,20 +1,20 @@
-#ifndef EASYCC_CPP_MESSAGES_H
-#define EASYCC_CPP_MESSAGES_H
+#ifndef EASYCC_CPP_LEXICALMESSAGES_H
+#define EASYCC_CPP_LEXICALMESSAGES_H
 
 #include <map>
 #include <string>
 #include <memory>
 
 namespace ecc{
-    class Messages {
+    class LexicalMessages {
     public:
 
         /**
          * Load messages from file
          * @param fileName JSON file containing the messages
-         * @return pointer to a Messages object
+         * @return pointer to a LexicalMessages object
          */
-        static std::shared_ptr<Messages> loadMessages(std::string fileName);
+        static std::shared_ptr<LexicalMessages> loadMessages(std::string fileName);
 
         /**
          * Get error message

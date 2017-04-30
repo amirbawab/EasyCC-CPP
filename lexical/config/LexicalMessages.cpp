@@ -1,4 +1,4 @@
-#include "Messages.h"
+#include "LexicalMessages.h"
 #include "../../rapidjson/document.h"
 #include "../../rapidjson/writer.h"
 #include <boost/algorithm/string.hpp>
@@ -6,7 +6,7 @@
 #include <sstream>
 
 namespace ecc{
-    std::shared_ptr<Messages> Messages::loadMessages(std::string fileName) {
+    std::shared_ptr<LexicalMessages> LexicalMessages::loadMessages(std::string fileName) {
 
         // Configuration JSON format
         const char* ERROR_MESSAGES = "error_messages";
@@ -17,8 +17,8 @@ namespace ecc{
         std::stringstream  buffer;
         buffer << file.rdbuf();
 
-        // Prepare a new Config
-        std::shared_ptr<Messages> messages = std::make_shared<Messages>();
+        // Prepare a new LexicalMessage
+        std::shared_ptr<LexicalMessages> messages = std::make_shared<LexicalMessages>();
 
         // Parse json
         rapidjson::Document d;
@@ -38,7 +38,7 @@ namespace ecc{
         return messages;
     }
 
-    std::string Messages::getErrorMessage(std::string key) {
+    std::string LexicalMessages::getErrorMessage(std::string key) {
         if(this->m_errorMessages.count(key) == 1) {
             return this->m_errorMessages[key];
         }

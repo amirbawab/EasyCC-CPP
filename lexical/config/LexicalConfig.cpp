@@ -1,4 +1,4 @@
-#include "Config.h"
+#include "LexicalConfig.h"
 #include "../../rapidjson/document.h"
 #include "../../rapidjson/writer.h"
 #include <fstream>
@@ -9,11 +9,11 @@
 namespace ecc{
 
     // Define line separators
-    const std::string Config::LF = "LF";
-    const std::string Config::CR = "CR";
-    const std::string Config::CRLF = "CRLF";
+    const std::string LexicalConfig::LF = "LF";
+    const std::string LexicalConfig::CR = "CR";
+    const std::string LexicalConfig::CRLF = "CRLF";
 
-    std::shared_ptr<Config> Config::buildConfig(std::string configFileName) {
+    std::shared_ptr<LexicalConfig> LexicalConfig::buildConfig(std::string configFileName) {
 
         // Configuration JSON format
         const char* NEWLINE = "newline";
@@ -30,8 +30,8 @@ namespace ecc{
         std::stringstream  buffer;
         buffer << file.rdbuf();
 
-        // Prepare a new Config
-        std::shared_ptr<Config> config = std::make_shared<Config>();
+        // Prepare a new LexicalConfig
+        std::shared_ptr<LexicalConfig> config = std::make_shared<LexicalConfig>();
 
         // Parse json
         rapidjson::Document d;
@@ -76,7 +76,7 @@ namespace ecc{
         return config;
     }
 
-    bool Config::mustIgnoreToken(std::string tokenName) {
+    bool LexicalConfig::mustIgnoreToken(std::string tokenName) {
         // If token name is in the exclude set
         if(this->m_ignoreExclude.find(tokenName) != this->m_ignoreExclude.end()) {
             return false;
@@ -96,7 +96,7 @@ namespace ecc{
         return m_ignoreSuffix.size() > 0 && boost::algorithm::ends_with(tokenName, m_ignoreSuffix);
     }
 
-    bool Config::isErrorToken(std::string tokenName) {
+    bool LexicalConfig::isErrorToken(std::string tokenName) {
         // If token name is in the exclude set
         if(this->m_errorExclude.find(tokenName) != this->m_errorExclude.end()) {
             return false;
@@ -116,7 +116,7 @@ namespace ecc{
         return m_errorSuffix.size() > 0 && boost::algorithm::ends_with(tokenName, m_errorSuffix);
     }
 
-    std::string Config::updateTokenName(std::string tokenName, std::string tokenValue) {
+    std::string LexicalConfig::updateTokenName(std::string tokenName, std::string tokenValue) {
 
         // If token name does not have any check entry
         if(this->m_reservedTokens.count(tokenName) == 0) {

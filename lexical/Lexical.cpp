@@ -15,8 +15,8 @@ BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(ecc_logger, src::logger_mt)
 namespace ecc {
     Lexical::Lexical(std::string stateMachineFileName, std::string configFileName, std::string messagesFileName) {
         this->m_graph = Graph::buildGraph(stateMachineFileName);
-        this->m_config = Config::buildConfig(configFileName);
-        this->m_messages = Messages::loadMessages(messagesFileName);
+        this->m_config = LexicalConfig::buildConfig(configFileName);
+        this->m_messages = LexicalMessages::loadMessages(messagesFileName);
     }
 
     void Lexical::generateLexicalTokens(
@@ -102,11 +102,11 @@ namespace ecc {
 
             // TODO Add "Config::AUTO" to automatically detect
             // Check if the read char is a new line
-            if(m_config->getNewLine() == Config::LF && ch == '\n' ||
-               m_config->getNewLine() == Config::CR && ch == '\r') {
+            if(m_config->getNewLine() == LexicalConfig::LF && ch == '\n' ||
+               m_config->getNewLine() == LexicalConfig::CR && ch == '\r') {
                 column = 1;
                 line++;
-            } else if(m_config->getNewLine() == Config::CRLF && ch == '\r' && fin.peek() == '\n') {
+            } else if(m_config->getNewLine() == LexicalConfig::CRLF && ch == '\r' && fin.peek() == '\n') {
                 // Skip next character
                 fin >> std::noskipws >> ch;
                 column = 1;
