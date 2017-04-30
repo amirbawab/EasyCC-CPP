@@ -58,11 +58,11 @@ target_link_libraries(${PROJECT_NAME} -lpthread)
 target_link_libraries(${PROJECT_NAME} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
 
 # Add gtest CMakeLists.txt to build it automatically
-add_subdirectory(gtest-1.6.0)
+add_subdirectory(googletest)
 enable_testing()
 
 # Add gtest header files (e.g. same as -I flag)
-include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+include_directories(${gtest_SOURCE_DIR}/include)
 
 # Add easycc test files to a variable
 file(GLOB_RECURSE easycctests_SRC "test/*.h" "test/*.cpp")

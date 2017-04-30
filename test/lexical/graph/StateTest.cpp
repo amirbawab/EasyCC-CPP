@@ -1,5 +1,5 @@
 #include "../../../lexical/graph/State.h"
-#include "../../../gtest-1.6.0/include/gtest/gtest.h"
+#include <gtest/gtest.h>
 
 TEST(StateTest, constructor_1) {
     ecc::State stateBckt(101, "type", "name", true);

@@ -1,5 +1,5 @@
 #include "../../../lexical/token/LexicalToken.h"
-#include "../../../gtest-1.6.0/include/gtest/gtest.h"
+#include <gtest/gtest.h>
 
 TEST(LexicalTokenTest, constructorValues) {
     ecc::LexicalToken lexicalTokenNormal(ecc::LexicalToken::Type::NORMAL_TOKEN,"name", "value", 1, 2, 3);

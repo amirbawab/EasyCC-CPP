@@ -1,5 +1,5 @@
 #include "../../../lexical/graph/Graph.h"
-#include "../../../gtest-1.6.0/include/gtest/gtest.h"
+#include <gtest/gtest.h>
 
 TEST(GraphTest, GraphTest_Multiple_definition_Test) {
     ASSERT_THROW(ecc::Graph::buildGraph("resources/test/graph_test1.json"), std::runtime_error);

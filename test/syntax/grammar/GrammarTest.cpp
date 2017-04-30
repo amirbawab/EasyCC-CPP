@@ -1,5 +1,5 @@
 #include "../../../syntax/grammar/Grammar.h"
-#include "../../../gtest-1.6.0/include/gtest/gtest.h"
+#include <gtest/gtest.h>
 
 TEST(GrammarTest, GrammarTest_Multiple_Delimeter_Test) {
     ASSERT_THROW(ecc::Grammar("resources/test/grammar_test1.txt"), std::runtime_error);

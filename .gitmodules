@@ -2,3 +2,7 @@
 	path = rapidjson
 	url = https://github.com/miloyip/rapidjson
 	branch = v1.1.0
+[submodule "googletest"]
+	path = googletest
+	url = https://github.com/google/googletest
+	branch = release-1.6.0
