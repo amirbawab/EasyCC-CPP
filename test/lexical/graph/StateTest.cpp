@@ -1,4 +1,4 @@
-#include "../../../lexical/graph/State.h"
+#include <easycc/State.h>
 #include <gtest/gtest.h>
 
 TEST(StateTest, constructor_1) {

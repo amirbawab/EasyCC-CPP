@@ -1,4 +1,4 @@
-#include "Lexical.h"
+#include <easycc/Lexical.h>
 #include <fstream>
 #include <sstream>
 #include <iostream>

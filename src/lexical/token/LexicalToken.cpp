@@ -1,4 +1,4 @@
-#include "LexicalToken.h"
+#include <easycc/LexicalToken.h>
 #include <sstream>
 
 namespace ecc{

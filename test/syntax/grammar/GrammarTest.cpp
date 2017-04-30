@@ -1,4 +1,4 @@
-#include "../../../syntax/grammar/Grammar.h"
+#include <easycc/Grammar.h>
 #include <gtest/gtest.h>
 
 TEST(GrammarTest, GrammarTest_Multiple_Delimeter_Test) {

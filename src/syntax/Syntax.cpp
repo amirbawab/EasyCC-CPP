@@ -1,4 +1,4 @@
-#include "Syntax.h"
+#include <easycc/Syntax.h>
 
 #include <boost/log/sources/logger.hpp>
 #include <boost/log/sources/record_ostream.hpp>

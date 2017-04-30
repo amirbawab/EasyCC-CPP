@@ -1,4 +1,4 @@
-#include "SyntaxConfig.h"
+#include <easycc/SyntaxConfig.h>
 #include <rapidjson/document.h>
 #include <rapidjson/writer.h>
 #include <fstream>

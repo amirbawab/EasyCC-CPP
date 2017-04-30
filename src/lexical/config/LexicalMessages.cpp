@@ -1,4 +1,4 @@
-#include "LexicalMessages.h"
+#include <easycc/LexicalMessages.h>
 #include <rapidjson/document.h>
 #include <rapidjson/writer.h>
 #include <boost/algorithm/string.hpp>

@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include "../lexical/Lexical.h"
-#include "../syntax/Syntax.h"
+#include "Lexical.h"
+#include "Syntax.h"
 
 namespace ecc{
     class EasyCC {

@@ -1,4 +1,4 @@
-#include "../../../lexical/graph/Graph.h"
+#include <easycc/Graph.h>
 #include <gtest/gtest.h>
 
 TEST(GraphTest, GraphTest_Multiple_definition_Test) {

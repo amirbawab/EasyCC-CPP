@@ -1,4 +1,4 @@
-#include "LexicalConfig.h"
+#include <easycc/LexicalConfig.h>
 #include <rapidjson/document.h>
 #include <rapidjson/writer.h>
 #include <fstream>

@@ -1,4 +1,4 @@
-#include "Grammar.h"
+#include <easycc/Grammar.h>
 #include <fstream>
 #include <sstream>
 #include <iostream>

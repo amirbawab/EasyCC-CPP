@@ -1,4 +1,4 @@
-#include "SyntaxMessages.h"
+#include <easycc/SyntaxMessages.h>
 #include <rapidjson/document.h>
 #include <rapidjson/writer.h>
 #include <boost/algorithm/string.hpp>

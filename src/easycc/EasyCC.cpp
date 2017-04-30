@@ -1,6 +1,6 @@
-#include "EasyCC.h"
-#include "../lexical/Lexical.h"
-#include "../syntax/Syntax.h"
+#include <easycc/EasyCC.h>
+#include <easycc/Lexical.h>
+#include <easycc/Syntax.h>
 #include <iostream>
 #include <getopt.h>
 #include <vector>

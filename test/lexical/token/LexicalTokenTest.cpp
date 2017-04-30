@@ -1,4 +1,4 @@
-#include "../../../lexical/token/LexicalToken.h"
+#include <easycc/LexicalToken.h>
 #include <gtest/gtest.h>
 
 TEST(LexicalTokenTest, constructorValues) {

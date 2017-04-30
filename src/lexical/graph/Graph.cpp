@@ -1,4 +1,4 @@
-#include "Graph.h"
+#include <easycc/Graph.h>
 #include <rapidjson/document.h>
 #include <rapidjson/writer.h>
 #include <fstream>
