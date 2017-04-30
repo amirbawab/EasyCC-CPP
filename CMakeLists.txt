@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 project(easycc)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(PROJECT_TEST "easycctests")
+set(PROJECT_LIB easyccls)
 
 # Copy resources
 file(GLOB resources_SRC "resources/src/*")
@@ -52,6 +53,9 @@ set(SOURCE_FILES
 
 # Add the primary executable
 add_executable(${PROJECT_NAME} ${SOURCE_FILES} main.cpp)
+
+# Add library
+add_library(${PROJECT_LIB} ${SOURCE_FILES})
 
 # Link libraries to the executbale
 target_link_libraries(${PROJECT_NAME} -lpthread)
