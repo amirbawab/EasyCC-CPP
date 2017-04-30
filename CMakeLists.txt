@@ -76,8 +76,6 @@ set(SOURCE_FILES
         syntax/config/SyntaxMessages.h
         syntax/config/SyntaxConfig.cpp
         syntax/config/SyntaxConfig.h
-        semantic/Semantic.cpp
-        semantic/Semantic.h
         easycc/EasyCC.cpp
         easycc/EasyCC.h)
 

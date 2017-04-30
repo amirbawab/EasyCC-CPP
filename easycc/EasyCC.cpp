@@ -1,7 +1,6 @@
 #include "EasyCC.h"
 #include "../lexical/Lexical.h"
 #include "../syntax/Syntax.h"
-#include "../semantic/Semantic.h"
 #include <iostream>
 #include <getopt.h>
 #include <vector>
@@ -14,7 +13,6 @@
 #include <boost/log/utility/setup/file.hpp>
 #include <boost/log/utility/setup/common_attributes.hpp>
 #include <boost/log/utility/setup/console.hpp>
-#include <boost/log/core/core.hpp>
 
 namespace logging = boost::log;
 namespace src = boost::log::sources;
@@ -24,6 +22,50 @@ namespace sinks = boost::log::sinks;
 BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(ecc_logger, src::logger_mt)
 
 namespace ecc{
+
+    int EasyCC::init(int argc, char*argv[]) {
+
+        // Configure the logger
+        initLogs();
+
+        // Initialize parameters
+        initParams(argc, argv);
+
+        // Get files
+        fetchInputFiles(argc, argv);
+
+        // Check if required arguments are set
+        if(!validArguments()) {
+            printUsage();
+            return ERR_CODE_PARAMS;
+        }
+
+        // Create analyzers
+        lexical = std::make_shared<Lexical>(lexicalStateMachineFile, lexicalConfigFile, lexicalErrorsFile);
+        syntax = std::make_shared<Syntax>(syntaxGrammarFile, syntaxConfigFile, syntaxErrorsFile);
+
+        // Handle syntax events
+        syntax->setSemanticAction([&](std::string semanticAction, int phase,
+                                      std::vector<std::shared_ptr<LexicalToken>> &lexicalTokensParam,
+                                      int index, bool stable) -> void {
+            if(semanticActionMap.find(semanticAction) == semanticActionMap.end()) {
+                BOOST_LOG(ecc_logger::get()) << "Error: Cannot find a handler for the semantic action: " << semanticAction;
+            } else {
+                semanticActionMap[semanticAction](phase, lexicalTokensParam, index, stable);
+            }
+        });
+    }
+
+    void EasyCC::registerSemanticAction(std::string semanticAction, std::function<void
+            (int, std::vector<std::shared_ptr<LexicalToken>>&, int, bool)> semanticActionFunction) {
+        if(semanticActionMap.find(semanticAction) == semanticActionMap.end()) {
+            semanticActionMap[semanticAction] = semanticActionFunction;
+            BOOST_LOG(ecc_logger::get()) << "Handler registered for the semantic action: " << semanticAction;
+        } else {
+            BOOST_LOG(ecc_logger::get()) << "Error: Handler already registered for the semantic action: "
+                                         << semanticAction;
+        }
+    }
 
     void EasyCC::initLogs() {
         logging::add_common_attributes();
@@ -122,63 +164,36 @@ namespace ecc{
         }
     }
 
-    int EasyCC::compile(int argc, char *argv[]) {
+    int EasyCC::compile() {
 
-        // Configure the logger
-        initLogs();
+        for(std::string inputFile : inputFiles) {
 
-        // Initialize parameters
-        initParams(argc, argv);
+            // Start lexical analyzer
+            std::vector<std::shared_ptr<LexicalToken>> lexicalTokens;
+            std::vector<std::string> lexicalErrorMessages;
+            lexical->generateLexicalTokens(inputFile, lexicalTokens, lexicalErrorMessages);
 
-        // Get files
-        fetchInputFiles(argc, argv);
+            // Logging
+            for(auto message : lexicalErrorMessages)
+                std::cerr << message << std::endl;
+            if(lexicalErrorMessages.size() != 0) {
+                // A lexical error exist, exit
+                std::cerr << "Exiting program with code " << ERR_CODE_LEXICAL << std::endl;
+                return ERR_CODE_LEXICAL;
+            }
 
-        // Check if required arguments are set
-        if(!validArguments()) {
-            printUsage();
-            return ERR_CODE_PARAMS;
-        }
+            // Start syntax analyzer
+            std::vector<std::string> syntaxErrorMessages;
+            syntax->parseTokens(lexicalTokens, syntaxErrorMessages);
 
-        // Lexical analysis phase
-        Lexical lexical(lexicalStateMachineFile, lexicalConfigFile, lexicalErrorsFile);
-
-        std::vector<std::shared_ptr<LexicalToken>> lexicalTokens;
-        std::vector<std::string> lexicalErrorMessages;
-        lexical.generateLexicalTokens(inputFiles[0], lexicalTokens, lexicalErrorMessages);
-
-        // Logging
-        for(auto message : lexicalErrorMessages)
-            std::cerr << message << std::endl;
-        if(lexicalErrorMessages.size() != 0) {
-            // A lexical error exist, exit
-            std::cerr << "Exiting program with code " << ERR_CODE_LEXICAL << std::endl;
-            return ERR_CODE_LEXICAL;
-        }
-
-        // Syntax analysis phase
-        std::vector<std::string> syntaxErrorMessages;
-        Syntax syntax(syntaxGrammarFile, syntaxConfigFile, syntaxErrorsFile);
-
-        // Prepare semantic analysis
-        Semantic semantic;
-
-        // Handle syntax events
-        syntax.setSemanticAction([&](std::string semanticAction, int phase,
-                                     std::vector<std::shared_ptr<LexicalToken>> &lexicalTokensParam,
-                                     int index, bool stable) -> void {
-            semantic.handle(semanticAction, phase, lexicalTokensParam, index, stable);
-        });
-
-        // Parse the generated lexical tokens
-        syntax.parseTokens(lexicalTokens, syntaxErrorMessages);
-
-        // Logging syntax phase
-        for(auto message : syntaxErrorMessages)
-            std::cerr << message << std::endl;
-        if(syntaxErrorMessages.size() != 0) {
-            // A syntax error exist, exit
-            std::cerr << "Exiting program with code " << ERR_CODE_SYNTAX << std::endl;
-            return ERR_CODE_SYNTAX;
+            // Logging syntax phase
+            for(auto message : syntaxErrorMessages)
+                std::cerr << message << std::endl;
+            if(syntaxErrorMessages.size() != 0) {
+                // A syntax error exist, exit
+                std::cerr << "Exiting program with code " << ERR_CODE_SYNTAX << std::endl;
+                return ERR_CODE_SYNTAX;
+            }
         }
 
         return OK_CODE;

@@ -87,8 +87,16 @@ namespace ecc{
                     }
                 } else if(Grammar::isSemanticAction(top)) {
 
-                    // Call the semantic action handler
-                    this->m_semanticAction(top, phase, lexicalTokens, inputIndex, stable);
+                    // Call the semantic action handler.
+                    // inputIndex value is subtracted by 2:
+                    // inputIndex:   -1-+-2-+-3-+-3-+-4-
+                    //                  A   B   #C  $
+                    // To retrieve the value of `B`, the semantic action `#C`
+                    // is placed right after. But at the time `#C` is processed,
+                    // the value of inputIndex is 3 which is the original index of B + 2.
+                    // Note that if the semantic action is placed at the beginning
+                    // of the grammar production, then the input index will be 2 - 1 = -1
+                    this->m_semanticAction(top, phase, lexicalTokens, inputIndex-2, stable);
 
                     // Remove the action from the stack
                     parseStack.pop();

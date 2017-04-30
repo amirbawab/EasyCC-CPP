@@ -3,6 +3,9 @@
 
 #include <string>
 #include <vector>
+#include <memory>
+#include "../lexical/Lexical.h"
+#include "../syntax/Syntax.h"
 
 namespace ecc{
     class EasyCC {
@@ -15,13 +18,30 @@ namespace ecc{
         static const int ERR_CODE_SYNTAX = 3;
 
         /**
-         * Run the lexical analyzer and the syntax analyzer
+         * Init logs and other tools
          * @param argc
          * @param argv
+         */
+        int init(int argc, char *argv[]);
+
+        /**
+         * Run the lexical analyzer and the syntax analyzer
          * @return Return code
          */
-        int compile(int argc, char *argv[]);
+        int compile();
+
+        /**
+         * Register semantic action
+         * @param semanticAction
+         * @param semanticActionFunction Function to execute on semantic action calls
+         */
+        void registerSemanticAction(std::string semanticAction, std::function<void
+                (int, std::vector<std::shared_ptr<LexicalToken>>&, int, bool)> semanticActionFunction);
     private:
+
+        // Compiler analyzers
+        std::shared_ptr<Lexical> lexical;
+        std::shared_ptr<Syntax> syntax;
 
         // Configuration files
         std::string lexicalStateMachineFile;
@@ -32,6 +52,8 @@ namespace ecc{
         std::string syntaxErrorsFile;
         std::string outputFile;
         std::vector<std::string> inputFiles;
+        std::map<std::string, std::function<void
+                (int, std::vector<std::shared_ptr<LexicalToken>>&, int, bool)>> semanticActionMap;
 
         /**
          * Initiliaze the logger
