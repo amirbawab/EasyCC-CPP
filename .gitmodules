@@ -1,4 +1,4 @@
 [submodule "rapidjson"]
 	path = rapidjson
 	url = https://github.com/miloyip/rapidjson
-    branch = v1.1.0
+	branch = v1.1.0
