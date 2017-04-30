@@ -1,6 +1,6 @@
 #include "SyntaxMessages.h"
-#include "../../rapidjson/document.h"
-#include "../../rapidjson/writer.h"
+#include <rapidjson/document.h>
+#include <rapidjson/writer.h>
 #include <boost/algorithm/string.hpp>
 #include <fstream>
 #include <sstream>

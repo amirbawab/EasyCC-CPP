@@ -1,6 +1,6 @@
 #include "LexicalConfig.h"
-#include "../../rapidjson/document.h"
-#include "../../rapidjson/writer.h"
+#include <rapidjson/document.h>
+#include <rapidjson/writer.h>
 #include <fstream>
 #include <sstream>
 #include <iostream>
