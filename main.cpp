@@ -12,6 +12,9 @@ int main(int argc, char *argv[]) {
         return code;
     }
 
+    // Get file name
+    std::string outputFileName = easyCC.getOutputFileName();
+
     // Register events
     easyCC.registerSemanticAction("#className#",[&](int phase,
                                          std::vector<std::shared_ptr<ecc::LexicalToken>> &lexicalVector,

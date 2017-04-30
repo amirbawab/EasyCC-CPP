@@ -37,6 +37,12 @@ namespace ecc{
          */
         void registerSemanticAction(std::string semanticAction, std::function<void
                 (int, std::vector<std::shared_ptr<LexicalToken>>&, int, bool)> semanticActionFunction);
+
+        /**
+         * Get output file name
+         * @return file name
+         */
+        std::string getOutputFileName() {return outputFile; }
     private:
 
         // Compiler analyzers
