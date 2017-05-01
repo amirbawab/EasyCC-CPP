@@ -1,0 +1,19 @@
+{
+    "newline": "LF",
+
+    "ignore": {
+        "prefix": "",
+        "suffix": "",
+        "include": ["T_COMMENT"],
+        "exclude": []
+    },
+
+    "error": {
+        "prefix": "T_INVALID_CHAR",
+        "suffix": "",
+        "include": [],
+        "exclude": []
+    },
+
+    "reserved": {}
+}

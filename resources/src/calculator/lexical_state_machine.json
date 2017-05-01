@@ -1,0 +1,164 @@
+{
+    "states": [
+        {
+            "type": "INITIAL",
+            "id": 0
+        },
+        {
+            "type": "NORMAL",
+            "id": 1
+        },
+        {
+            "type": "FINAL",
+            "id": 2,
+            "token": "T_INTEGER",
+            "backtrack": true
+        },
+        {
+            "type": "FINAL",
+            "id": 3,
+            "token": "T_PLUS",
+            "backtrack": false
+        },
+        {
+            "type": "FINAL",
+            "id": 4,
+            "token": "T_MINUS",
+            "backtrack": false
+        },
+        {
+            "type": "FINAL",
+            "id": 5,
+            "token": "T_MULTIPLY",
+            "backtrack": false
+        },
+        {
+            "type": "FINAL",
+            "id": 6,
+            "token": "T_DIVIDE",
+            "backtrack": false
+        },
+        {
+            "type": "FINAL",
+            "id": 7,
+            "token": "T_SEMICOLON",
+            "backtrack": false
+        },
+        {
+            "type": "FINAL",
+            "id": 8,
+            "token": "T_INVALID_CHAR",
+            "backtrack": false
+        },
+        {
+            "type": "FINAL",
+            "id": 9,
+            "token": "T_INTEGER",
+            "backtrack": false
+        },
+        {
+            "type": "FINAL",
+            "id": 10,
+            "token": "T_OPEN_PAR",
+            "backtrack": false
+        },
+        {
+            "type": "FINAL",
+            "id": 11,
+            "token": "T_CLOSE_PAR",
+            "backtrack": false
+        },
+        {
+            "type": "NORMAL",
+            "id": 12
+        },
+        {
+            "type": "FINAL",
+            "id": 13,
+            "token": "T_COMMENT",
+            "backtrack": true
+        }
+    ],
+    "transitions": [
+        {
+            "from": 0,
+            "to": 0,
+            "chars": [" ","\r","\t","\n","EOF"]
+        },
+        {
+            "from": 0,
+            "to": 1,
+            "chars": ["POSITIVE"]
+        },
+        {
+            "from": 1,
+            "to": 1,
+            "chars": ["POSITIVE","0"]
+        },
+        {
+            "from": 1,
+            "to": 2,
+            "chars": ["OTHER"]
+        },
+        {
+            "from": 0,
+            "to": 3,
+            "chars": ["+"]
+        },
+        {
+            "from": 0,
+            "to": 4,
+            "chars": ["-"]
+        },
+        {
+            "from": 0,
+            "to": 5,
+            "chars": ["*"]
+        },
+        {
+            "from": 0,
+            "to": 6,
+            "chars": ["/"]
+        },
+        {
+            "from": 0,
+            "to": 7,
+            "chars": [";"]
+        },
+        {
+            "from": 0,
+            "to": 8,
+            "chars": ["OTHER"]
+        },
+        {
+            "from": 0,
+            "to": 9,
+            "chars": ["T_INTEGER"]
+        },
+        {
+            "from": 0,
+            "to": 10,
+            "chars": ["("]
+        },
+        {
+            "from": 0,
+            "to": 11,
+            "chars": [")"]
+        },
+        {
+            "from": 0,
+            "to": 12,
+            "chars": ["#"]
+        },
+        {
+            "from": 12,
+            "to": 12,
+            "chars": ["OTHER"]
+        },
+        {
+            "from": 12,
+            "to": 13,
+            "chars": ["\n","EOF"]
+        }
+    ]
+}

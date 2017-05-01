@@ -1,0 +1,4 @@
+{
+    "default_message": "Error found: ${lexical.value} at line ${lexical.line} and column ${lexical.column}",
+    "error_messages": []
+}
