@@ -13,6 +13,7 @@ set(TOOL_FIRST_FOLLOW "firstfollow")
 set(TEST_RES_PATH "resources/test")
 file(COPY "${TEST_RES_PATH}/grammar/" DESTINATION "${CMAKE_BINARY_DIR}/bin/${TEST_RES_PATH}/grammar/")
 file(COPY "${TEST_RES_PATH}/graph/" DESTINATION "${CMAKE_BINARY_DIR}/bin/${TEST_RES_PATH}/graph/")
+file(COPY "${TEST_RES_PATH}/firstfollow/" DESTINATION "${CMAKE_BINARY_DIR}/bin/${TEST_RES_PATH}/firstfollow/")
 
 # Configure directory of output file
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
