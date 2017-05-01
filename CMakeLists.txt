@@ -10,8 +10,9 @@ set(PROJECT_EXEC_1 "calculator")
 set(TOOL_FIRST_FOLLOW "firstfollow")
 
 # Copy resources
-file(GLOB resources_TEST "resources/test/*")
-file(COPY ${resources_TEST} DESTINATION "${CMAKE_BINARY_DIR}/bin/resources/test/")
+set(TEST_RES_PATH "resources/test")
+file(COPY "${TEST_RES_PATH}/grammar/" DESTINATION "${CMAKE_BINARY_DIR}/bin/${TEST_RES_PATH}/grammar/")
+file(COPY "${TEST_RES_PATH}/graph/" DESTINATION "${CMAKE_BINARY_DIR}/bin/${TEST_RES_PATH}/graph/")
 
 # Configure directory of output file
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
