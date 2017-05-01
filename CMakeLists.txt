@@ -6,9 +6,7 @@ set(PROJECT_LIB easyccls)
 set(PROJECT_EXEC_1 "calculator")
 
 # Copy resources
-file(GLOB resources_SRC "resources/src/*")
 file(GLOB resources_TEST "resources/test/*")
-file(COPY ${resources_SRC} DESTINATION "${CMAKE_BINARY_DIR}/bin/resources/src/")
 file(COPY ${resources_TEST} DESTINATION "${CMAKE_BINARY_DIR}/bin/resources/test/")
 
 # Configure directory of output file
