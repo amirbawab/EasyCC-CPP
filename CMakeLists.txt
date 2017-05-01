@@ -1,9 +1,13 @@
 cmake_minimum_required(VERSION 3.5)
 project(easycc)
 set(CMAKE_VERBOSE_MAKEFILE ON)
+
+# Set targets
 set(PROJECT_TEST "easycctests")
-set(PROJECT_LIB easyccls)
+set(PROJECT_DEV_LIB easyccdev)
+set(PROJECT_PRO_LIB easyccpro)
 set(PROJECT_EXEC_1 "calculator")
+set(TOOL_FIRST_FOLLOW "firstfollow")
 
 # Copy resources
 file(GLOB resources_TEST "resources/test/*")
@@ -37,7 +41,7 @@ link_libraries(${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
 
 # [TARGET 1]
 # Add library target
-add_library(${PROJECT_LIB} ${PROJECT_SOURCE_FILES})
+add_library(${PROJECT_DEV_LIB} ${PROJECT_SOURCE_FILES})
 # [/TARGET 1]
 
 # Add gtest CMakeLists.txt to build it automatically
@@ -60,6 +64,11 @@ add_test(${PROJECT_TEST} ${PROJECT_TEST})
 # [/TARGET 2]
 
 # [TARGET 3]
+# Add first and follow set executable
+# add_executable(${TOOL_FIRST_FOLLOW} ${PROJECT_SOURCE_FILES} tools/first_follow/ConvertFF.h tools/first_follow/ConvertFF.cpp)
+# [/TARGET 3]
+
+# [TARGET 4]
 # Add example executable
 add_executable(${PROJECT_EXEC_1} ${PROJECT_SOURCE_FILES} examples/calculator/calculator.cpp)
-# [/TARGET 3]
+# [/TARGET 4]
