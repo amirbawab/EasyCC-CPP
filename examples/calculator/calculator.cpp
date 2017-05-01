@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Create file
-    std::ofstream outputFile("/tmp/testing.txt");
+    std::ofstream outputFile(easyCC.getOutputFileName());
 
     // Check if can open file
     if(!outputFile.is_open()) {
