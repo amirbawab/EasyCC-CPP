@@ -555,7 +555,7 @@ namespace ecc {
         }
     }
 
-    std::shared_ptr<std::vector<std::string>> Grammar::getParseTabel(
+    std::shared_ptr<std::vector<std::string>> Grammar::getParseTable(
             const std::string &nonTerminal, const std::string &input) {
         if(m_parseTableMap.find(nonTerminal) != m_parseTableMap.end() &&
                     (*m_parseTableMap[nonTerminal]).find(input) != (*m_parseTableMap[nonTerminal]).end()) {

@@ -42,7 +42,7 @@ namespace ecc {
          * otherwise return nullptr
          */
         std::shared_ptr<std::vector<std::string>>
-                getParseTabel(const std::string &nonTerminal, const std::string &input);
+                getParseTable(const std::string &nonTerminal, const std::string &input);
 
         /**
          * Get the root of any grammar derivation tree

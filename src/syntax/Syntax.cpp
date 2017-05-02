@@ -105,7 +105,7 @@ namespace ecc{
 
                     // Get record from the parse table
                     std::shared_ptr<std::vector<std::string>> production =
-                            m_grammar->getParseTabel(top, lexicalToken->getName());
+                            m_grammar->getParseTable(top, lexicalToken->getName());
 
                     // Check if the record exists or it is an error
                     if(production) {
