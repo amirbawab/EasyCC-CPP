@@ -6,7 +6,6 @@
 #include <map>
 #include <vector>
 #include <set>
-#include <easycc/tools/ConvertFF.h>
 
 namespace ecc {
     class Grammar {
