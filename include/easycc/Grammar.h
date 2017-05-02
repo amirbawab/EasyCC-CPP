@@ -45,6 +45,16 @@ namespace ecc {
                 getParseTable(const std::string &nonTerminal, const std::string &input);
 
         /**
+         * Get the map for productions stored in the parsing table under
+         * a specific non terminal.
+         * @param non terminal
+         * @return If non terminal exists as a key, return the map pointer, otherwise
+         * return nullptr
+         */
+        std::shared_ptr<std::map<std::string, std::shared_ptr<std::vector<std::string>>>>
+                getParseMap(std::string nonTerminal);
+
+        /**
          * Get the root of any grammar derivation tree
          * @return start token
          */

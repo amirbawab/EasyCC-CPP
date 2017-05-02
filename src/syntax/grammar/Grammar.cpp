@@ -564,6 +564,14 @@ namespace ecc {
         return nullptr;
     }
 
+    std::shared_ptr<std::map<std::string, std::shared_ptr<std::vector<std::string>>>> Grammar::getParseMap(
+            std::string nonTerminal) {
+        if(m_parseTableMap.find(nonTerminal) != m_parseTableMap.end()) {
+            return m_parseTableMap[nonTerminal];
+        }
+        return nullptr;
+    }
+
     std::string Grammar::extractTerminal(std::string terminal) {
         if(terminal.length() > 2 && terminal[0] == '\'' && terminal[terminal.length()-1] == '\'') {
             return terminal.substr(1,terminal.length()-2);
