@@ -6,6 +6,7 @@
 #include <map>
 #include <vector>
 #include <set>
+#include <easycc/tools/ConvertFF.h>
 
 namespace ecc {
     class Grammar {
@@ -59,6 +60,7 @@ namespace ecc {
         static std::string extractTerminal(std::string terminal);
 
     private:
+        friend class ConvertFF;
         std::string m_start;
         std::map<std::string, std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::string>>>>> m_productions;
         std::map<std::shared_ptr<std::vector<std::string>>, std::shared_ptr<std::set<std::string>>> m_productionFirstSet;

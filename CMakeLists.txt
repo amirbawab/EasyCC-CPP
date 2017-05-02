@@ -29,6 +29,9 @@ file(GLOB_RECURSE PROJECT_SOURCE_FILES "src/*/*.cpp")
 # Include rapidjson header files
 include_directories(rapidjson/include)
 
+# Include tools header files
+include_directories(tools/include)
+
 # Add boost
 add_definitions(-DBOOST_LOG_DYN_LINK)
 find_package(Boost 1.63.0 COMPONENTS log log_setup thread date_time filesystem system REQUIRED)
@@ -67,7 +70,8 @@ add_test(${PROJECT_TEST} ${PROJECT_TEST})
 
 # [TARGET 3]
 # Add first and follow set executable
-# add_executable(${TOOL_FIRST_FOLLOW} ${PROJECT_SOURCE_FILES} tools/first_follow/ConvertFF.h tools/first_follow/ConvertFF.cpp)
+add_executable(${TOOL_FIRST_FOLLOW} tools/first_follow/ConvertFF.cpp tools/include/easycc/tools/ConvertFF.h)
+target_link_libraries(${TOOL_FIRST_FOLLOW} ${PROJECT_DEV_LIB})
 # [/TARGET 3]
 
 # [TARGET 4]
