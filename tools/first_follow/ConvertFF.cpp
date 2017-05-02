@@ -93,11 +93,6 @@ namespace ecc{
 
     void ConvertFF::convert(std::string fileName) {
 
-        // Patterns
-        const std::string FIRST_SET_PATTERN = "/*FIRST_SET*/";
-        const std::string FOLLOW_SET_PATTERN = "/*FOLLOW_SET*/";
-        const std::string PARSE_TABLE_PATTERN = "/*PARSE_TABLE*/";
-
         // Process the grammar file
         Grammar grammar(fileName);
 
@@ -147,13 +142,14 @@ namespace ecc{
         std::cout
         << "First Follow - Convert syntax grammar into a C++ header file" << std::endl
         << "Usage: firstfollow -t template.h -o output.h [OPTION]... FILE" << std::endl
-        << "\t-t, --template\t\t\tInput template file" << std::endl
-        << "\t-o, --output\t\t\tOutput file" << std::endl
-        << "\t-v, --verbose\t\t\tVerbose mode" << std::endl
-        << "\t-h, --help\t\t\tDisplay this help message" << std::endl << std::endl
+        << "\t-t, --template\t\tInput template file" << std::endl
+        << "\t-o, --output\t\tOutput file" << std::endl
+        << "\t-v, --verbose\t\tVerbose mode" << std::endl
+        << "\t-h, --help\t\tDisplay this help message" << std::endl << std::endl
         << "Replaced patterns:" << std::endl
-        << "\t{FIRST_SET}" << std::endl
-        << "\t{FOLLOW_SET}" << std::endl;
+        << "\t" << FIRST_SET_PATTERN << std::endl
+        << "\t" << FOLLOW_SET_PATTERN << std::endl
+        << "\t" << PARSE_TABLE_PATTERN << std::endl;
     }
 
     void ConvertFF::initParams(int argc, char *argv[]) {
