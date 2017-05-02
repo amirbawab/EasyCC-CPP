@@ -78,3 +78,12 @@ target_link_libraries(${TOOL_FIRST_FOLLOW} ${PROJECT_DEV_LIB})
 # Add example executable
 add_executable(${PROJECT_EXEC_1} ${PROJECT_SOURCE_FILES} examples/calculator/calculator.cpp)
 # [/TARGET 4]
+
+add_custom_command(
+        TARGET ${PROJECT_EXEC_1} PRE_BUILD
+        COMMAND ${TOOL_FIRST_FOLLOW}
+        ARGS -t ${PROJECT_SOURCE_DIR}/tools/first_follow/GrammarFF.h.template
+        -o ${PROJECT_SOURCE_DIR}/bin/GrammarFF.h
+        ${PROJECT_SOURCE_DIR}/resources/src/calculator/syntax_grammar.txt
+        DEPENDS ${TOOL_FIRST_FOLLOW}
+        VERBATIM)
