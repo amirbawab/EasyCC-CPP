@@ -35,6 +35,13 @@ include_directories(rapidjson/include)
 # Include tools header files
 include_directories(tools/include)
 
+# Check if generate files exists, if so use them
+if(EXISTS "${PROJECT_SOURCE_DIR}/bin/include/easycc/generated")
+    message(WARNING "Directory exists!")
+else()
+    message(WARNING "Directory missing")
+endif()
+
 # Add boost
 add_definitions(-DBOOST_LOG_DYN_LINK)
 find_package(Boost 1.63.0 COMPONENTS log log_setup thread date_time filesystem system REQUIRED)
@@ -78,11 +85,13 @@ target_link_libraries(${TOOL_FIRST_FOLLOW} ${PROJECT_DEV_LIB})
 add_executable(${EXAMPLE_CALCULATOR} examples/calculator/calculator.cpp)
 target_link_libraries(${EXAMPLE_CALCULATOR} ${PROJECT_DEV_LIB})
 
+# Generate grammar header file
 add_custom_command(
-        TARGET ${PROJECT_PRO_LIB} PRE_LINK
+        TARGET ${PROJECT_PRO_LIB} PRE_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_SOURCE_DIR}/bin/include/easycc/generated
         COMMAND ${TOOL_FIRST_FOLLOW}
-        ARGS -t ${PROJECT_SOURCE_DIR}/tools/first_follow/GrammarFF.h.template
-        -o ${PROJECT_SOURCE_DIR}/bin/GrammarFF.h
+        ARGS -t ${PROJECT_SOURCE_DIR}/tools/include/easycc/generated/GrammarFF.h
+        -o ${PROJECT_SOURCE_DIR}/bin/include/easycc/generated/GrammarFF.h
         ${PROJECT_SOURCE_DIR}/resources/src/calculator/syntax_grammar.txt
         DEPENDS ${TOOL_FIRST_FOLLOW}
         VERBATIM)
