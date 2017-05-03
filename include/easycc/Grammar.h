@@ -78,10 +78,6 @@ namespace ecc {
         std::string m_start;
         std::map<std::string, std::shared_ptr<std::vector<std::shared_ptr<std::vector<std::string>>>>> m_productions;
         std::map<std::shared_ptr<std::vector<std::string>>, std::shared_ptr<std::set<std::string>>> m_productionFirstSet;
-        std::map<std::string, std::shared_ptr<std::set<std::string>>> m_firstSet;
-        std::map<std::string, std::shared_ptr<std::set<std::string>>> m_followSet;
-        std::map<std::string, std::shared_ptr<std::map<std::string,
-                std::shared_ptr<std::vector<std::string>>>>> m_parseTableMap;
 
         /**
          * Parse one line of the grammar file
@@ -139,6 +135,12 @@ namespace ecc {
          * TT[NT][Input[0]] = production | not found
          */
         void buildParseTable();
+
+    protected:
+        std::map<std::string, std::shared_ptr<std::set<std::string>>> m_firstSet;
+        std::map<std::string, std::shared_ptr<std::set<std::string>>> m_followSet;
+        std::map<std::string, std::shared_ptr<std::map<std::string,
+                std::shared_ptr<std::vector<std::string>>>>> m_parseTableMap;
     };
 }
 
