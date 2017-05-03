@@ -7,9 +7,10 @@
 #include <map>
 #include <set>
 #include <memory>
+#include <easycc/Grammar.h>
 
 namespace ecc{
-    class GrammarFF {
+    class GrammarFF : public Grammar {
     public:
         GrammarFF() {
 

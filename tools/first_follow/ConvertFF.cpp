@@ -41,7 +41,7 @@ namespace ecc{
             for(std::string token : *grammar.getFirstSet(nonTerminal)) {
                 stream << "            "
                 << "this->m_firstSet[\"" << nonTerminal
-                << "\"]->insert(\"" << token << "\")" << std::endl;
+                << "\"]->insert(\"" << token << "\");" << std::endl;
             }
             stream << std::endl;
         }
@@ -56,7 +56,7 @@ namespace ecc{
             for(std::string token : *grammar.getFollowSet(nonTerminal)) {
                 stream << "            "
                 << "this->m_followSet[\"" << nonTerminal
-                << "\"]->insert(\"" << token << "\")" << std::endl;
+                << "\"]->insert(\"" << token << "\");" << std::endl;
             }
             stream << std::endl;
         }
