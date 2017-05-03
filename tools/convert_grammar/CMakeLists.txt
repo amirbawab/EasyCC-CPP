@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
-project(firstfollow)
-set(TOOL_CONVERT_GRAMMAR "firstfollow")
+project(convert-grammar)
+set(TOOL_CONVERT_GRAMMAR "convert-grammar")
 set(TOOL_CONVERT_GRAMMAR ${TOOL_CONVERT_GRAMMAR} PARENT_SCOPE)
 
 # Add first and follow set executable
