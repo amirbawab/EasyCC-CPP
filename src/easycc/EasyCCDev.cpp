@@ -1,10 +1,6 @@
-#include <easycc/EasyCC.h>
-#include <easycc/Lexical.h>
-#include <easycc/Syntax.h>
+#include <easycc/EasyCCDev.h>
 #include <iostream>
 #include <getopt.h>
-#include <vector>
-#include <string>
 
 #include <boost/move/utility_core.hpp>
 #include <boost/log/sources/logger.hpp>
@@ -41,30 +37,11 @@ namespace ecc{
         }
 
         // Create analyzers
-        lexical = std::make_shared<Lexical>(lexicalStateMachineFile, lexicalConfigFile, lexicalErrorsFile);
-        syntax = std::make_shared<Syntax>(syntaxGrammarFile, syntaxConfigFile, syntaxErrorsFile);
+        m_lexical = std::make_shared<Lexical>(m_lexicalStateMachineFile, m_lexicalConfigFile, m_lexicalErrorsFile);
+        m_syntax = std::make_shared<Syntax>(m_syntaxGrammarFile, m_syntaxConfigFile, m_syntaxErrorsFile);
 
-        // Handle syntax events
-        syntax->setSemanticAction([&](std::string semanticAction, int phase,
-                                      std::vector<std::shared_ptr<LexicalToken>> &lexicalTokensParam,
-                                      int index, bool stable) -> void {
-            if(semanticActionMap.find(semanticAction) == semanticActionMap.end()) {
-                BOOST_LOG(ecc_logger::get()) << "Error: Cannot find a handler for the semantic action: " << semanticAction;
-            } else {
-                semanticActionMap[semanticAction](phase, lexicalTokensParam, index, stable);
-            }
-        });
-    }
-
-    void EasyCC::registerSemanticAction(std::string semanticAction, std::function<void
-            (int, std::vector<std::shared_ptr<LexicalToken>>&, int, bool)> semanticActionFunction) {
-        if(semanticActionMap.find(semanticAction) == semanticActionMap.end()) {
-            semanticActionMap[semanticAction] = semanticActionFunction;
-            BOOST_LOG(ecc_logger::get()) << "Handler registered for the semantic action: " << semanticAction;
-        } else {
-            BOOST_LOG(ecc_logger::get()) << "Error: Handler already registered for the semantic action: "
-                                         << semanticAction;
-        }
+        // Set semantic action after m_syntax is created
+        setSemanticAction();
     }
 
     void EasyCC::initLogs() {
@@ -113,25 +90,25 @@ namespace ecc{
         while ((c = getopt_long(argc, argv, "hvs:c:e:g:C:E:o:", longOptions, &optionIndex)) != -1) {
             switch (c) {
                 case 's':
-                    lexicalStateMachineFile = optarg;
+                    m_lexicalStateMachineFile = optarg;
                     break;
                 case 'c':
-                    lexicalConfigFile = optarg;
+                    m_lexicalConfigFile = optarg;
                     break;
                 case 'e':
-                    lexicalErrorsFile = optarg;
+                    m_lexicalErrorsFile = optarg;
                     break;
                 case 'g':
-                    syntaxGrammarFile = optarg;
+                    m_syntaxGrammarFile = optarg;
                     break;
                 case 'C':
-                    syntaxConfigFile = optarg;
+                    m_syntaxConfigFile = optarg;
                     break;
                 case 'E':
-                    syntaxErrorsFile = optarg;
+                    m_syntaxErrorsFile = optarg;
                     break;
                 case 'o':
-                    outputFile = optarg;
+                    m_outputFile = optarg;
                     break;
                 case 'v':
                     logging::add_console_log(
@@ -149,54 +126,19 @@ namespace ecc{
     }
 
     bool EasyCC::validArguments() {
-        return  !lexicalStateMachineFile.empty() &&
-                !lexicalConfigFile.empty() &&
-                !lexicalErrorsFile.empty() &&
-                !syntaxGrammarFile.empty() &&
-                !syntaxConfigFile.empty() &&
-                !syntaxErrorsFile.empty() &&
-                !inputFiles.empty();
+        return  !m_lexicalStateMachineFile.empty() &&
+                !m_lexicalConfigFile.empty() &&
+                !m_lexicalErrorsFile.empty() &&
+                !m_syntaxGrammarFile.empty() &&
+                !m_syntaxConfigFile.empty() &&
+                !m_syntaxErrorsFile.empty() &&
+                !m_inputFiles.empty();
     }
 
     void EasyCC::fetchInputFiles(const int argc, char *argv[]) {
         for(int i = optind; i < argc; ++i) {
-            inputFiles.push_back(argv[i]);
+            m_inputFiles.push_back(argv[i]);
         }
-    }
-
-    int EasyCC::compile() {
-
-        for(std::string inputFile : inputFiles) {
-
-            // Start lexical analyzer
-            std::vector<std::shared_ptr<LexicalToken>> lexicalTokens;
-            std::vector<std::string> lexicalErrorMessages;
-            lexical->generateLexicalTokens(inputFile, lexicalTokens, lexicalErrorMessages);
-
-            // Logging
-            for(auto message : lexicalErrorMessages)
-                std::cerr << message << std::endl;
-            if(lexicalErrorMessages.size() != 0) {
-                // A lexical error exist, exit
-                std::cerr << "Exiting program with code " << ERR_CODE_LEXICAL << std::endl;
-                return ERR_CODE_LEXICAL;
-            }
-
-            // Start syntax analyzer
-            std::vector<std::string> syntaxErrorMessages;
-            syntax->parseTokens(lexicalTokens, syntaxErrorMessages);
-
-            // Logging syntax phase
-            for(auto message : syntaxErrorMessages)
-                std::cerr << message << std::endl;
-            if(syntaxErrorMessages.size() != 0) {
-                // A syntax error exist, exit
-                std::cerr << "Exiting program with code " << ERR_CODE_SYNTAX << std::endl;
-                return ERR_CODE_SYNTAX;
-            }
-        }
-
-        return OK_CODE;
     }
 }
 

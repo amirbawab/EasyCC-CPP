@@ -1,6 +1,5 @@
-#include "easycc/EasyCC.h"
+#include "easycc/EasyCCDev.h"
 #include <iostream>
-
 #include <stack>
 #include <fstream>
 
@@ -132,6 +131,11 @@ int main(int argc, char *argv[]) {
     });
 
     // Start compiling
-    code = easyCC.compile();
+    for(std::string fileName : easyCC.getInputFilesNames()) {
+        code = easyCC.compile(fileName);
+        if(code != ecc::EasyCC::OK_CODE) {
+            return code;
+        }
+    }
     return code;
 }

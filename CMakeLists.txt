@@ -6,7 +6,7 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 set(PROJECT_TEST "easycctests")
 set(PROJECT_DEV_LIB easyccdev)
 set(PROJECT_PRO_LIB easyccpro)
-set(PROJECT_EXEC_1 "calculator")
+set(EXAMPLE_CALCULATOR "calculator")
 set(TOOL_FIRST_FOLLOW "firstfollow")
 
 # Copy resources
@@ -25,6 +25,9 @@ include_directories(include)
 
 # Store src cpp files in a variable
 file(GLOB_RECURSE PROJECT_SOURCE_FILES "src/*/*.cpp")
+list(REMOVE_ITEM PROJECT_SOURCE_FILES
+        "${PROJECT_SOURCE_DIR}/src/easycc/EasyCCDev.cpp"
+        "${PROJECT_SOURCE_DIR}/src/easycc/EasyCCPro.cpp")
 
 # Include rapidjson header files
 include_directories(rapidjson/include)
@@ -44,10 +47,11 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 link_libraries(-lpthread)
 link_libraries(${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
 
-# [TARGET 1]
-# Add library target
-add_library(${PROJECT_DEV_LIB} ${PROJECT_SOURCE_FILES})
-# [/TARGET 1]
+# Add development library target
+add_library(${PROJECT_DEV_LIB} ${PROJECT_SOURCE_FILES} src/easycc/EasyCCDev.cpp)
+
+# Add production library target
+add_library(${PROJECT_PRO_LIB} ${PROJECT_SOURCE_FILES} src/easycc/EasyCCPro.cpp)
 
 # Add gtest CMakeLists.txt to build it automatically
 add_subdirectory(googletest)
@@ -59,28 +63,23 @@ include_directories(googletest/include)
 # Store easycc test files to a variable
 file(GLOB_RECURSE easycctests_SRC "test/*.h" "test/*.cpp")
 
-# [TARGET 2]
 # Add test executable
 add_executable(${PROJECT_TEST} ${PROJECT_SOURCE_FILES} ${easycctests_SRC})
 
 # Link libraries to the test executable only
 target_link_libraries(${PROJECT_TEST} gtest gtest_main)
 add_test(${PROJECT_TEST} ${PROJECT_TEST})
-# [/TARGET 2]
 
-# [TARGET 3]
 # Add first and follow set executable
 add_executable(${TOOL_FIRST_FOLLOW} tools/first_follow/ConvertFF.cpp tools/include/easycc/tools/ConvertFF.h)
 target_link_libraries(${TOOL_FIRST_FOLLOW} ${PROJECT_DEV_LIB})
-# [/TARGET 3]
 
-# [TARGET 4]
 # Add example executable
-add_executable(${PROJECT_EXEC_1} ${PROJECT_SOURCE_FILES} examples/calculator/calculator.cpp)
-# [/TARGET 4]
+add_executable(${EXAMPLE_CALCULATOR} examples/calculator/calculator.cpp)
+target_link_libraries(${EXAMPLE_CALCULATOR} ${PROJECT_DEV_LIB})
 
 add_custom_command(
-        TARGET ${PROJECT_EXEC_1} PRE_BUILD
+        TARGET ${PROJECT_PRO_LIB} PRE_LINK
         COMMAND ${TOOL_FIRST_FOLLOW}
         ARGS -t ${PROJECT_SOURCE_DIR}/tools/first_follow/GrammarFF.h.template
         -o ${PROJECT_SOURCE_DIR}/bin/GrammarFF.h
