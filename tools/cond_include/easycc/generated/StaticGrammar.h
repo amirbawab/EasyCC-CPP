@@ -10,9 +10,9 @@
 #include <easycc/Grammar.h>
 
 namespace ecc{
-    class GrammarFF : public Grammar {
+    class StaticGrammar : public Grammar {
     public:
-        GrammarFF() {
+        StaticGrammar() {
 
 /*FIRST_SET*/
 /*FOLLOW_SET*/
