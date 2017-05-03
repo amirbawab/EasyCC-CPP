@@ -10,13 +10,10 @@
 #include <easycc/Grammar.h>
 
 namespace ecc{
-    class StaticGrammar : public Grammar {
-    public:
-        StaticGrammar() {
 
+    void Grammar::staticContent() {
 /*FIRST_SET*/
 /*FOLLOW_SET*/
 /*PARSE_TABLE*/
-        }
-    };
+    }
 }

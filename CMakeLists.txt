@@ -11,7 +11,6 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-
 # Store src cpp files in a variable
 file(GLOB_RECURSE PROJECT_SOURCE_FILES "src/*.cpp")
 list(REMOVE_ITEM PROJECT_SOURCE_FILES
@@ -24,11 +23,12 @@ include_directories(rapidjson/include)
 include_directories(tools/include)
 
 # Check if generate files exists, if so use them
-if(EXISTS "${PROJECT_SOURCE_DIR}/bin/include/easycc/generated")
-    include_directories(bin/include)
+if(EXISTS "${PROJECT_SOURCE_DIR}/bin/generated/cpp")
+    file(GLOB_RECURSE GENERATED_FILES ${PROJECT_SOURCE_DIR}/bin/generated/cpp/*.cpp)
 else()
-    include_directories(tools/cond_include)
+    file(GLOB_RECURSE GENERATED_FILES ${PROJECT_SOURCE_DIR}/tools/convert/templates/*.cpp)
 endif()
+set(PROJECT_SOURCE_FILES ${PROJECT_SOURCE_FILES} ${GENERATED_FILES})
 
 # Add boost
 add_definitions(-DBOOST_LOG_DYN_LINK)
@@ -49,7 +49,7 @@ add_library(${PROJECT_DEV_LIB} ${PROJECT_SOURCE_FILES} src/easycc/EasyCCDev.cpp)
 add_library(${PROJECT_PRO_LIB} ${PROJECT_SOURCE_FILES} src/easycc/EasyCCPro.cpp)
 
 # Add subdirectory CMakeLists.txt
-add_subdirectory(tools/convert_grammar)
+add_subdirectory(tools/convert)
 add_subdirectory(googletest)
 add_subdirectory(test)
 add_subdirectory(examples/calculator-dev)
@@ -58,9 +58,9 @@ add_subdirectory(examples/calculator-pro)
 # Explicitely generate header files
 add_custom_target(
         generate_headers
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_SOURCE_DIR}/bin/include/easycc/generated
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_SOURCE_DIR}/bin/generated/cpp
         COMMAND ${TOOL_CONVERT_GRAMMAR}
-        -t ${PROJECT_SOURCE_DIR}/tools/cond_include/easycc/generated/StaticGrammar.h
-        -o ${PROJECT_SOURCE_DIR}/bin/include/easycc/generated/StaticGrammar.h
+        -t ${PROJECT_SOURCE_DIR}/tools/convert/templates/StaticGrammar.cpp
+        -o ${PROJECT_SOURCE_DIR}/bin/generated/cpp/StaticGrammar.cpp
         ${PROJECT_SOURCE_DIR}/resources/src/calculator/syntax_grammar.txt
 )

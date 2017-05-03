@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
-project(convert-grammar)
+project(convert)
+
 set(TOOL_CONVERT_GRAMMAR "convert-grammar")
 set(TOOL_CONVERT_GRAMMAR ${TOOL_CONVERT_GRAMMAR} PARENT_SCOPE)
 
