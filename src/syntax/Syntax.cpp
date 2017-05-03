@@ -21,6 +21,11 @@ namespace ecc{
         this->m_messages = SyntaxMessages::loadMessages(messagesFileName);
     }
 
+    Syntax::Syntax() {
+        this->m_grammar = std::make_shared<Grammar>();
+        this->m_grammar->staticContent();
+    }
+
     /**
      * Helper function to get and increment input index
      * @param lexicalToken Vector of lexical tokens pointers
