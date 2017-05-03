@@ -37,9 +37,9 @@ include_directories(tools/include)
 
 # Check if generate files exists, if so use them
 if(EXISTS "${PROJECT_SOURCE_DIR}/bin/include/easycc/generated")
-    message(WARNING "Directory exists!")
+    include_directories(bin/include)
 else()
-    message(WARNING "Directory missing")
+    include_directories(tools/cond_include)
 endif()
 
 # Add boost
