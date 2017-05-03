@@ -1,11 +1,11 @@
-#ifndef EASYCC_CONVERTFF_H
-#define EASYCC_CONVERTFF_H
+#ifndef EASYCC_CONVERTGRAMMAR_H
+#define EASYCC_CONVERTGRAMMAR_H
 
 #include <string>
 #include <easycc/Grammar.h>
 
 namespace ecc {
-    class ConvertFF {
+    class ConvertGrammar {
     public:
         void init(int argc, char *argv[]);
         void convert(std::string fileName);

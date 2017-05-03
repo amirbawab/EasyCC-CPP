@@ -1,4 +1,4 @@
-#include <easycc/tools/ConvertFF.h>
+#include <easycc/tools/ConvertGrammar.h>
 #include <iostream>
 #include <getopt.h>
 #include <fstream>
@@ -20,7 +20,7 @@ BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(ecc_logger, src::logger_mt)
 
 namespace ecc{
 
-    void ConvertFF::init(int argc, char*argv[]) {
+    void ConvertGrammar::init(int argc, char*argv[]) {
 
         // Init logs
         logging::add_common_attributes();
@@ -30,7 +30,7 @@ namespace ecc{
         initParams(argc, argv);
     }
 
-    void ConvertFF::generateFirstSet(std::stringstream &stream, Grammar &grammar) {
+    void ConvertGrammar::generateFirstSet(std::stringstream &stream, Grammar &grammar) {
 
         for(std::string nonTerminal : grammar.getNonTerminals()) {
             stream << "            "
@@ -46,7 +46,7 @@ namespace ecc{
         }
     }
 
-    void ConvertFF::generateFollowSet(std::stringstream &stream, Grammar &grammar) {
+    void ConvertGrammar::generateFollowSet(std::stringstream &stream, Grammar &grammar) {
         for(std::string nonTerminal : grammar.getNonTerminals()) {
             stream << "            "
             << "this->m_followSet[\""<< nonTerminal
@@ -61,7 +61,7 @@ namespace ecc{
         }
     }
 
-    void ConvertFF::generateParseTable(std::stringstream &stream, Grammar &grammar) {
+    void ConvertGrammar::generateParseTable(std::stringstream &stream, Grammar &grammar) {
         for(std::string nonTerminal : grammar.getNonTerminals()) {
 
             // Create set for the non-terminal
@@ -73,24 +73,24 @@ namespace ecc{
             // Populate the created map
             for(const auto &parseEntry : *grammar.getParseMap(nonTerminal)) {
                 stream << "            "
-                << "*(this->m_parseTableMap[\"" << nonTerminal
+                << "(*this->m_parseTableMap[\"" << nonTerminal
                 << "\"])[\"" << parseEntry.first << "\"] = "
-                << "std::make_shared<std::vector<std::string>>({";
+                << "std::make_shared<std::vector<std::string>>();"
+                << std::endl;
 
-                for(int i=0; i < parseEntry.second->size(); i++) {
-                    if(i == 0) {
-                        stream << "\"" << (*parseEntry.second)[i] << "\"";
-                    } else {
-                        stream << ",\"" << (*parseEntry.second)[i] << "\"";
-                    }
+
+                for(const std::string &token : *parseEntry.second) {
+                    stream << "            "
+                    << "(*this->m_parseTableMap[\"" << nonTerminal
+                    << "\"])[\"" << parseEntry.first << "\"]->push_back(\"" << token
+                    << "\");" << std::endl;
                 }
-                stream << "});" << std::endl;
             }
             stream << std::endl;
         }
     }
 
-    void ConvertFF::convert(std::string fileName) {
+    void ConvertGrammar::convert(std::string fileName) {
 
         // Process the grammar file
         Grammar grammar(fileName);
@@ -137,7 +137,7 @@ namespace ecc{
         }
     }
 
-    void ConvertFF::printUsage() {
+    void ConvertGrammar::printUsage() {
         std::cout
         << "First Follow - Convert syntax grammar into a C++ header file" << std::endl
         << "Usage: firstfollow -t template.h -o output.h [OPTION]... FILE" << std::endl
@@ -151,7 +151,7 @@ namespace ecc{
         << "\t" << PARSE_TABLE_PATTERN << std::endl;
     }
 
-    void ConvertFF::initParams(int argc, char *argv[]) {
+    void ConvertGrammar::initParams(int argc, char *argv[]) {
 
         struct option longOptions[] = {
                 {"verbose", no_argument, 0, 'v'},
@@ -188,18 +188,18 @@ namespace ecc{
 }
 
 int main(int argc, char *argv[]) {
-    ecc::ConvertFF convertFF;
-    convertFF.init(argc, argv);
+    ecc::ConvertGrammar convertGrammar;
+    convertGrammar.init(argc, argv);
 
     // Check if all the required arguments are passed
     int fileIndex = optind;
-    if(fileIndex >= argc || convertFF.getOutputFile().empty() || convertFF.getInputFile().empty()) {
-        convertFF.printUsage();
+    if(fileIndex >= argc || convertGrammar.getOutputFile().empty() || convertGrammar.getInputFile().empty()) {
+        convertGrammar.printUsage();
         return 1;
     }
 
     // Convert file
-    convertFF.convert(argv[fileIndex]);
+    convertGrammar.convert(argv[fileIndex]);
 
     return 0;
 }

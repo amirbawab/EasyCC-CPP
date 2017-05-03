@@ -55,13 +55,12 @@ add_subdirectory(test)
 add_subdirectory(examples/calculator-dev)
 add_subdirectory(examples/calculator-pro)
 
-# Generate grammar header file
-add_custom_command(
-        TARGET ${PROJECT_PRO_LIB} PRE_BUILD
+# Explicitely generate header files
+add_custom_target(
+        generate_headers
         COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_SOURCE_DIR}/bin/include/easycc/generated
         COMMAND ${TOOL_CONVERT_GRAMMAR}
-        ARGS -t ${PROJECT_SOURCE_DIR}/tools/cond_include/easycc/generated/StaticGrammar.h
+        -t ${PROJECT_SOURCE_DIR}/tools/cond_include/easycc/generated/StaticGrammar.h
         -o ${PROJECT_SOURCE_DIR}/bin/include/easycc/generated/StaticGrammar.h
         ${PROJECT_SOURCE_DIR}/resources/src/calculator/syntax_grammar.txt
-        DEPENDS ${TOOL_FIRST_FOLLOW}
-        VERBATIM)
+)

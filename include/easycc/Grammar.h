@@ -70,6 +70,10 @@ namespace ecc {
 
         /**
          * Get vector of non terminals
+         * The vector is populated from the first set.
+         * It can also be implemented to read from the follow set since
+         * it is guaranteed for first and follow sets to have the same keys
+         * and size
          * @return vector
          */
         std::vector<std::string> getNonTerminals() const;
@@ -137,6 +141,7 @@ namespace ecc {
         void buildParseTable();
 
     protected:
+        Grammar(){}
         std::map<std::string, std::shared_ptr<std::set<std::string>>> m_firstSet;
         std::map<std::string, std::shared_ptr<std::set<std::string>>> m_followSet;
         std::map<std::string, std::shared_ptr<std::map<std::string,
