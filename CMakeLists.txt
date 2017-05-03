@@ -57,10 +57,11 @@ add_subdirectory(examples/calculator-pro)
 
 # Explicitely generate header files
 add_custom_target(
-        generate_headers
+        generate_files
         COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_SOURCE_DIR}/bin/generated/cpp
         COMMAND ${TOOL_CONVERT_GRAMMAR}
         -t ${PROJECT_SOURCE_DIR}/tools/convert/templates/StaticGrammar.cpp
         -o ${PROJECT_SOURCE_DIR}/bin/generated/cpp/StaticGrammar.cpp
-        ${PROJECT_SOURCE_DIR}/resources/src/calculator/syntax_grammar.txt
+        -i ${PROJECT_SOURCE_DIR}/resources/src/calculator/syntax_grammar.txt
+        DEPENDS ${TOOL_CONVERT_GRAMMAR}
 )

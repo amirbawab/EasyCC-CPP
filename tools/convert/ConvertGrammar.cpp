@@ -1,34 +1,13 @@
 #include <easycc/tools/ConvertGrammar.h>
 #include <iostream>
-#include <getopt.h>
-#include <fstream>
-
 #include <boost/algorithm/string.hpp>
-#include <boost/log/sources/logger.hpp>
-#include <boost/log/sources/record_ostream.hpp>
-#include <boost/log/sources/global_logger_storage.hpp>
-#include <boost/log/utility/setup/file.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/utility/setup/console.hpp>
-
-namespace logging = boost::log;
-namespace src = boost::log::sources;
-namespace keywords = boost::log::keywords;
-namespace sinks = boost::log::sinks;
-
-BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(ecc_logger, src::logger_mt)
+#include <sstream>
 
 namespace ecc{
 
-    void ConvertGrammar::init(int argc, char*argv[]) {
-
-        // Init logs
-        logging::add_common_attributes();
-        logging::core::get()->set_logging_enabled(false);
-
-        // Initialize parameters
-        initParams(argc, argv);
-    }
+    const std::string ConvertGrammar::FIRST_SET_PATTERN = "/*FIRST_SET*/";
+    const std::string ConvertGrammar::FOLLOW_SET_PATTERN = "/*FOLLOW_SET*/";
+    const std::string ConvertGrammar::PARSE_TABLE_PATTERN = "/*PARSE_TABLE*/";
 
     void ConvertGrammar::generateFirstSet(std::stringstream &stream, Grammar &grammar) {
 
@@ -95,111 +74,31 @@ namespace ecc{
         // Process the grammar file
         Grammar grammar(fileName);
 
-        // Prepare output file
-        std::ofstream file(m_outputFile);
+        std::stringstream firstSetStream;
+        std::stringstream followSetStream;
+        std::stringstream parseTableStream;
 
-        // Check if can open file
-        if(!file.is_open()) {
-            std::cerr << "Cannot open file: " << m_outputFile << std::endl;
-        } else {
+        generateFirstSet(firstSetStream, grammar);
+        generateFollowSet(followSetStream, grammar);
+        generateParseTable(parseTableStream, grammar);
 
-            // Load template into string
-            std::ifstream inputFile(m_inputFile);
-
-            if(!inputFile.is_open()) {
-                std::cerr << "Cannot open file: " << m_inputFile << std::endl;
-            } else {
-
-                // Store template into string
-                std::stringstream buffer;
-                buffer << inputFile.rdbuf();
-                std::string content = buffer.str();
-
-                // Close file because its content is copied
-                inputFile.close();
-
-                std::stringstream firstSetStream;
-                std::stringstream followSetStream;
-                std::stringstream parseTableStream;
-
-                generateFirstSet(firstSetStream, grammar);
-                generateFollowSet(followSetStream, grammar);
-                generateParseTable(parseTableStream, grammar);
-
-                // Replace patterns
-                boost::replace_all(content, FIRST_SET_PATTERN, firstSetStream.str());
-                boost::replace_all(content, FOLLOW_SET_PATTERN, followSetStream.str());
-                boost::replace_all(content, PARSE_TABLE_PATTERN, parseTableStream.str());
-
-                file << content;
-            }
-            file.close();
-        }
-    }
-
-    void ConvertGrammar::printUsage() {
-        std::cout
-        << "First Follow - Convert syntax grammar into a C++ header file" << std::endl
-        << "Usage: firstfollow -t template.h -o output.h [OPTION]... FILE" << std::endl
-        << "\t-t, --template\t\tInput template file" << std::endl
-        << "\t-o, --output\t\tOutput file" << std::endl
-        << "\t-v, --verbose\t\tVerbose mode" << std::endl
-        << "\t-h, --help\t\tDisplay this help message" << std::endl << std::endl
-        << "Replaced patterns:" << std::endl
-        << "\t" << FIRST_SET_PATTERN << std::endl
-        << "\t" << FOLLOW_SET_PATTERN << std::endl
-        << "\t" << PARSE_TABLE_PATTERN << std::endl;
-    }
-
-    void ConvertGrammar::initParams(int argc, char *argv[]) {
-
-        struct option longOptions[] = {
-                {"verbose", no_argument, 0, 'v'},
-                {"template", required_argument, 0, 't'},
-                {"output", required_argument, 0, 'o'},
-                {"help", no_argument, 0, 'h'},
-                {0, 0, 0, 0}
-        };
-
-        int optionIndex = 0;
-        int c;
-        while ((c = getopt_long(argc, argv, "hvo:t:", longOptions, &optionIndex)) != -1) {
-            switch (c) {
-                case 'v':
-                    logging::add_console_log(
-                            std::cout,
-                            boost::log::keywords::format = "[%TimeStamp%]: %Message%"
-                    );
-                    logging::core::get()->set_logging_enabled(true);
-                    break;
-                case 'o':
-                    m_outputFile = optarg;
-                    break;
-                case 't':
-                    m_inputFile = optarg;
-                    break;
-                case 'h':
-                default:
-                    // Print by default
-                    break;
-            }
-        }
+        // Replace patterns
+        boost::replace_all(m_newContent, FIRST_SET_PATTERN, firstSetStream.str());
+        boost::replace_all(m_newContent, FOLLOW_SET_PATTERN, followSetStream.str());
+        boost::replace_all(m_newContent, PARSE_TABLE_PATTERN, parseTableStream.str());
     }
 }
 
 int main(int argc, char *argv[]) {
     ecc::ConvertGrammar convertGrammar;
-    convertGrammar.init(argc, argv);
-
-    // Check if all the required arguments are passed
-    int fileIndex = optind;
-    if(fileIndex >= argc || convertGrammar.getOutputFile().empty() || convertGrammar.getInputFile().empty()) {
-        convertGrammar.printUsage();
-        return 1;
+    if(convertGrammar.init(argc,argv) != ecc::ConvertGrammar::RETURN_SUCCESS) {
+        convertGrammar.printUsage(
+                "First Follow - Convert syntax grammar into a C++ file\n"
+                        "Usage: convert-grammar -t template.h -o output.h [OPTION]... FILE",
+                "Replaced patterns:"
+                        "\n\t" + ecc::ConvertGrammar::FIRST_SET_PATTERN +
+                        "\n\t" + ecc::ConvertGrammar::FOLLOW_SET_PATTERN +
+                        "\n\t" + ecc::ConvertGrammar::PARSE_TABLE_PATTERN );
     }
-
-    // Convert file
-    convertGrammar.convert(argv[fileIndex]);
-
-    return 0;
+    return convertGrammar.run();
 }
