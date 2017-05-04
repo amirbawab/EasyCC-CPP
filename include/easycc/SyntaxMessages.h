@@ -22,6 +22,9 @@ namespace ecc{
          * @return specific error message or default one
          */
         std::string getErrorMessage(std::string nonTerminal, std::string terminal);
+
+        std::map<std::string, std::map<std::string, std::string>> getErrorMessages(){return this->m_errorMessages;};
+        std::string getDefaultMessage(){return this->m_defaultMessage;}
     private:
         std::string m_defaultMessage;
         std::map<std::string, std::map<std::string, std::string>> m_errorMessages;

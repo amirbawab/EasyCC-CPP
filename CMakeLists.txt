@@ -67,5 +67,9 @@ add_custom_target(
         -t ${PROJECT_SOURCE_DIR}/tools/convert/templates/StaticSyntaxConfig.cpp
         -o ${PROJECT_SOURCE_DIR}/bin/generated/cpp/StaticSyntaxConfig.cpp
         -i ${PROJECT_SOURCE_DIR}/resources/src/calculator/syntax_config.json
+        COMMAND ${TOOL_CONVERT_SYNTAX_MSG}
+        -t ${PROJECT_SOURCE_DIR}/tools/convert/templates/StaticSyntaxMessages.cpp
+        -o ${PROJECT_SOURCE_DIR}/bin/generated/cpp/StaticSyntaxMessages.cpp
+        -i ${PROJECT_SOURCE_DIR}/resources/src/calculator/syntax_errors.json
         DEPENDS ${TOOL_CONVERT_GRAMMAR}
 )
