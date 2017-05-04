@@ -24,6 +24,10 @@ namespace ecc{
     Syntax::Syntax() {
         this->m_grammar = std::make_shared<Grammar>();
         this->m_grammar->staticContent();
+        this->m_config = std::make_shared<SyntaxConfig>();
+        this->m_config->staticContent();
+        this->m_messages = std::make_shared<SyntaxMessages>();
+        this->m_messages->staticContent();
     }
 
     /**
