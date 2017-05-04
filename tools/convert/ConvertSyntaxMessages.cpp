@@ -11,9 +11,23 @@ namespace ecc {
         std::shared_ptr<SyntaxMessages> syntaxMessages = SyntaxMessages::loadMessages(fileName);
 
         // Write default messages
-        std::stringstream stream;
-        stream << "this->m_parsingPhases = \"" << syntaxMessages->getDefaultMessage()<< "\";" << std::endl;
-        boost::replace_all(m_newContent, DEFAULT_MESSAGE_PATTERN, stream.str());
+        std::stringstream defaultMessageStream;
+        defaultMessageStream << "        "
+                "this->m_defaultMessage = \"" <<
+                syntaxMessages->getDefaultMessage() << "\";" << std::endl;
+        boost::replace_all(m_newContent, DEFAULT_MESSAGE_PATTERN, defaultMessageStream.str());
+
+        // Write all error messages
+        std::stringstream errorMessageStream;
+        auto errorMessages = syntaxMessages->getErrorMessages();
+        for(auto nonTerminalMap : errorMessages) {
+            for(auto terminalMap : nonTerminalMap.second) {
+                errorMessageStream << "        "
+                        "this->m_errorMessages[\"" << nonTerminalMap.first << "\"][\""
+                << terminalMap.first << "\"] = \"" << terminalMap.second << "\";" << std::endl;
+            }
+        }
+        boost::replace_all(m_newContent, ERROR_MESSAGES_PATTERN, errorMessageStream.str());
     }
 }
 

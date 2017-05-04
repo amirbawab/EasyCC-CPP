@@ -7,7 +7,7 @@
 
 namespace ecc {
     void SyntaxMessages::staticContent() {
-        /*DEFAULT_MESSAGE*/
-        /*ERROR_MESSAGES*/
+/*DEFAULT_MESSAGE*/
+/*ERROR_MESSAGES*/
     }
 }

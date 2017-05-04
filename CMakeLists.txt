@@ -62,14 +62,14 @@ add_custom_target(
         COMMAND ${TOOL_CONVERT_GRAMMAR}
         -t ${PROJECT_SOURCE_DIR}/tools/convert/templates/StaticGrammar.cpp
         -o ${PROJECT_SOURCE_DIR}/bin/generated/cpp/StaticGrammar.cpp
-        -i ${PROJECT_SOURCE_DIR}/resources/src/calculator/syntax_grammar.txt
+        -i ${PROJECT_SOURCE_DIR}/resources/src/oop/syntax_grammar.txt
         COMMAND ${TOOL_CONVERT_SYNTAX_CONFIG}
         -t ${PROJECT_SOURCE_DIR}/tools/convert/templates/StaticSyntaxConfig.cpp
         -o ${PROJECT_SOURCE_DIR}/bin/generated/cpp/StaticSyntaxConfig.cpp
-        -i ${PROJECT_SOURCE_DIR}/resources/src/calculator/syntax_config.json
+        -i ${PROJECT_SOURCE_DIR}/resources/src/oop/syntax_config.json
         COMMAND ${TOOL_CONVERT_SYNTAX_MSG}
         -t ${PROJECT_SOURCE_DIR}/tools/convert/templates/StaticSyntaxMessages.cpp
         -o ${PROJECT_SOURCE_DIR}/bin/generated/cpp/StaticSyntaxMessages.cpp
-        -i ${PROJECT_SOURCE_DIR}/resources/src/calculator/syntax_errors.json
+        -i ${PROJECT_SOURCE_DIR}/resources/src/oop/syntax_errors.json
         DEPENDS ${TOOL_CONVERT_GRAMMAR}
 )
