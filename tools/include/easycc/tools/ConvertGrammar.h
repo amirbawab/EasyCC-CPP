@@ -9,9 +9,6 @@ namespace ecc {
     class ConvertGrammar : public Convertible {
     public:
         void convert(std::string fileName);
-        static const std::string FIRST_SET_PATTERN;
-        static const std::string FOLLOW_SET_PATTERN;
-        static const std::string PARSE_TABLE_PATTERN;
     private:
         void generateFirstSet(std::stringstream &stream, Grammar &grammar);
         void generateFollowSet(std::stringstream &stream, Grammar &grammar);

@@ -5,9 +5,9 @@
 
 namespace ecc{
 
-    const std::string ConvertGrammar::FIRST_SET_PATTERN = "/*FIRST_SET*/";
-    const std::string ConvertGrammar::FOLLOW_SET_PATTERN = "/*FOLLOW_SET*/";
-    const std::string ConvertGrammar::PARSE_TABLE_PATTERN = "/*PARSE_TABLE*/";
+    const std::string FIRST_SET_PATTERN = "/*FIRST_SET*/";
+    const std::string FOLLOW_SET_PATTERN = "/*FOLLOW_SET*/";
+    const std::string PARSE_TABLE_PATTERN = "/*PARSE_TABLE*/";
 
     void ConvertGrammar::generateFirstSet(std::stringstream &stream, Grammar &grammar) {
 
@@ -91,14 +91,14 @@ namespace ecc{
 
 int main(int argc, char *argv[]) {
     ecc::ConvertGrammar convertGrammar;
-    if(convertGrammar.init(argc,argv) != ecc::ConvertGrammar::RETURN_SUCCESS) {
+    if(convertGrammar.init(argc,argv) != ecc::Convertible::RETURN_SUCCESS) {
         convertGrammar.printUsage(
-                "First Follow - Convert syntax grammar into a C++ file\n"
-                        "Usage: convert-grammar -t template.h -o output.h [OPTION]... FILE",
+                "Syntax Grammar - Convert syntax grammar into a C++ file\n"
+                        "Usage: convert-grammar -t template.h -o output.h -i input [OPTION]...",
                 "Replaced patterns:"
-                        "\n\t" + ecc::ConvertGrammar::FIRST_SET_PATTERN +
-                        "\n\t" + ecc::ConvertGrammar::FOLLOW_SET_PATTERN +
-                        "\n\t" + ecc::ConvertGrammar::PARSE_TABLE_PATTERN );
+                        "\n\t" + ecc::FIRST_SET_PATTERN +
+                        "\n\t" + ecc::FOLLOW_SET_PATTERN +
+                        "\n\t" + ecc::PARSE_TABLE_PATTERN );
     }
     return convertGrammar.run();
 }
