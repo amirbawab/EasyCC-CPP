@@ -1,8 +1,30 @@
 #include <easycc/Grammar.h>
 #include <gtest/gtest.h>
 
+TEST(GrammarParsingTest, GrammarParsingTest_Empty_Production_Array_Test) {
+    ASSERT_THROW(ecc::Grammar("resources/test/grammar/grammar_test1.json"), std::runtime_error);
+}
+
+TEST(GrammarParsingTest, GrammarParsingTest_Empty_Key_Test) {
+    ASSERT_THROW(ecc::Grammar("resources/test/grammar/grammar_test2.json"), std::runtime_error);
+}
+
+TEST(GrammarParsingTest, GrammarParsingTest_Empty_Production_String_Test) {
+    ASSERT_THROW(ecc::Grammar("resources/test/grammar/grammar_test3.json"), std::runtime_error);
+}
+
 TEST(GrammarParsingTest, GrammarParsingTest_LHS_Must_Be_Upper_Case_Only_Test) {
     ASSERT_THROW(ecc::Grammar("resources/test/grammar/grammar_test4.json"), std::runtime_error);
+}
+
+TEST(GrammarParsingTest, GrammarParsingTest_Semantic_Action_Terminal_Test) {
+    ecc::Grammar("resources/test/grammar/grammar_test5.json");
+    SUCCEED();
+}
+
+TEST(GrammarParsingTest, GrammarParsingTest_Semantic_Action_Epsilon_Test) {
+    ecc::Grammar("resources/test/grammar/grammar_test6.json");
+    SUCCEED();
 }
 
 TEST(GrammarParsingTest, GrammarParsingTest_Terminal_Alone_Test) {
@@ -13,7 +35,7 @@ TEST(GrammarParsingTest, GrammarParsingTest_Epsilon_Alone_Test) {
     ASSERT_THROW(ecc::Grammar("resources/test/grammar/grammar_test8.json"), std::runtime_error);
 }
 
-TEST(GrammarParsingTest, GrammarParsingTest_Empty_RHS_Test) {
+TEST(GrammarParsingTest, GrammarParsingTest_Duplicate_Keys_Test) {
     ASSERT_THROW(ecc::Grammar("resources/test/grammar/grammar_test9.json"), std::runtime_error);
 }
 
