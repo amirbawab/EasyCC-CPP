@@ -1,3 +1,0 @@
-A -> B C
-B -> 'b' | EPSILON
-C -> 'c'

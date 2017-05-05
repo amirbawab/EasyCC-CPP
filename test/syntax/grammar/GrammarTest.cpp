@@ -2,7 +2,7 @@
 #include <gtest/gtest.h>
 
 TEST(GrammarParsingTest, GrammarParsingTest_LHS_Must_Be_Upper_Case_Only_Test) {
-    ASSERT_THROW(ecc::Grammar("resources/test/grammar/grammar_test4.txt"), std::runtime_error);
+    ASSERT_THROW(ecc::Grammar("resources/test/grammar/grammar_test4.json"), std::runtime_error);
 }
 
 TEST(GrammarParsingTest, GrammarParsingTest_Terminal_Alone_Test) {
@@ -18,7 +18,7 @@ TEST(GrammarParsingTest, GrammarParsingTest_Empty_RHS_Test) {
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_1_Test) {
-    ecc::Grammar grammar("resources/test/firstfollow/ff_test1.txt");
+    ecc::Grammar grammar("resources/test/firstfollow/ff_test1.json");
 
     std::string A = "A";
     std::string B = "B";
@@ -122,7 +122,7 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_1_Test) {
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_1_Test) {
-    ecc::Grammar grammar("resources/test/firstfollow/ff_test1.txt");
+    ecc::Grammar grammar("resources/test/firstfollow/ff_test1.json");
 
     std::string A = "A";
     std::string B = "B";
@@ -248,7 +248,7 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_1_Test) {
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_2_Test) {
-    ecc::Grammar grammar("resources/test/firstfollow/ff_test2.txt");
+    ecc::Grammar grammar("resources/test/firstfollow/ff_test2.json");
 
     std::string A = "A";
     std::string B = "B";
@@ -286,7 +286,7 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_2_Test) {
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_2_Test) {
-    ecc::Grammar grammar("resources/test/firstfollow/ff_test2.txt");
+    ecc::Grammar grammar("resources/test/firstfollow/ff_test2.json");
 
     std::string A = "A";
     std::string B = "B";
@@ -324,7 +324,7 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_2_Test) {
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_3_Test) {
-    ecc::Grammar grammar("resources/test/firstfollow/ff_test3.txt");
+    ecc::Grammar grammar("resources/test/firstfollow/ff_test3.json");
 
     std::string A = "A";
     std::string B = "B";
@@ -364,7 +364,7 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_3_Test) {
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_3_Test) {
-    ecc::Grammar grammar("resources/test/firstfollow/ff_test3.txt");
+    ecc::Grammar grammar("resources/test/firstfollow/ff_test3.json");
 
     std::string A = "A";
     std::string B = "B";
@@ -402,7 +402,7 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_3_Test) {
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_4_Test) {
-    ecc::Grammar grammar("resources/test/firstfollow/ff_test4.txt");
+    ecc::Grammar grammar("resources/test/firstfollow/ff_test4.json");
 
     std::string A = "A";
     std::string B = "B";
@@ -446,7 +446,7 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_4_Test) {
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_4_Test) {
-    ecc::Grammar grammar("resources/test/firstfollow/ff_test4.txt");
+    ecc::Grammar grammar("resources/test/firstfollow/ff_test4.json");
 
     std::string A = "A";
     std::string B = "B";
@@ -490,7 +490,7 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_4_Test) {
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_5_Test) {
-    ecc::Grammar grammar("resources/test/firstfollow/ff_test5.txt");
+    ecc::Grammar grammar("resources/test/firstfollow/ff_test5.json");
 
     std::string A = "A";
     std::string B = "B";
@@ -545,7 +545,7 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_5_Test) {
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_5_Test) {
-    ecc::Grammar grammar("resources/test/firstfollow/ff_test5.txt");
+    ecc::Grammar grammar("resources/test/firstfollow/ff_test5.json");
 
     std::string A = "A";
     std::string B = "B";
@@ -601,7 +601,7 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_5_Test) {
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_6_Test) {
-    ecc::Grammar grammar("resources/test/firstfollow/ff_test6.txt");
+    ecc::Grammar grammar("resources/test/firstfollow/ff_test6.json");
 
     std::string A = "A";
     std::string B = "B";
@@ -643,7 +643,7 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_6_Test) {
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_6_Test) {
-    ecc::Grammar grammar("resources/test/firstfollow/ff_test6.txt");
+    ecc::Grammar grammar("resources/test/firstfollow/ff_test6.json");
 
     std::string A = "A";
     std::string B = "B";

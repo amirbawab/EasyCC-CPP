@@ -1,6 +1,0 @@
-S -> A F
-A -> B C D
-B -> 'b'
-C -> 'c' | EPSILON
-D -> 'd' | EPSILON
-F -> 'f'

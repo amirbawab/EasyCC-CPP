@@ -88,6 +88,18 @@ namespace ecc {
                 throw std::runtime_error("Non terminal " + nonTerminal + " cannot have an empty production array");
             }
 
+            // Check if the key entered is empty
+            if(nonTerminal.empty()) {
+                throw std::runtime_error("A non-terminal key cannot be empty");
+            }
+
+            // Check if non-terminal is composed of upper case alphabets only
+            for (size_t i = 0; i < nonTerminal.size(); i++) {
+                if ((nonTerminal[i] < 'A' || nonTerminal[i] > 'Z') && nonTerminal[i] != '_') {
+                    throw std::runtime_error("Non terminals should be composed of upper case letters only.");
+                }
+            }
+
             // Make sure non-terminal key is only defined once
             if(m_productions.find(nonTerminal) == m_productions.end()) {
                 m_productions[nonTerminal] =
@@ -97,12 +109,12 @@ namespace ecc {
                                                  " should be grouped in the array value");
             }
 
-            // Resize corresponding vector
-            size_t prevSize = m_productions[nonTerminal]->size();
-            m_productions[nonTerminal]->resize(prevSize + array.Size());
+            // Store start non-terminal
+            if(m_start.empty()) {
+                m_start = nonTerminal;
+            }
 
-            int i = 0;
-            for(auto vIter = array.Begin(); vIter != array.End(); ++vIter, i++) {
+            for(auto vIter = array.Begin(); vIter != array.End(); ++vIter) {
                 std::string production = vIter->GetString();
                 boost::trim(production);
 
@@ -110,10 +122,7 @@ namespace ecc {
                     throw std::runtime_error("A production cannot be empty.");
                 } else {
                     std::istringstream productionss(production);
-
-                    // If production not created, create it
-                    (*m_productions[nonTerminal])[i + prevSize] =
-                            std::make_shared<std::vector<std::string>>();
+                    (*m_productions[nonTerminal]).push_back(std::make_shared<std::vector<std::string>>());
 
                     // Read word by word
                     std::string word;
@@ -122,11 +131,11 @@ namespace ecc {
                         // Terminal and epsilon tokens cannot be mixed with other tokens except the ones
                         // specified in the isEmptyWithIgnoreExceptions() function
                         if((Grammar::isTerminal(word) || Grammar::isEpsilon(word)) &&
-                           !isEmptyWithIgnoreExceptions((*m_productions[nonTerminal])[i+prevSize])) {
+                           !isEmptyWithIgnoreExceptions((*m_productions[nonTerminal]).back())) {
                             throw std::runtime_error("A production containing a terminal or an epsilon token "
                                                              "cannot be followed or preceded by other tokens.");
                         }
-                        (*m_productions[nonTerminal])[i + prevSize]->push_back(word);
+                        (*m_productions[nonTerminal]).back()->push_back(word);
                     }
                 }
             }
