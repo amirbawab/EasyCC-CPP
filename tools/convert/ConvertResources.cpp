@@ -1,5 +1,5 @@
 #include <easycc/tools/ConvertResources.h>
-
+#include <easycc/tools/Base64.h>
 #include <getopt.h>
 #include <boost/log/sources/logger.hpp>
 #include <boost/log/sources/record_ostream.hpp>
@@ -8,6 +8,7 @@
 #include <boost/log/utility/setup/common_attributes.hpp>
 #include <boost/log/utility/setup/console.hpp>
 #include <boost/algorithm/string.hpp>
+#include <boost/regex.hpp>
 #include <fstream>
 #include "rapidjson/filewritestream.h"
 #include <rapidjson/document.h>
@@ -149,11 +150,11 @@ namespace ecc{
                         d.Accept(writer);
                         std::string jsonString = jsonStringStream.str();
 
-                        // Add backslash to the double quotes in the json content
-                        boost::replace_all(jsonString, "\"", "\\\"");
+                        // Encode JSON
+                        std::string jsonB64 = encode64(jsonString);
 
                         // Replace patterns with the JSON file content
-                        boost::replace_all(generatedContent, pattern, jsonString);
+                        boost::replace_all(generatedContent, pattern, jsonB64);
 
                         jFile.close();
                     }

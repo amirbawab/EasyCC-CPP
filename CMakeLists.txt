@@ -69,5 +69,9 @@ add_custom_target(
         -o ${PROJECT_SOURCE_DIR}/bin/include/easycc/tools/StaticResources.h
         /*SYNTAX_ERRORS*/=${PROJECT_SOURCE_DIR}/resources/src/oop/syntax_errors.json
         /*SYNTAX_CONFIG*/=${PROJECT_SOURCE_DIR}/resources/src/oop/syntax_config.json
+        /*SYNTAX_GRAMMAR*/=${PROJECT_SOURCE_DIR}/resources/src/oop/syntax_grammar.json
+        /*LEXICAL_ERRORS*/=${PROJECT_SOURCE_DIR}/resources/src/oop/lexical_errors.json
+        /*LEXICAL_CONFIG*/=${PROJECT_SOURCE_DIR}/resources/src/oop/lexical_config.json
+        /*LEXICAL_STATE_MACHINE*/=${PROJECT_SOURCE_DIR}/resources/src/oop/lexical_state_machine.json
         DEPENDS ${TOOL_CONVERT_RESOURCES}
 )
