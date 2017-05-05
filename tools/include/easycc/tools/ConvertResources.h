@@ -2,21 +2,20 @@
 #define EASYCC_CONVERTIBLE_H
 
 #include <string>
+#include <vector>
 
 namespace ecc{
-    class Convertible {
+    class ConvertResources {
     public:
         static const int RETURN_SUCCESS = 0;
         static const int RETURN_ERROR = 1;
-        virtual void convert(std::string fileName)=0;
-        int init(int argc, char *argv[]);
-        int run();
-        void printUsage(std::string header, std::string footer);
+        int convert();
+        int run(int argc, char *argv[]);
+        void printUsage();
     protected:
         std::string m_outputFile;
-        std::string m_inputFile;
+        std::vector<std::string> m_patternJson;
         std::string m_templateFile;
-        std::string m_newContent;
     private:
         void initParams(int argc, char *argv[]);
     };

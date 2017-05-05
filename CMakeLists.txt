@@ -23,12 +23,11 @@ include_directories(rapidjson/include)
 include_directories(tools/include)
 
 # Check if generate files exists, if so use them
-if(EXISTS "${PROJECT_SOURCE_DIR}/bin/generated/cpp")
-    file(GLOB_RECURSE GENERATED_FILES ${PROJECT_SOURCE_DIR}/bin/generated/cpp/*.cpp)
+if(EXISTS "${PROJECT_SOURCE_DIR}/bin/include/easycc/tools/StaticResources.h")
+    include_directories(bin/include)
 else()
-    file(GLOB_RECURSE GENERATED_FILES ${PROJECT_SOURCE_DIR}/tools/convert/templates/*.cpp)
+    include_directories(tools/convert/include)
 endif()
-set(PROJECT_SOURCE_FILES ${PROJECT_SOURCE_FILES} ${GENERATED_FILES})
 
 # Add boost
 add_definitions(-DBOOST_LOG_DYN_LINK)
@@ -58,18 +57,11 @@ add_subdirectory(examples/calculator-pro)
 # Explicitely generate header files
 add_custom_target(
         generate_files
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_SOURCE_DIR}/bin/generated/cpp
-        COMMAND ${TOOL_CONVERT_GRAMMAR}
-        -t ${PROJECT_SOURCE_DIR}/tools/convert/templates/StaticGrammar.cpp
-        -o ${PROJECT_SOURCE_DIR}/bin/generated/cpp/StaticGrammar.cpp
-        -i ${PROJECT_SOURCE_DIR}/resources/src/oop/syntax_grammar.txt
-        COMMAND ${TOOL_CONVERT_SYNTAX_CONFIG}
-        -t ${PROJECT_SOURCE_DIR}/tools/convert/templates/StaticSyntaxConfig.cpp
-        -o ${PROJECT_SOURCE_DIR}/bin/generated/cpp/StaticSyntaxConfig.cpp
-        -i ${PROJECT_SOURCE_DIR}/resources/src/oop/syntax_config.json
-        COMMAND ${TOOL_CONVERT_SYNTAX_MSG}
-        -t ${PROJECT_SOURCE_DIR}/tools/convert/templates/StaticSyntaxMessages.cpp
-        -o ${PROJECT_SOURCE_DIR}/bin/generated/cpp/StaticSyntaxMessages.cpp
-        -i ${PROJECT_SOURCE_DIR}/resources/src/oop/syntax_errors.json
-        DEPENDS ${TOOL_CONVERT_GRAMMAR}
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_SOURCE_DIR}/bin/include/easycc/tools/
+        COMMAND ${TOOL_CONVERT_RESOURCES}
+        -t ${PROJECT_SOURCE_DIR}/tools/convert/include/easycc/tools/StaticResources.h
+        -o ${PROJECT_SOURCE_DIR}/bin/include/easycc/tools/StaticResources.h
+        /*SYNTAX_ERRORS*/=${PROJECT_SOURCE_DIR}/resources/src/oop/syntax_errors.json
+        /*SYNTAX_CONFIG*/=${PROJECT_SOURCE_DIR}/resources/src/oop/syntax_config.json
+        DEPENDS ${TOOL_CONVERT_RESOURCES}
 )

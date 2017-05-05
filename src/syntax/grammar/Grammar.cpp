@@ -578,12 +578,4 @@ namespace ecc {
         }
         std::runtime_error("String '" + terminal + "' is not a terminal");
     }
-
-    std::vector<std::string> Grammar::getNonTerminals() const {
-        std::vector<std::string> nonTerminals;
-        for(auto entry : m_firstSet) {
-            nonTerminals.push_back(entry.first);
-        }
-        return nonTerminals;
-    }
 }
