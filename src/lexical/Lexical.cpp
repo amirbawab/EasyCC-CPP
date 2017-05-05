@@ -14,16 +14,10 @@ BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(ecc_logger, src::logger_mt)
 
 namespace ecc {
 
-    void Lexical::setStateMachineFile(std::string file) {
-        this->m_graph = Graph::buildGraphFromFile(file);
-    }
-
-    void Lexical::setConfigFile(std::string file) {
-        this->m_config = LexicalConfig::buildConfigFromFile(file);
-    }
-
-    void Lexical::setMessagesFile(std::string file) {
-        this->m_messages = LexicalMessages::loadMessagesFromFile(file);
+    void Lexical::buildFromFiles(std::string grammarFile, std::string configFile, std::string errorFile){
+        this->m_graph = Graph::buildGraphFromFile(grammarFile);
+        this->m_config = LexicalConfig::buildConfigFromFile(configFile);
+        this->m_messages = LexicalMessages::loadMessagesFromFile(errorFile);
     }
 
     void Lexical::generateLexicalTokens(

@@ -14,14 +14,14 @@ namespace ecc{
     public:
 
         /**
-         * Setters for the main configuration files
+         * Build syntax members from files
          */
-        void setGrammarFile(std::string file);
-        void setGrammarString(std::string data);
-        void setConfigFile(std::string file);
-        void setConfigString(std::string data);
-        void setMessagesFile(std::string file);
-        void setMessagesString(std::string data);
+        void buildFromFiles(std::string stateMachineFile, std::string configFile, std::string errorFile);
+
+        /**
+         * Build syntax members from strings
+         */
+        void buildFromStrings(std::string stateMachine, std::string config, std::string error);
 
         /**
          * Parse lexical tokens
