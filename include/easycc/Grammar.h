@@ -77,18 +77,10 @@ namespace ecc {
                 std::shared_ptr<std::vector<std::string>>>>> m_parseTableMap;
 
         /**
-         * Parse one line of the grammar file
-         * @param line Line to be parse
-         * @param lastNonTerminal Keep track of the last non-terminal defined
+         * Parse JSON file
+         * @param grammarFile
          */
-        void parseGrammarLine(std::string line, std::string &lastNonTerminal);
-
-        /**
-         * Process a definition
-         * @param LHS Left-hand side of a production
-         * @param RHS Right-hand side of a production
-         */
-        void processDefinition(std::string &LHS, std::string &RHS, bool completeDefinition);
+        void parseGrammar(std::string grammarFile);
 
         /**
          * Compute the first set

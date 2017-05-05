@@ -5,10 +5,11 @@
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/trim.hpp>
-
 #include <boost/log/sources/logger.hpp>
 #include <boost/log/sources/record_ostream.hpp>
 #include <boost/log/sources/global_logger_storage.hpp>
+#include <rapidjson/document.h>
+
 namespace src = boost::log::sources;
 BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(ecc_logger, src::logger_mt)
 
@@ -22,15 +23,8 @@ namespace ecc {
 
     Grammar::Grammar(std::string grammarFile) {
 
-        // Load file
-        std::ifstream file(grammarFile);
-
-        // Read line by line
-        std::string line;
-        std::string lastNonTerminal;
-        while (std::getline(file, line)) {
-            parseGrammarLine(line, lastNonTerminal);
-        }
+        // Parse json file
+        parseGrammar(grammarFile);
 
         // Construct the first set
         computeFirstSet();
@@ -63,39 +57,6 @@ namespace ecc {
         BOOST_LOG(ecc_logger::get()) << "Grammar parsed successfully!";
     }
 
-    void Grammar::parseGrammarLine(std::string line, std::string &lastNonTerminal) {
-        std::vector<std::string> words;
-        boost::split(words, line, boost::is_any_of("->"), boost::token_compress_on);
-
-        // If two, then it's a complete definition
-        if(words.size() == 2) {
-
-            // Process definition
-            processDefinition(words[0], words[1], true);
-
-            // Update last non-terminal
-            lastNonTerminal = words[0];
-
-            // Update start token
-            if(m_start.empty()) {
-                m_start = lastNonTerminal;
-            }
-
-        } else if(words.size() == 1) {
-
-            // If no last non-terminal defined (wrong format)
-            if(lastNonTerminal.empty()) {
-                throw std::runtime_error("Wrong grammar format. No left-hand side non-terminal "
-                                                 "token defined at line" + line);
-            }
-
-            // Process definition
-            processDefinition(lastNonTerminal, words[0], false);
-        } else {
-            throw std::runtime_error("Wrong grammar format at line: " + line);
-        }
-    }
-
     bool isEmptyWithIgnoreExceptions(std::shared_ptr<std::vector<std::string>> production) {
         for(auto &token : *production) {
 
@@ -107,61 +68,52 @@ namespace ecc {
         return true;
     }
 
-    void Grammar::processDefinition(std::string &LHS, std::string &RHS, bool completeDefinition) {
+    void Grammar::parseGrammar(std::string grammarFile) {
 
-        // Clear whitespaces on both sides
-        boost::trim(LHS);
+        // Load file into string stream
+        std::ifstream file(grammarFile);
+        std::stringstream  buffer;
+        buffer << file.rdbuf();
 
-        // If non-terminal not defined
-        if (LHS.size() == 0) {
-            throw std::runtime_error("Wrong grammar format: A line cannot start with a delimiter");
-        }
+        // Parse json
+        rapidjson::Document d;
+        d.Parse(buffer.str().c_str());
 
-        // Check if non-terminal is composed of upper case alphabets only
-        for (size_t i = 0; i < LHS.size(); i++) {
-            if ((LHS[i] < 'A' || LHS[i] > 'Z') && LHS[i] != '_') {
-                throw std::runtime_error("Non terminals should be composed of upper case letters only.");
-            }
-        }
+        for (auto iter = d.MemberBegin(); iter != d.MemberEnd(); ++iter){
+            std::string nonTerminal = iter->name.GetString();
+            auto array = iter->value.GetArray();
 
-        // Check the set of terminals
-        std::vector<std::string> productionVector;
-        boost::split(productionVector, RHS, boost::is_any_of("|"), boost::token_compress_on);
-
-        // If production found
-        if (productionVector.size() > 0) {
-
-            // If not a complete definition remove the first element
-            if(!completeDefinition) {
-                boost::trim(productionVector[0]);
-                if(productionVector[0].size() != 0) {
-                    throw std::runtime_error("Wrong grammar format. Expecting a delimiter before " + RHS);
-                }
-                productionVector.erase(productionVector.begin());
+            // Check if the productions array is empty
+            if(array.Size() == 0) {
+                throw std::runtime_error("Non terminal " + nonTerminal + " cannot have an empty production array");
             }
 
-            // If production of LHS was not created, create one
-            if(m_productions.count(LHS) == 0) {
-                m_productions[LHS] = std::make_shared<std::vector<std::shared_ptr<std::vector<std::string>>>>();
+            // Make sure non-terminal key is only defined once
+            if(m_productions.find(nonTerminal) == m_productions.end()) {
+                m_productions[nonTerminal] =
+                        std::make_shared<std::vector<std::shared_ptr<std::vector<std::string>>>>();
+            } else {
+                throw std::runtime_error("All definition for the non-terminal " + nonTerminal+
+                                                 " should be grouped in the array value");
             }
 
             // Resize corresponding vector
-            size_t prevSize = m_productions[LHS]->size();
-            m_productions[LHS]->resize(prevSize + productionVector.size());
+            size_t prevSize = m_productions[nonTerminal]->size();
+            m_productions[nonTerminal]->resize(prevSize + array.Size());
 
-            // Split production by spaces
-            for (size_t i = 0; i < productionVector.size(); i++) {
-                boost::trim(productionVector[i]);
+            int i = 0;
+            for(auto vIter = array.Begin(); vIter != array.End(); ++vIter, i++) {
+                std::string production = vIter->GetString();
+                boost::trim(production);
 
-                if(productionVector[i].size() == 0) {
+                if(production.size() == 0) {
                     throw std::runtime_error("A production cannot be empty.");
                 } else {
-                    std::istringstream productionss(productionVector[i]);
+                    std::istringstream productionss(production);
 
                     // If production not created, create it
-                    if(!(*m_productions[LHS])[i + prevSize]) {
-                        (*m_productions[LHS])[i + prevSize] = std::make_shared<std::vector<std::string>>();
-                    }
+                    (*m_productions[nonTerminal])[i + prevSize] =
+                            std::make_shared<std::vector<std::string>>();
 
                     // Read word by word
                     std::string word;
@@ -170,16 +122,14 @@ namespace ecc {
                         // Terminal and epsilon tokens cannot be mixed with other tokens except the ones
                         // specified in the isEmptyWithIgnoreExceptions() function
                         if((Grammar::isTerminal(word) || Grammar::isEpsilon(word)) &&
-                                !isEmptyWithIgnoreExceptions((*m_productions[LHS])[i+prevSize])) {
+                           !isEmptyWithIgnoreExceptions((*m_productions[nonTerminal])[i+prevSize])) {
                             throw std::runtime_error("A production containing a terminal or an epsilon token "
                                                              "cannot be followed or preceded by other tokens.");
                         }
-                        (*m_productions[LHS])[i + prevSize]->push_back(word);
+                        (*m_productions[nonTerminal])[i + prevSize]->push_back(word);
                     }
                 }
             }
-        } else {
-            throw std::runtime_error("Wrong grammar format at the definition of: " + LHS);
         }
     }
 
