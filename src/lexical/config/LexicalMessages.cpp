@@ -6,7 +6,7 @@
 #include <sstream>
 
 namespace ecc{
-    std::shared_ptr<LexicalMessages> LexicalMessages::loadMessages(std::string fileName) {
+    std::shared_ptr<LexicalMessages> LexicalMessages::loadMessagesFromFile(std::string fileName) {
 
         // Configuration JSON format
         const char* ERROR_MESSAGES = "error_messages";

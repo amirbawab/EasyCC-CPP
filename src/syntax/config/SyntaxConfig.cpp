@@ -8,7 +8,7 @@
 
 namespace ecc{
 
-    std::shared_ptr<SyntaxConfig> SyntaxConfig::buildConfig(std::string configFileName) {
+    std::shared_ptr<SyntaxConfig> SyntaxConfig::buildConfigFromFile(std::string configFileName) {
 
         // Configuration JSON format
         const char* PARSING_PHASES = "parsing_phases";

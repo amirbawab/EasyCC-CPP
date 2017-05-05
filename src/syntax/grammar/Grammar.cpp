@@ -21,10 +21,17 @@ namespace ecc {
     // This symbol must match the value of END_OF_FILE in lexical analysis
     const std::string Grammar::END_OF_STACK = "$";
 
-    Grammar::Grammar(std::string grammarFile) {
+    std::shared_ptr<Grammar> Grammar::buildGrammarFromFile(std::string grammarFile) {
+
+        // Create grammar
+        std::shared_ptr<Grammar> grammar = std::make_shared<Grammar>();
 
         // Parse json file
-        parseGrammar(grammarFile);
+        parseGrammar(grammar, grammarFile);
+        return grammar;
+    }
+
+    void Grammar::process() {
 
         // Construct the first set
         computeFirstSet();
@@ -39,7 +46,7 @@ namespace ecc {
         logFollowSet();
 
         BOOST_LOG(ecc_logger::get()) << "Checking if the keys size for the first set matches "
-                                                "the keys size for the follow set ...";
+                    "the keys size for the follow set ...";
         if(m_firstSet.size() != m_followSet.size()) {
             throw std::runtime_error("Not all non-terminals were assigned a production");
         }
@@ -68,7 +75,7 @@ namespace ecc {
         return true;
     }
 
-    void Grammar::parseGrammar(std::string grammarFile) {
+    void Grammar::parseGrammar(std::shared_ptr<Grammar> grammar, std::string grammarFile) {
 
         // Load file into string stream
         std::ifstream file(grammarFile);
@@ -101,8 +108,8 @@ namespace ecc {
             }
 
             // Make sure non-terminal key is only defined once
-            if(m_productions.find(nonTerminal) == m_productions.end()) {
-                m_productions[nonTerminal] =
+            if(grammar->m_productions.find(nonTerminal) == grammar->m_productions.end()) {
+                grammar->m_productions[nonTerminal] =
                         std::make_shared<std::vector<std::shared_ptr<std::vector<std::string>>>>();
             } else {
                 throw std::runtime_error("All definition for the non-terminal " + nonTerminal+
@@ -110,8 +117,8 @@ namespace ecc {
             }
 
             // Store start non-terminal
-            if(m_start.empty()) {
-                m_start = nonTerminal;
+            if(grammar->m_start.empty()) {
+                grammar->m_start = nonTerminal;
             }
 
             for(auto vIter = array.Begin(); vIter != array.End(); ++vIter) {
@@ -122,7 +129,7 @@ namespace ecc {
                     throw std::runtime_error("A production cannot be empty.");
                 } else {
                     std::istringstream productionss(production);
-                    (*m_productions[nonTerminal]).push_back(std::make_shared<std::vector<std::string>>());
+                    (*grammar->m_productions[nonTerminal]).push_back(std::make_shared<std::vector<std::string>>());
 
                     // Read word by word
                     std::string word;
@@ -131,11 +138,11 @@ namespace ecc {
                         // Terminal and epsilon tokens cannot be mixed with other tokens except the ones
                         // specified in the isEmptyWithIgnoreExceptions() function
                         if((Grammar::isTerminal(word) || Grammar::isEpsilon(word)) &&
-                           !isEmptyWithIgnoreExceptions((*m_productions[nonTerminal]).back())) {
+                           !isEmptyWithIgnoreExceptions((*grammar->m_productions[nonTerminal]).back())) {
                             throw std::runtime_error("A production containing a terminal or an epsilon token "
                                                              "cannot be followed or preceded by other tokens.");
                         }
-                        (*m_productions[nonTerminal]).back()->push_back(word);
+                        (*grammar->m_productions[nonTerminal]).back()->push_back(word);
                     }
                 }
             }

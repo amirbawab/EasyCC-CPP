@@ -14,7 +14,7 @@ namespace ecc{
          * @param fileName JSON file containing the messages
          * @return pointer to a SyntaxMessages object
          */
-        static std::shared_ptr<SyntaxMessages> loadMessages(std::string fileName);
+        static std::shared_ptr<SyntaxMessages> loadMessagesFromFile(std::string fileName);
 
         /**
          * Get error message

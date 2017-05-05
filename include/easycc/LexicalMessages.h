@@ -14,7 +14,7 @@ namespace ecc{
          * @param fileName JSON file containing the messages
          * @return pointer to a LexicalMessages object
          */
-        static std::shared_ptr<LexicalMessages> loadMessages(std::string fileName);
+        static std::shared_ptr<LexicalMessages> loadMessagesFromFile(std::string fileName);
 
         /**
          * Get error message

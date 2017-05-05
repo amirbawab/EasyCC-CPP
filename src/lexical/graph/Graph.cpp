@@ -15,7 +15,7 @@ namespace ecc {
     const std::string Graph::TRANSITION_OTHER = "OTHER";
 
     // TODO Check if transition is more than one character
-    std::shared_ptr<Graph> Graph::buildGraph(std::string fileName) {
+    std::shared_ptr<Graph> Graph::buildGraphFromFile(std::string fileName) {
 
         // State machine JSON format
         const char* STATES = "states";

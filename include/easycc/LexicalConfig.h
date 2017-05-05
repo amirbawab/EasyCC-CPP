@@ -20,7 +20,7 @@ namespace ecc {
          * @param config file name
          * @return pointer to LexicalConfig object
          */
-        static std::shared_ptr<LexicalConfig> buildConfig(std::string configFileName);
+        static std::shared_ptr<LexicalConfig> buildConfigFromFile(std::string configFileName);
 
         /**
          * Check if token must be ignored

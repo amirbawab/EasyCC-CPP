@@ -13,7 +13,16 @@ namespace ecc {
 
     class Lexical {
     public:
-        Lexical(std::string stateMachineFileName, std::string configFileName, std::string messagesFileName);
+
+        /**
+         * Setters for the main configuration files
+         */
+        void setStateMachineFile(std::string file);
+        void setStateMachineString(std::string data);
+        void setConfigFile(std::string file);
+        void setConfigString(std::string data);
+        void setMessagesFile(std::string file);
+        void setMessagesString(std::string data);
 
         /**
          * Analyze a text file

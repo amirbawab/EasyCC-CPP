@@ -13,10 +13,17 @@ namespace src = boost::log::sources;
 BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(ecc_logger, src::logger_mt)
 
 namespace ecc {
-    Lexical::Lexical(std::string stateMachineFileName, std::string configFileName, std::string messagesFileName) {
-        this->m_graph = Graph::buildGraph(stateMachineFileName);
-        this->m_config = LexicalConfig::buildConfig(configFileName);
-        this->m_messages = LexicalMessages::loadMessages(messagesFileName);
+
+    void Lexical::setStateMachineFile(std::string file) {
+        this->m_graph = Graph::buildGraphFromFile(file);
+    }
+
+    void Lexical::setConfigFile(std::string file) {
+        this->m_config = LexicalConfig::buildConfigFromFile(file);
+    }
+
+    void Lexical::setMessagesFile(std::string file) {
+        this->m_messages = LexicalMessages::loadMessagesFromFile(file);
     }
 
     void Lexical::generateLexicalTokens(

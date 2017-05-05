@@ -25,7 +25,7 @@ namespace ecc {
          * @param fileName JSON file name
          * @return pointer to the graph object
          */
-        static std::shared_ptr<Graph> buildGraph(std::string fileName);
+        static std::shared_ptr<Graph> buildGraphFromFile(std::string fileName);
 
         /**
          * Get initial state

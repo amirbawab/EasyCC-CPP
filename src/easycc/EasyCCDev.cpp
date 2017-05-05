@@ -37,8 +37,15 @@ namespace ecc{
         }
 
         // Create analyzers
-        m_lexical = std::make_shared<Lexical>(m_lexicalStateMachineFile, m_lexicalConfigFile, m_lexicalErrorsFile);
-        m_syntax = std::make_shared<Syntax>(m_syntaxGrammarFile, m_syntaxConfigFile, m_syntaxErrorsFile);
+        m_lexical = std::make_shared<Lexical>();
+        m_lexical->setStateMachineFile(m_lexicalStateMachineFile);
+        m_lexical->setConfigFile(m_lexicalConfigFile);
+        m_lexical->setMessagesFile(m_lexicalErrorsFile);
+
+        m_syntax = std::make_shared<Syntax>();
+        m_syntax->setGrammarFile(m_syntaxGrammarFile);
+        m_syntax->setConfigFile(m_syntaxConfigFile);
+        m_syntax->setMessagesFile(m_syntaxErrorsFile);
 
         // Set semantic action after m_syntax is created
         setSemanticAction();

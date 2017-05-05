@@ -15,10 +15,17 @@ namespace ecc{
     namespace src = boost::log::sources;
     BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(ecc_logger, src::logger_mt)
 
-    Syntax::Syntax(std::string grammarFile, std::string configFileName, std::string messagesFileName) {
-        this->m_grammar = std::make_shared<Grammar>(grammarFile);
-        this->m_config = SyntaxConfig::buildConfig(configFileName);
-        this->m_messages = SyntaxMessages::loadMessages(messagesFileName);
+    void Syntax::setGrammarFile(std::string file) {
+        this->m_grammar = Grammar::buildGrammarFromFile(file);
+        this->m_grammar->process();
+    }
+
+    void Syntax::setConfigFile(std::string file) {
+        this->m_config = SyntaxConfig::buildConfigFromFile(file);
+    }
+
+    void Syntax::setMessagesFile(std::string file) {
+        this->m_messages = SyntaxMessages::loadMessagesFromFile(file);
     }
 
     /**

@@ -15,7 +15,7 @@ namespace ecc {
          * @param config file name
          * @return pointer to SyntaxConfig object
          */
-        static std::shared_ptr<SyntaxConfig> buildConfig(std::string configFileName);
+        static std::shared_ptr<SyntaxConfig> buildConfigFromFile(std::string configFileName);
 
         int getParsingPhases() { return this->m_parsingPhases;}
     private:

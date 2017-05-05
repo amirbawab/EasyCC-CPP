@@ -13,7 +13,7 @@ namespace ecc{
     const std::string LexicalConfig::CR = "CR";
     const std::string LexicalConfig::CRLF = "CRLF";
 
-    std::shared_ptr<LexicalConfig> LexicalConfig::buildConfig(std::string configFileName) {
+    std::shared_ptr<LexicalConfig> LexicalConfig::buildConfigFromFile(std::string configFileName) {
 
         // Configuration JSON format
         const char* NEWLINE = "newline";

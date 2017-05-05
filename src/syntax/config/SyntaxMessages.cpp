@@ -9,7 +9,7 @@
 
 namespace ecc {
 
-    std::shared_ptr<SyntaxMessages> SyntaxMessages::loadMessages(std::string fileName) {
+    std::shared_ptr<SyntaxMessages> SyntaxMessages::loadMessagesFromFile(std::string fileName) {
 
         // Configuration JSON format
         const char* ERROR_MESSAGES = "error_messages";

@@ -12,11 +12,22 @@ namespace ecc {
     public:
         static const std::string EPSILON;
         static const std::string END_OF_STACK;
-        Grammar(std::string grammarFile);
         static bool isTerminal(const std::string &token);
         static bool isNonTerminal(const std::string &token);
         static bool isEpsilon(const std::string &token);
         static bool isSemanticAction(const std::string &token);
+
+        /**
+         * Create a grammar pointer
+         * @param grammarFileName file name for the grammar file
+         * @return grammar pointer
+         */
+        static std::shared_ptr<Grammar> buildGrammarFromFile(std::string grammarFileName);
+
+        /**
+         * Build first and follow sets, and populate the parsing table
+         */
+        void process();
 
         /**
          * Get first set of a token
@@ -78,9 +89,10 @@ namespace ecc {
 
         /**
          * Parse JSON file
+         * @param grammar
          * @param grammarFile
          */
-        void parseGrammar(std::string grammarFile);
+        static void parseGrammar(std::shared_ptr<Grammar> grammar, std::string grammarFile);
 
         /**
          * Compute the first set
