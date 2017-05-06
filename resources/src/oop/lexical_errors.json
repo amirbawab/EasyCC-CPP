@@ -1,6 +1,0 @@
-{
-    "default_message": "Error token of value '${value}' found at line ${line} and column ${column}",
-    "error_messages": {
-        "T_ERR_INVALID_CHAR": "Invalid character '${value}' at line ${line} column ${column}"
-    }
-}
