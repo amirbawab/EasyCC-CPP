@@ -40,7 +40,8 @@ TEST(GrammarParsingTest, GrammarParsingTest_Duplicate_Keys_Test) {
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_1_Test) {
-    ecc::Grammar &grammar = *ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test1.json");
+    auto grammar = ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test1.json");
+    grammar->process();
 
     std::string A = "A";
     std::string B = "B";
@@ -132,19 +133,20 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_1_Test) {
             FirstDivide,FirstInteger,FirstMinus,FirstMultiply,FirstOpenPar,FirstPlus,FirstSemicolon};
 
     for(int i=0; i < sets.size(); i++) {
-        for(std::string first : *grammar.getFirstSet(tokens[i])) {
+        for(std::string first : *grammar->getFirstSet(tokens[i])) {
             if(sets[i].find(first) == sets[i].end()) {
                 FAIL() << "Token " << first << " not in first set of " << tokens[i];
             }
         }
-        if(sets[i].size() != grammar.getFirstSet(tokens[i])->size()) {
+        if(sets[i].size() != grammar->getFirstSet(tokens[i])->size()) {
             FAIL() << "The first set size is different!";
         }
     }
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_1_Test) {
-    ecc::Grammar &grammar = *ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test1.json");
+    auto grammar = ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test1.json");
+    grammar->process();
 
     std::string A = "A";
     std::string B = "B";
@@ -258,19 +260,21 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_1_Test) {
                                                FollowMultiply,FollowOpenPar,FollowPlus,FollowSemicolon};
 
     for(int i=0; i < sets.size(); i++) {
-        for(std::string follow : *grammar.getFollowSet(tokens[i])) {
+        for(std::string follow : *grammar->getFollowSet(tokens[i])) {
             if(sets[i].find(follow) == sets[i].end()) {
                 FAIL() << "Terminal " << follow << " not in follow set of " << tokens[i];
             }
         }
-        if(sets[i].size() != grammar.getFollowSet(tokens[i])->size()) {
+        if(sets[i].size() != grammar->getFollowSet(tokens[i])->size()) {
             FAIL() << "The first set size is different!";
         }
     }
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_2_Test) {
-    ecc::Grammar &grammar = *ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test2.json");
+    auto grammar = ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test2.json");
+    grammar->process();
+
 
     std::string A = "A";
     std::string B = "B";
@@ -296,19 +300,20 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_2_Test) {
     std::vector<std::set<std::string>> sets = {FirstA,FirstB,FirstC};
 
     for(int i=0; i < sets.size(); i++) {
-        for(std::string first : *grammar.getFirstSet(tokens[i])) {
+        for(std::string first : *grammar->getFirstSet(tokens[i])) {
             if(sets[i].find(first) == sets[i].end()) {
                 FAIL() << "Token " << first << " not in first set of " << tokens[i];
             }
         }
-        if(sets[i].size() != grammar.getFirstSet(tokens[i])->size()) {
+        if(sets[i].size() != grammar->getFirstSet(tokens[i])->size()) {
             FAIL() << "The first set size is different!";
         }
     }
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_2_Test) {
-    ecc::Grammar &grammar = *ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test2.json");
+    auto grammar = ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test2.json");
+    grammar->process();
 
     std::string A = "A";
     std::string B = "B";
@@ -334,19 +339,20 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_2_Test) {
     std::vector<std::set<std::string>> sets = {FollowA,FollowB,FollowC};
 
     for(int i=0; i < sets.size(); i++) {
-        for(std::string follow : *grammar.getFollowSet(tokens[i])) {
+        for(std::string follow : *grammar->getFollowSet(tokens[i])) {
             if(sets[i].find(follow) == sets[i].end()) {
                 FAIL() << "Terminal " << follow << " not in follow set of " << tokens[i];
             }
         }
-        if(sets[i].size() != grammar.getFollowSet(tokens[i])->size()) {
+        if(sets[i].size() != grammar->getFollowSet(tokens[i])->size()) {
             FAIL() << "The first set size is different!";
         }
     }
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_3_Test) {
-    ecc::Grammar &grammar = *ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test3.json");
+    auto grammar = ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test3.json");
+    grammar->process();
 
     std::string A = "A";
     std::string B = "B";
@@ -374,19 +380,20 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_3_Test) {
     std::vector<std::set<std::string>> sets = {FirstA,FirstB,FirstC};
 
     for(int i=0; i < sets.size(); i++) {
-        for(std::string first : *grammar.getFirstSet(tokens[i])) {
+        for(std::string first : *grammar->getFirstSet(tokens[i])) {
             if(sets[i].find(first) == sets[i].end()) {
                 FAIL() << "Token " << first << " not in first set of " << tokens[i];
             }
         }
-        if(sets[i].size() != grammar.getFirstSet(tokens[i])->size()) {
+        if(sets[i].size() != grammar->getFirstSet(tokens[i])->size()) {
             FAIL() << "The first set size is different!";
         }
     }
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_3_Test) {
-    ecc::Grammar &grammar = *ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test3.json");
+    auto grammar = ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test3.json");
+    grammar->process();
 
     std::string A = "A";
     std::string B = "B";
@@ -412,19 +419,20 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_3_Test) {
     std::vector<std::set<std::string>> sets = {FollowA,FollowB,FollowC};
 
     for(int i=0; i < sets.size(); i++) {
-        for(std::string follow : *grammar.getFollowSet(tokens[i])) {
+        for(std::string follow : *grammar->getFollowSet(tokens[i])) {
             if(sets[i].find(follow) == sets[i].end()) {
                 FAIL() << "Terminal " << follow << " not in follow set of " << tokens[i];
             }
         }
-        if(sets[i].size() != grammar.getFollowSet(tokens[i])->size()) {
+        if(sets[i].size() != grammar->getFollowSet(tokens[i])->size()) {
             FAIL() << "The first set size is different!";
         }
     }
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_4_Test) {
-    ecc::Grammar &grammar = *ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test4.json");
+    auto grammar = ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test4.json");
+    grammar->process();
 
     std::string A = "A";
     std::string B = "B";
@@ -456,19 +464,20 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_4_Test) {
     std::vector<std::set<std::string>> sets = {FirstA,FirstB,FirstC,FirstD};
 
     for(int i=0; i < sets.size(); i++) {
-        for(std::string first : *grammar.getFirstSet(tokens[i])) {
+        for(std::string first : *grammar->getFirstSet(tokens[i])) {
             if(sets[i].find(first) == sets[i].end()) {
                 FAIL() << "Token " << first << " not in first set of " << tokens[i];
             }
         }
-        if(sets[i].size() != grammar.getFirstSet(tokens[i])->size()) {
+        if(sets[i].size() != grammar->getFirstSet(tokens[i])->size()) {
             FAIL() << "The first set size is different!";
         }
     }
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_4_Test) {
-    ecc::Grammar &grammar = *ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test4.json");
+    auto grammar = ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test4.json");
+    grammar->process();
 
     std::string A = "A";
     std::string B = "B";
@@ -500,19 +509,20 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_4_Test) {
     std::vector<std::set<std::string>> sets = {FollowA,FollowB,FollowC,FollowD};
 
     for(int i=0; i < sets.size(); i++) {
-        for(std::string follow : *grammar.getFollowSet(tokens[i])) {
+        for(std::string follow : *grammar->getFollowSet(tokens[i])) {
             if(sets[i].find(follow) == sets[i].end()) {
                 FAIL() << "Terminal " << follow << " not in follow set of " << tokens[i];
             }
         }
-        if(sets[i].size() != grammar.getFollowSet(tokens[i])->size()) {
+        if(sets[i].size() != grammar->getFollowSet(tokens[i])->size()) {
             FAIL() << "The first set size is different!";
         }
     }
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_5_Test) {
-    ecc::Grammar grammar = *ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test5.json");
+    auto grammar = ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test5.json");
+    grammar->process();
 
     std::string A = "A";
     std::string B = "B";
@@ -555,19 +565,20 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_5_Test) {
     std::vector<std::set<std::string>> sets = {FirstA,FirstB,FirstC,FirstD,FirstS,FirstF};
 
     for(int i=0; i < sets.size(); i++) {
-        for(std::string first : *grammar.getFirstSet(tokens[i])) {
+        for(std::string first : *grammar->getFirstSet(tokens[i])) {
             if(sets[i].find(first) == sets[i].end()) {
                 FAIL() << "Token " << first << " not in first set of " << tokens[i];
             }
         }
-        if(sets[i].size() != grammar.getFirstSet(tokens[i])->size()) {
+        if(sets[i].size() != grammar->getFirstSet(tokens[i])->size()) {
             FAIL() << "The first set size is different!";
         }
     }
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_5_Test) {
-    ecc::Grammar grammar = *ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test5.json");
+    auto grammar = ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test5.json");
+    grammar->process();
 
     std::string A = "A";
     std::string B = "B";
@@ -611,19 +622,20 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_5_Test) {
     std::vector<std::set<std::string>> sets = {FollowA,FollowB,FollowC,FollowD,FollowS,FollowF};
 
     for(int i=0; i < sets.size(); i++) {
-        for(std::string follow : *grammar.getFollowSet(tokens[i])) {
+        for(std::string follow : *grammar->getFollowSet(tokens[i])) {
             if(sets[i].find(follow) == sets[i].end()) {
                 FAIL() << "Terminal " << follow << " not in follow set of " << tokens[i];
             }
         }
-        if(sets[i].size() != grammar.getFollowSet(tokens[i])->size()) {
+        if(sets[i].size() != grammar->getFollowSet(tokens[i])->size()) {
             FAIL() << "The first set size is different!";
         }
     }
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_6_Test) {
-    ecc::Grammar grammar = *ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test6.json");
+    auto grammar = ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test6.json");
+    grammar->process();
 
     std::string A = "A";
     std::string B = "B";
@@ -653,19 +665,20 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_6_Test) {
     std::vector<std::set<std::string>> sets = {FirstA,FirstB,FirstC};
 
     for(int i=0; i < sets.size(); i++) {
-        for(std::string first : *grammar.getFirstSet(tokens[i])) {
+        for(std::string first : *grammar->getFirstSet(tokens[i])) {
             if(sets[i].find(first) == sets[i].end()) {
                 FAIL() << "Token " << first << " not in first set of " << tokens[i];
             }
         }
-        if(sets[i].size() != grammar.getFirstSet(tokens[i])->size()) {
+        if(sets[i].size() != grammar->getFirstSet(tokens[i])->size()) {
             FAIL() << "The first set size is different!";
         }
     }
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_6_Test) {
-    ecc::Grammar grammar = *ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test6.json");
+    auto grammar = ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test6.json");
+    grammar->process();
 
     std::string A = "A";
     std::string B = "B";
@@ -692,12 +705,12 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_6_Test) {
     std::vector<std::set<std::string>> sets = {FollowA,FollowB,FollowC};
 
     for(int i=0; i < sets.size(); i++) {
-        for(std::string follow : *grammar.getFollowSet(tokens[i])) {
+        for(std::string follow : *grammar->getFollowSet(tokens[i])) {
             if(sets[i].find(follow) == sets[i].end()) {
                 FAIL() << "Terminal " << follow << " not in follow set of " << tokens[i];
             }
         }
-        if(sets[i].size() != grammar.getFollowSet(tokens[i])->size()) {
+        if(sets[i].size() != grammar->getFollowSet(tokens[i])->size()) {
             FAIL() << "The first set size is different!";
         }
     }
