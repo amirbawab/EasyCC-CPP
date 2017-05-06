@@ -5,4 +5,4 @@
 [submodule "googletest"]
 	path = googletest
 	url = https://github.com/google/googletest
-	branch = release-1.6.0
+	branch = release-1.8.0
