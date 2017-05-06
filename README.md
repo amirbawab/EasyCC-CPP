@@ -27,13 +27,3 @@ sudo ./b2 install
 
 ### Syntax Analysis
 * <a href="https://github.com/amirbawab/EasyCC-CPP/tree/master/syntax">Documentation</a>
-
-#### TODO List
-##### General
-* Draw a UML
-* Replace map.count() with map.find()
-* Fix all FIXME
-##### Lexical
-* Import test cases from the AB-Compiler repo
-* Implement the TODO in the code
-* Rename Config and Messages to LexicalConfig and LexicalMessages
