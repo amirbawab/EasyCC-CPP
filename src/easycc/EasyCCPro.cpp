@@ -25,7 +25,7 @@ namespace ecc{
         m_lexical->buildFromStrings(lexicalStateMachineJSON, lexicalConfigJSON, lexicalErrorsJSON);
 
         m_syntax = std::make_shared<Syntax>();
-        m_syntax->buildFromStrings(syntaxGrammarJSON, syntaxConfigJSON, syntaxErrorsJSON);
+        m_syntax->buildFromStrings(syntaxGrammarJSON, syntaxErrorsJSON);
 
         // Set semantic action after m_syntax is created
         setSemanticAction();
