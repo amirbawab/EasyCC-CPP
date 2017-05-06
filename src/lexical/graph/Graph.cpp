@@ -1,6 +1,6 @@
 #include <easycc/Graph.h>
-#include <rapidjson/document.h>
 #include <rapidjson/writer.h>
+#include <rapidjson/istreamwrapper.h>
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -14,8 +14,22 @@ namespace ecc {
     const std::string Graph::TRANSITION_POSITIVE = "POSITIVE";
     const std::string Graph::TRANSITION_OTHER = "OTHER";
 
-    // TODO Check if transition is more than one character
     std::shared_ptr<Graph> Graph::buildGraphFromFile(std::string fileName) {
+        std::ifstream ifs(fileName);
+        rapidjson::IStreamWrapper isw(ifs);
+        rapidjson::Document d;
+        d.ParseStream(isw);
+        return buildGraph(d);
+    }
+
+    std::shared_ptr<Graph> Graph::buildGraphFromString(std::string data) {
+        rapidjson::Document d;
+        d.Parse(data.c_str());
+        return buildGraph(d);
+    }
+
+    // TODO Check if transition is more than one character
+    std::shared_ptr<Graph> Graph::buildGraph(rapidjson::Document &d) {
 
         // State machine JSON format
         const char* STATES = "states";
@@ -28,17 +42,8 @@ namespace ecc {
         const char* TO = "to";
         const char* CHARS = "chars";
 
-        // Load file into string stream
-        std::ifstream file(fileName);
-        std::stringstream  buffer;
-        buffer << file.rdbuf();
-
         // Prepare an empty graph
         std::shared_ptr<Graph> graph = std::make_shared<Graph>();
-
-        // Parse json
-        rapidjson::Document d;
-        d.Parse(buffer.str().c_str());
 
         // Resize vector of states
         graph->m_states.resize(d[STATES].Size());

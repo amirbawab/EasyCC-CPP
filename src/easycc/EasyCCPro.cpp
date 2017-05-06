@@ -1,5 +1,4 @@
 #include <easycc/EasyCCPro.h>
-#include <boost/move/utility_core.hpp>
 #include <boost/log/sources/logger.hpp>
 #include <boost/log/sources/record_ostream.hpp>
 #include <boost/log/sources/global_logger_storage.hpp>
@@ -18,6 +17,18 @@ BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(ecc_logger, src::logger_mt)
 namespace ecc{
     EasyCC::EasyCC() {
 
+        // Disable logs
+        logging::core::get()->set_logging_enabled(false);
+
+        // Create analyzers
+        m_lexical = std::make_shared<Lexical>();
+        m_lexical->buildFromStrings(lexicalStateMachineJSON, lexicalConfigJSON, lexicalErrorsJSON);
+
+        m_syntax = std::make_shared<Syntax>();
+        m_syntax->buildFromStrings(syntaxGrammarJSON, syntaxConfigJSON, syntaxErrorsJSON);
+
+        // Set semantic action after m_syntax is created
+        setSemanticAction();
     }
 }
 

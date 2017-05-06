@@ -17,12 +17,12 @@ namespace ecc {
         /**
          * Build lexical members from files
          */
-        void buildFromFiles(std::string grammarFile, std::string configFile, std::string errorFile);
+        void buildFromFiles(std::string stateMachineFile, std::string configFile, std::string errorFile);
 
         /**
          * Build lexical members from data
          */
-        void buildFromStrings(std::string &grammar, std::string &config, std::string &errors);
+        void buildFromStrings(std::string &stateMachine, std::string &config, std::string &errors);
 
         /**
          * Analyze a text file

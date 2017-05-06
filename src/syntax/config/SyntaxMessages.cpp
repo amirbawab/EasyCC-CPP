@@ -1,5 +1,5 @@
 #include <easycc/SyntaxMessages.h>
-#include <rapidjson/document.h>
+#include <rapidjson/istreamwrapper.h>
 #include <rapidjson/writer.h>
 #include <boost/algorithm/string.hpp>
 #include <fstream>
@@ -10,6 +10,20 @@
 namespace ecc {
 
     std::shared_ptr<SyntaxMessages> SyntaxMessages::loadMessagesFromFile(std::string fileName) {
+        std::ifstream ifs(fileName);
+        rapidjson::IStreamWrapper isw(ifs);
+        rapidjson::Document d;
+        d.ParseStream(isw);
+        return loadMessages(d);
+    }
+
+    std::shared_ptr<SyntaxMessages> SyntaxMessages::loadMessagesFromString(std::string data) {
+        rapidjson::Document d;
+        d.Parse(data.c_str());
+        return loadMessages(d);
+    }
+
+    std::shared_ptr<SyntaxMessages> SyntaxMessages::loadMessages(rapidjson::Document &d) {
 
         // Configuration JSON format
         const char* ERROR_MESSAGES = "error_messages";
@@ -18,17 +32,8 @@ namespace ecc {
         const char* TERMINAL = "terminal";
         const char* MESSAGE = "message";
 
-        // Load file into string stream
-        std::ifstream file(fileName);
-        std::stringstream  buffer;
-        buffer << file.rdbuf();
-
         // Prepare a new Config
         std::shared_ptr<SyntaxMessages> messages = std::make_shared<SyntaxMessages>();
-
-        // Parse json
-        rapidjson::Document d;
-        d.Parse(buffer.str().c_str());
 
         // Default message
         messages->m_defaultMessage = d[DEFAULT_MESSAGE].GetString();
@@ -44,8 +49,8 @@ namespace ecc {
             // Verify duplicates
             if(messages->m_errorMessages.find(nonTerminal) != messages->m_errorMessages.end() &&
                     messages->m_errorMessages[nonTerminal].find(terminal) != messages->m_errorMessages[nonTerminal].end()) {
-                throw std::runtime_error(std::string("Message with non-terminal: ") + nonTerminal +
-                                         " and terminal: " + terminal + " is defined multiple times in " + fileName);
+                throw std::runtime_error("Message with non-terminal: " + nonTerminal +
+                                         " and terminal: " + terminal + " is defined multiple times");
             }
             messages->m_errorMessages[nonTerminal][terminal] = message;
         }

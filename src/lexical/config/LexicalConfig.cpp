@@ -1,5 +1,5 @@
 #include <easycc/LexicalConfig.h>
-#include <rapidjson/document.h>
+#include <rapidjson/istreamwrapper.h>
 #include <rapidjson/writer.h>
 #include <fstream>
 #include <sstream>
@@ -13,7 +13,7 @@ namespace ecc{
     const std::string LexicalConfig::CR = "CR";
     const std::string LexicalConfig::CRLF = "CRLF";
 
-    std::shared_ptr<LexicalConfig> LexicalConfig::buildConfigFromFile(std::string configFileName) {
+    std::shared_ptr<LexicalConfig> LexicalConfig::buildConfig(rapidjson::Document &d) {
 
         // Configuration JSON format
         const char* NEWLINE = "newline";
@@ -25,17 +25,8 @@ namespace ecc{
         const char* INCLUDE = "include";
         const char* EXCLUDE = "exclude";
 
-        // Load file into string stream
-        std::ifstream file(configFileName);
-        std::stringstream  buffer;
-        buffer << file.rdbuf();
-
         // Prepare a new LexicalConfig
         std::shared_ptr<LexicalConfig> config = std::make_shared<LexicalConfig>();
-
-        // Parse json
-        rapidjson::Document d;
-        d.Parse(buffer.str().c_str());
 
         // Get the newline separator
         std::string configNewline = std::string(d[NEWLINE].GetString());
@@ -74,6 +65,20 @@ namespace ecc{
             }
         }
         return config;
+    }
+
+    std::shared_ptr<LexicalConfig> LexicalConfig::buildConfigFromFile(std::string configFileName) {
+        std::ifstream ifs(configFileName);
+        rapidjson::IStreamWrapper isw(ifs);
+        rapidjson::Document d;
+        d.ParseStream(isw);
+        return buildConfig(d);
+    }
+
+    std::shared_ptr<LexicalConfig> LexicalConfig::buildConfigFromString(std::string data) {
+        rapidjson::Document d;
+        d.Parse(data.c_str());
+        return buildConfig(d);
     }
 
     bool LexicalConfig::mustIgnoreToken(std::string tokenName) {

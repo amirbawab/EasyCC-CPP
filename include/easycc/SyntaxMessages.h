@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include <memory>
+#include <rapidjson/document.h>
 
 namespace ecc{
     class SyntaxMessages {
@@ -17,6 +18,13 @@ namespace ecc{
         static std::shared_ptr<SyntaxMessages> loadMessagesFromFile(std::string fileName);
 
         /**
+         * Load messages from string
+         * @param data JSON data
+         * @return pointer to a SyntaxMessages object
+         */
+        static std::shared_ptr<SyntaxMessages> loadMessagesFromString(std::string data);
+
+        /**
          * Get error message
          * @param error token name
          * @return specific error message or default one
@@ -28,6 +36,13 @@ namespace ecc{
 
         // Reserved token names
         const std::string DEFAULT_TERMINAL_AND_NON_TERMINAL = ":any";
+
+        /**
+         * Load messages
+         * @param document
+         * @return pointer to a SyntaxMessages object
+         */
+        static std::shared_ptr<SyntaxMessages> loadMessages(rapidjson::Document &d);
     };
 }
 

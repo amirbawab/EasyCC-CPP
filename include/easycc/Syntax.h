@@ -16,12 +16,12 @@ namespace ecc{
         /**
          * Build syntax members from files
          */
-        void buildFromFiles(std::string stateMachineFile, std::string configFile, std::string errorFile);
+        void buildFromFiles(std::string grammarFile, std::string configFile, std::string errorFile);
 
         /**
          * Build syntax members from strings
          */
-        void buildFromStrings(std::string stateMachine, std::string config, std::string error);
+        void buildFromStrings(std::string grammar, std::string config, std::string error);
 
         /**
          * Parse lexical tokens

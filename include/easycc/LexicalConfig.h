@@ -5,6 +5,7 @@
 #include <string>
 #include <set>
 #include <map>
+#include <rapidjson/document.h>
 
 namespace ecc {
     class LexicalConfig {
@@ -21,6 +22,13 @@ namespace ecc {
          * @return pointer to LexicalConfig object
          */
         static std::shared_ptr<LexicalConfig> buildConfigFromFile(std::string configFileName);
+
+        /**
+         * Create a lexicalConfig based on a JSON string
+         * @param data JSON data
+         * @return pointer to LexicalConfig object
+         */
+        static std::shared_ptr<LexicalConfig> buildConfigFromString(std::string data);
 
         /**
          * Check if token must be ignored
@@ -68,6 +76,13 @@ namespace ecc {
 
         // Reserved token names
         std::map<std::string, std::map<std::string, std::string>> m_reservedTokens;
+
+        /**
+         * Create a lexicalConfig
+         * @param document
+         * @return pointer to LexicalConfig object
+         */
+        static std::shared_ptr<LexicalConfig> buildConfig(rapidjson::Document &document);
     };
 }
 

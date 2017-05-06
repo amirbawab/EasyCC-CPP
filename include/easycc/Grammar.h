@@ -6,6 +6,7 @@
 #include <map>
 #include <vector>
 #include <set>
+#include <rapidjson/document.h>
 
 namespace ecc {
     class Grammar {
@@ -23,6 +24,13 @@ namespace ecc {
          * @return grammar pointer
          */
         static std::shared_ptr<Grammar> buildGrammarFromFile(std::string grammarFileName);
+
+        /**
+         * Create a grammar pointer
+         * @param data JSON data
+         * @return grammar pointer
+         */
+        static std::shared_ptr<Grammar> buildGrammarFromString(std::string data);
 
         /**
          * Build first and follow sets, and populate the parsing table
@@ -88,13 +96,6 @@ namespace ecc {
                 std::shared_ptr<std::vector<std::string>>>>> m_parseTableMap;
 
         /**
-         * Parse JSON file
-         * @param grammar
-         * @param grammarFile
-         */
-        static void parseGrammar(std::shared_ptr<Grammar> grammar, std::string grammarFile);
-
-        /**
          * Compute the first set
          */
         void computeFirstSet();
@@ -136,6 +137,13 @@ namespace ecc {
          * TT[NT][Input[0]] = production | not found
          */
         void buildParseTable();
+
+        /**
+         * Create a grammar pointer
+         * @param document
+         * @return grammar pointer
+         */
+        static std::shared_ptr<Grammar> buildGrammar(rapidjson::Document &d);
     };
 }
 

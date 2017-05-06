@@ -8,7 +8,7 @@
 #include <boost/log/sources/logger.hpp>
 #include <boost/log/sources/record_ostream.hpp>
 #include <boost/log/sources/global_logger_storage.hpp>
-#include <rapidjson/document.h>
+#include <rapidjson/istreamwrapper.h>
 
 namespace src = boost::log::sources;
 BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(ecc_logger, src::logger_mt)
@@ -21,13 +21,98 @@ namespace ecc {
     // This symbol must match the value of END_OF_FILE in lexical analysis
     const std::string Grammar::END_OF_STACK = "$";
 
-    std::shared_ptr<Grammar> Grammar::buildGrammarFromFile(std::string grammarFile) {
+
+    bool isEmptyWithIgnoreExceptions(std::shared_ptr<std::vector<std::string>> production) {
+        for(auto &token : *production) {
+
+            // Semantic action is an exception
+            if(!Grammar::isSemanticAction(token)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    std::shared_ptr<Grammar> Grammar::buildGrammarFromFile(std::string grammarFileName) {
+        std::ifstream ifs(grammarFileName);
+        rapidjson::IStreamWrapper isw(ifs);
+        rapidjson::Document d;
+        d.ParseStream(isw);
+        return buildGrammar(d);
+    }
+
+    std::shared_ptr<Grammar> Grammar::buildGrammarFromString(std::string data) {
+        rapidjson::Document d;
+        d.Parse(data.c_str());
+        return buildGrammar(d);
+    }
+
+    std::shared_ptr<Grammar> Grammar::buildGrammar(rapidjson::Document &d) {
 
         // Create grammar
         std::shared_ptr<Grammar> grammar = std::make_shared<Grammar>();
 
-        // Parse json file
-        parseGrammar(grammar, grammarFile);
+        for (auto iter = d.MemberBegin(); iter != d.MemberEnd(); ++iter){
+            std::string nonTerminal = iter->name.GetString();
+            auto array = iter->value.GetArray();
+
+            // Check if the productions array is empty
+            if(array.Size() == 0) {
+                throw std::runtime_error("Non terminal " + nonTerminal + " cannot have an empty production array");
+            }
+
+            // Check if the key entered is empty
+            if(nonTerminal.empty()) {
+                throw std::runtime_error("A non-terminal key cannot be empty");
+            }
+
+            // Check if non-terminal is composed of upper case alphabets only
+            for (size_t i = 0; i < nonTerminal.size(); i++) {
+                if ((nonTerminal[i] < 'A' || nonTerminal[i] > 'Z') && nonTerminal[i] != '_') {
+                    throw std::runtime_error("Non terminals should be composed of upper case letters only.");
+                }
+            }
+
+            // Make sure non-terminal key is only defined once
+            if(grammar->m_productions.find(nonTerminal) == grammar->m_productions.end()) {
+                grammar->m_productions[nonTerminal] =
+                        std::make_shared<std::vector<std::shared_ptr<std::vector<std::string>>>>();
+            } else {
+                throw std::runtime_error("All definition for the non-terminal " + nonTerminal+
+                                         " should be grouped in the array value");
+            }
+
+            // Store start non-terminal
+            if(grammar->m_start.empty()) {
+                grammar->m_start = nonTerminal;
+            }
+
+            for(auto vIter = array.Begin(); vIter != array.End(); ++vIter) {
+                std::string production = vIter->GetString();
+                boost::trim(production);
+
+                if(production.size() == 0) {
+                    throw std::runtime_error("A production cannot be empty.");
+                } else {
+                    std::istringstream productionss(production);
+                    (*grammar->m_productions[nonTerminal]).push_back(std::make_shared<std::vector<std::string>>());
+
+                    // Read word by word
+                    std::string word;
+                    while (productionss >> word) {
+
+                        // Terminal and epsilon tokens cannot be mixed with other tokens except the ones
+                        // specified in the isEmptyWithIgnoreExceptions() function
+                        if((Grammar::isTerminal(word) || Grammar::isEpsilon(word)) &&
+                           !isEmptyWithIgnoreExceptions((*grammar->m_productions[nonTerminal]).back())) {
+                            throw std::runtime_error("A production containing a terminal or an epsilon token "
+                                                             "cannot be followed or preceded by other tokens.");
+                        }
+                        (*grammar->m_productions[nonTerminal]).back()->push_back(word);
+                    }
+                }
+            }
+        }
         return grammar;
     }
 
@@ -62,91 +147,6 @@ namespace ecc {
         buildParseTable();
 
         BOOST_LOG(ecc_logger::get()) << "Grammar parsed successfully!";
-    }
-
-    bool isEmptyWithIgnoreExceptions(std::shared_ptr<std::vector<std::string>> production) {
-        for(auto &token : *production) {
-
-            // Semantic action is an exception
-            if(!Grammar::isSemanticAction(token)){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    void Grammar::parseGrammar(std::shared_ptr<Grammar> grammar, std::string grammarFile) {
-
-        // Load file into string stream
-        std::ifstream file(grammarFile);
-        std::stringstream  buffer;
-        buffer << file.rdbuf();
-
-        // Parse json
-        rapidjson::Document d;
-        d.Parse(buffer.str().c_str());
-
-        for (auto iter = d.MemberBegin(); iter != d.MemberEnd(); ++iter){
-            std::string nonTerminal = iter->name.GetString();
-            auto array = iter->value.GetArray();
-
-            // Check if the productions array is empty
-            if(array.Size() == 0) {
-                throw std::runtime_error("Non terminal " + nonTerminal + " cannot have an empty production array");
-            }
-
-            // Check if the key entered is empty
-            if(nonTerminal.empty()) {
-                throw std::runtime_error("A non-terminal key cannot be empty");
-            }
-
-            // Check if non-terminal is composed of upper case alphabets only
-            for (size_t i = 0; i < nonTerminal.size(); i++) {
-                if ((nonTerminal[i] < 'A' || nonTerminal[i] > 'Z') && nonTerminal[i] != '_') {
-                    throw std::runtime_error("Non terminals should be composed of upper case letters only.");
-                }
-            }
-
-            // Make sure non-terminal key is only defined once
-            if(grammar->m_productions.find(nonTerminal) == grammar->m_productions.end()) {
-                grammar->m_productions[nonTerminal] =
-                        std::make_shared<std::vector<std::shared_ptr<std::vector<std::string>>>>();
-            } else {
-                throw std::runtime_error("All definition for the non-terminal " + nonTerminal+
-                                                 " should be grouped in the array value");
-            }
-
-            // Store start non-terminal
-            if(grammar->m_start.empty()) {
-                grammar->m_start = nonTerminal;
-            }
-
-            for(auto vIter = array.Begin(); vIter != array.End(); ++vIter) {
-                std::string production = vIter->GetString();
-                boost::trim(production);
-
-                if(production.size() == 0) {
-                    throw std::runtime_error("A production cannot be empty.");
-                } else {
-                    std::istringstream productionss(production);
-                    (*grammar->m_productions[nonTerminal]).push_back(std::make_shared<std::vector<std::string>>());
-
-                    // Read word by word
-                    std::string word;
-                    while (productionss >> word) {
-
-                        // Terminal and epsilon tokens cannot be mixed with other tokens except the ones
-                        // specified in the isEmptyWithIgnoreExceptions() function
-                        if((Grammar::isTerminal(word) || Grammar::isEpsilon(word)) &&
-                           !isEmptyWithIgnoreExceptions((*grammar->m_productions[nonTerminal]).back())) {
-                            throw std::runtime_error("A production containing a terminal or an epsilon token "
-                                                             "cannot be followed or preceded by other tokens.");
-                        }
-                        (*grammar->m_productions[nonTerminal]).back()->push_back(word);
-                    }
-                }
-            }
-        }
     }
 
     void Grammar::logFirstSet() {

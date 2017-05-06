@@ -6,7 +6,8 @@
 #include <memory>
 #include <string>
 #include <ostream>
-#include "State.h"
+#include <rapidjson/document.h>
+#include <easycc/State.h>
 
 namespace ecc {
 
@@ -26,6 +27,13 @@ namespace ecc {
          * @return pointer to the graph object
          */
         static std::shared_ptr<Graph> buildGraphFromFile(std::string fileName);
+
+        /**
+         * Build a graph based on a JSON string
+         * @param data Json data
+         * @return pointer to the graph object
+         */
+        static std::shared_ptr<Graph> buildGraphFromString(std::string data);
 
         /**
          * Get initial state
@@ -56,6 +64,13 @@ namespace ecc {
 
         // Starting state of the graph
         std::shared_ptr<State> m_initialState;
+
+        /**
+         * Build a graph
+         * @param document
+         * @return pointer to the graph object
+         */
+        static std::shared_ptr<Graph> buildGraph(rapidjson::Document &document);
 
         /**
          * To string
