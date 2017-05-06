@@ -25,10 +25,10 @@ sudo ./b2 install
 * <a href="https://drive.google.com/file/d/0B8fWEFscW3Z4SzlpMnpETkdPOGs/view">UML Draw.io</a>
 
 ### Lexical Analysis
-* <a href="https://github.com/amirbawab/EasyCC-CPP/tree/master/lexical">Documentation</a>
+* <a href="https://github.com/amirbawab/EasyCC-CPP/tree/master/src/lexical">Documentation</a>
 
 ### Syntax Analysis
-* <a href="https://github.com/amirbawab/EasyCC-CPP/tree/master/syntax">Documentation</a>
+* <a href="https://github.com/amirbawab/EasyCC-CPP/tree/master/src/syntax">Documentation</a>
 
 ### Semantic Analysis
 ```
