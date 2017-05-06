@@ -23,10 +23,10 @@ namespace ecc{
     }
 
     void Syntax::buildFromStrings(std::string grammar, std::string config, std::string errors) {
-        this->m_grammar = Grammar::buildGrammarFromFile(grammar);
+        this->m_grammar = Grammar::buildGrammarFromString(grammar);
         this->m_grammar->process();
-        this->m_config = SyntaxConfig::buildConfigFromFile(config);
-        this->m_messages = SyntaxMessages::loadMessagesFromFile(errors);
+        this->m_config = SyntaxConfig::buildConfigFromString(config);
+        this->m_messages = SyntaxMessages::loadMessagesFromString(errors);
     }
 
     /**
