@@ -5,37 +5,37 @@
 #### Productions syntax
 
 ```
-START -> HEADER BODY FOOTER
-HEADER -> HELLO EASYCC
-BODY -> WORD BODY | NUMBER BODY
-FOOTER -> BYE EASYCC
-HELLO -> 'T_HELLO'
-NUMBER -> 'T_NUMBER'
-EASYCC -> 'T_EASYCC'
-WORD -> 'T_WORD'
+{
+  "START" : ["HEADER BODY FOOTER],
+  "HEADER" : ["HELLO EASYCC"],
+  "BODY" : ["WORD BODY","NUMBER BODY"],
+  "FOOTER" : ["BYE EASYCC"],
+  "HELLO" : ["'T_HELLO'"],
+  "NUMBER" : ["'T_NUMBER'"],
+  "EASYCC" : ["'T_EASYCC'"],
+  "WORD" : ["'T_WORD'"]
+}
 ```
 
 Each line should be in one of the following forms:
 
 ```
-NONTERMINAL -> NONTERMINAL NONTERMINAL ...
+"NONTERMINAL" : ["NONTERMINAL NONTERMINAL ..."]
 ```
 or 
 ```
-NONTERMINL -> 'TERMINAL'
+"NONTERMINL" : ["'TERMINAL'"]
+```
+or
+```
+"NONTERMINL" : ["EPSILON"]
 ```
 or 
 ```
-| NONTERMINAL NONTERMINAL NONTERMINAL ...
-```
-or 
-```
-| TERMINAL
+"NONTERMINAL" : ["NONTERMINAL NONTERMINAL ...", "'TERMINAL'", "EPSILON"]
 ```
 
 #### Definitions
-* `->` is a delimiter in a production
-* `|` is an `or` symbol. To avoid writting the same left-hand side non-terminal for different productions, the `|` allows defining another set of tokens for the same non-terminal
 * `NONTERMINAL` can be compsed of upper case letters and underscores only
 * `TERMINAL` must begin and end with a single quote. The text in between the single quotes must be a defined lexical token name (case sensitive) and should not contain spaces.
 * `EPSILON` represents an epsilon production
@@ -51,32 +51,6 @@ The grammar provided by the user should satisfy the following conditions:
 * Terminals and Non-Terminals should not match any reserved word from the following list:
   * `:any`
   * `$`
-
-### Configuration
-
-#### JSON
-
-```
-{
-    "parsing_phases": "..."
-}
-```
-
-#### Explanation
-
-<table>
-  <tr>
-    <th>Object</th>
-    <th>Value</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td>parsing_phases</td>
-    <td>number</td>
-    <td>The number of parsing iterations. This is useful for parsing languages where during the first parsing iteration the 
-    classes are built, and in the second iteration the semantic check is validated.</td>
-  </tr>
-</table>
 
 ### Error messages
 
