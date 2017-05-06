@@ -29,3 +29,11 @@ sudo ./b2 install
 
 ### Syntax Analysis
 * <a href="https://github.com/amirbawab/EasyCC-CPP/tree/master/syntax">Documentation</a>
+
+### Semantic Analysis
+```
+typedef std::vector<std::shared_ptr<ecc::LexicalToken>> Tokens;
+easyCC.registerSemanticAction("#MyAction#",[&](int phase, Tokens &lexicalVector, int index, bool stable){
+    std::cout << "Action `MyAction` handled!" << std::endl;
+});
+```
