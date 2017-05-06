@@ -31,6 +31,14 @@ namespace ecc {
         });
     }
 
+    void IEasyCC::setSilentSyntaxErrorMessages(bool visible) {
+        this->m_syntax->setSilent(!visible);
+    }
+
+    void IEasyCC::setParsingPhase(int phase) {
+        this->m_syntax->setParsingPhase(phase);
+    }
+
     int IEasyCC::compile(std::string fileName) {
 
         // Start lexical analyzer
@@ -42,8 +50,6 @@ namespace ecc {
         for(auto message : lexicalErrorMessages)
             std::cerr << message << std::endl;
         if(lexicalErrorMessages.size() != 0) {
-            // A lexical error exist, exit
-            std::cerr << "Exiting program with code " << ERR_CODE_LEXICAL << std::endl;
             return ERR_CODE_LEXICAL;
         }
 
@@ -55,8 +61,6 @@ namespace ecc {
         for(auto message : syntaxErrorMessages)
             std::cerr << message << std::endl;
         if(syntaxErrorMessages.size() != 0) {
-            // A syntax error exist, exit
-            std::cerr << "Exiting program with code " << ERR_CODE_SYNTAX << std::endl;
             return ERR_CODE_SYNTAX;
         }
 

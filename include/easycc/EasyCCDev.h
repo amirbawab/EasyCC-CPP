@@ -37,7 +37,6 @@ namespace ecc{
         std::string m_lexicalConfigFile;
         std::string m_lexicalErrorsFile;
         std::string m_syntaxGrammarFile;
-        std::string m_syntaxConfigFile;
         std::string m_syntaxErrorsFile;
         std::string m_outputFile;
         std::vector<std::string> m_inputFiles;

@@ -41,7 +41,7 @@ namespace ecc{
         m_lexical->buildFromFiles(m_lexicalStateMachineFile, m_lexicalConfigFile, m_lexicalErrorsFile);
 
         m_syntax = std::make_shared<Syntax>();
-        m_syntax->buildFromFiles(m_syntaxGrammarFile, m_syntaxConfigFile, m_syntaxErrorsFile);
+        m_syntax->buildFromFiles(m_syntaxGrammarFile, m_syntaxErrorsFile);
 
         // Set semantic action after m_syntax is created
         setSemanticAction();
@@ -60,7 +60,6 @@ namespace ecc{
         << "\t-c, --lexical_config\t\t[required] Lexical configuration file" << std::endl
         << "\t-e, --lexical_errors\t\t[required] Lexical errors file" << std::endl
         << "\t-g, --syntax_grammar\t\t[required] Syntax grammar file" << std::endl
-        << "\t-C, --syntax_config\t\t[required] Syntax configuration file" << std::endl
         << "\t-E, --syntax_errors\t\t[required] Syntax errors file" << std::endl
         << "\t-o, --output\t\t\tOutput file" << std::endl
         << "\t-v, --verbose\t\t\tVerbose mode" << std::endl
@@ -78,7 +77,6 @@ namespace ecc{
 
                 // Syntax params
                 {"syntax_grammar", required_argument, 0, 'g'},
-                {"syntax_config", required_argument, 0, 'C'},
                 {"syntax_errors", required_argument, 0, 'E'},
 
                 // Other
@@ -90,7 +88,7 @@ namespace ecc{
 
         int optionIndex = 0;
         int c;
-        while ((c = getopt_long(argc, argv, "hvs:c:e:g:C:E:o:", longOptions, &optionIndex)) != -1) {
+        while ((c = getopt_long(argc, argv, "hvs:c:e:g:E:o:", longOptions, &optionIndex)) != -1) {
             switch (c) {
                 case 's':
                     m_lexicalStateMachineFile = optarg;
@@ -103,9 +101,6 @@ namespace ecc{
                     break;
                 case 'g':
                     m_syntaxGrammarFile = optarg;
-                    break;
-                case 'C':
-                    m_syntaxConfigFile = optarg;
                     break;
                 case 'E':
                     m_syntaxErrorsFile = optarg;
@@ -133,7 +128,6 @@ namespace ecc{
                 !m_lexicalConfigFile.empty() &&
                 !m_lexicalErrorsFile.empty() &&
                 !m_syntaxGrammarFile.empty() &&
-                !m_syntaxConfigFile.empty() &&
                 !m_syntaxErrorsFile.empty() &&
                 !m_inputFiles.empty();
     }

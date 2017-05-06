@@ -26,6 +26,18 @@ namespace ecc{
         virtual int compile(std::string fileName);
         virtual void registerSemanticAction(std::string semanticAction, std::function<void
             (int, std::vector<std::shared_ptr<LexicalToken>>&, int, bool)> semanticActionFunction);
+
+        /**
+         * Hide syntax error messages
+         * @param silent
+         */
+        void setSilentSyntaxErrorMessages(bool silent);
+
+        /**
+         * Set the parsing phase
+         * @param phase number
+         */
+        void setParsingPhase(int phase);
     };
 }
 

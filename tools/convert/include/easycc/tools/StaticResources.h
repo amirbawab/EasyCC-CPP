@@ -9,7 +9,6 @@ namespace ecc{
     std::string lexicalConfigJSON = decode64("/*LEXICAL_CONFIG*/");
     std::string lexicalErrorsJSON = decode64("/*LEXICAL_ERRORS*/");
     std::string lexicalStateMachineJSON = decode64("/*LEXICAL_STATE_MACHINE*/");
-    std::string syntaxConfigJSON = decode64("/*SYNTAX_CONFIG*/");
     std::string syntaxErrorsJSON = decode64("/*SYNTAX_ERRORS*/");
     std::string syntaxGrammarJSON = decode64("/*SYNTAX_GRAMMAR*/");
 }

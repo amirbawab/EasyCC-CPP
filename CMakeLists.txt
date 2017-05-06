@@ -68,7 +68,6 @@ add_custom_target(
         -t ${PROJECT_SOURCE_DIR}/tools/convert/include/easycc/tools/StaticResources.h
         -o ${PROJECT_SOURCE_DIR}/bin/include/easycc/tools/StaticResources.h
         /*SYNTAX_ERRORS*/=${SYNTAX_ERRORS}
-        /*SYNTAX_CONFIG*/=${SYNTAX_CONFIG}
         /*SYNTAX_GRAMMAR*/=${SYNTAX_GRAMMAR}
         /*LEXICAL_ERRORS*/=${LEXICAL_ERRORS}
         /*LEXICAL_CONFIG*/=${LEXICAL_CONFIG}

@@ -130,6 +130,11 @@ int main(int argc, char *argv[]) {
         outputFile.close();
     });
 
+    // No need for more than one phase for this example, so let's pick phase 0
+    // The phase number selected is important because the semantic action handlers
+    // will hold the phase number in which the action occurred
+    easyCC.setParsingPhase(0);
+
     // Start compiling
     for(std::string fileName : easyCC.getInputFilesNames()) {
         code = easyCC.compile(fileName);
@@ -137,5 +142,6 @@ int main(int argc, char *argv[]) {
             return code;
         }
     }
+
     return code;
 }

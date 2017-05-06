@@ -4,7 +4,6 @@
 #include "Grammar.h"
 #include "LexicalToken.h"
 #include "SyntaxMessages.h"
-#include "SyntaxConfig.h"
 #include <string>
 #include <memory>
 #include <functional>
@@ -16,12 +15,12 @@ namespace ecc{
         /**
          * Build syntax members from files
          */
-        void buildFromFiles(std::string grammarFile, std::string configFile, std::string errorFile);
+        void buildFromFiles(std::string grammarFile, std::string errorFile);
 
         /**
          * Build syntax members from strings
          */
-        void buildFromStrings(std::string grammar, std::string config, std::string error);
+        void buildFromStrings(std::string grammar, std::string error);
 
         /**
          * Parse lexical tokens
@@ -38,9 +37,26 @@ namespace ecc{
                 (std::string, int, std::vector<std::shared_ptr<LexicalToken>>&, int, bool)> semanticAction) {
             this->m_semanticAction = semanticAction;
         }
+
+        /**
+         * Silent mode ignores syntax error messages
+         * @param silent
+         */
+        void setSilent(bool silent) {
+            this->m_silent = silent;
+        }
+
+        /**
+         * Set phase number
+         * @param phase
+         */
+        void setParsingPhase(int phase) {
+            this->m_phase = phase;
+        }
     private:
+        int m_phase = 0;
+        bool m_silent = false;
         std::shared_ptr<Grammar> m_grammar;
-        std::shared_ptr<SyntaxConfig> m_config;
         std::shared_ptr<SyntaxMessages> m_messages;
         std::function<void(std::string, int, std::vector<std::shared_ptr<LexicalToken>>&, int, bool)> m_semanticAction;
 
