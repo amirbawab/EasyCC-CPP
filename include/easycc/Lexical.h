@@ -50,10 +50,9 @@ namespace ecc {
         * @param token value
         * @param line
         * @param column
-        * @param position
         */
         std::shared_ptr<LexicalToken> createToken(
-               std::string tokenName, std::string tokenValue, const int &line, const int &column, const int &position);
+               std::string tokenName, std::string tokenValue, const int &line, const int &column);
 
         /**
          * Generate an error message based on the error token name

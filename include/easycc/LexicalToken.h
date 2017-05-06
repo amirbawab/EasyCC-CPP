@@ -16,8 +16,8 @@ namespace ecc {
             NORMAL_FINAL_TOKEN
         };
 
-        LexicalToken(LexicalToken::Type type,std::string name, std::string value, int line, int column, int position) :
-                m_type(type), m_name(name), m_value(value), m_line(line), m_column(column), m_position(position){};
+        LexicalToken(LexicalToken::Type type,std::string name, std::string value, int line, int column) :
+                m_type(type), m_name(name), m_value(value), m_line(line), m_column(column){};
 
         /**
          * Get token name
@@ -44,12 +44,6 @@ namespace ecc {
         int getColumn() const {return this->m_column;}
 
         /**
-         * Get token position
-         * @return position
-         */
-        int getPosition() const {return this->m_position;}
-
-        /**
          * Get lexical token type
          * @return lexical token type
          */
@@ -65,7 +59,6 @@ namespace ecc {
         std::string m_value;
         int m_line;
         int m_column;
-        int m_position;
         LexicalToken::Type m_type;
     };
 }

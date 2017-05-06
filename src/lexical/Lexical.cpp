@@ -35,10 +35,8 @@ namespace ecc {
         // Keep track of file information
         int tokenLine = 1;
         int tokenColumn = 1;
-        int tokenPosition = 0;
         int line = 1;
         int column = 1;
-        int position = 0;
 
         // Keep track of the state
         std::shared_ptr<State> state = m_graph->getInitialState();
@@ -60,7 +58,6 @@ namespace ecc {
                 if(state->getType() == State::INITIAL) {
                     tokenLine = line;
                     tokenColumn = column;
-                    tokenPosition = position;
                 }
 
                 // Jump to the next state
@@ -79,7 +76,7 @@ namespace ecc {
 
                     // Create token
                     std::shared_ptr<LexicalToken> token =createToken(state->getTokenName(), tokenValueStream.str(),
-                                                                     tokenLine, tokenColumn, tokenPosition);
+                                                                     tokenLine, tokenColumn);
 
                     // If token created
                     if(token) {
@@ -121,8 +118,6 @@ namespace ecc {
             } else {
                 column++;
             }
-
-            position++;
         }
 
         // One more call for the end of file
@@ -140,7 +135,7 @@ namespace ecc {
         // If final state, then create the last token
         if(state->getType() == State::FINAL) {
             std::shared_ptr<LexicalToken> token = createToken(state->getTokenName(), tokenValueStream.str(),
-                                                              tokenLine, tokenColumn, tokenPosition);
+                                                              tokenLine, tokenColumn);
 
             // If token created
             if(token) {
@@ -157,7 +152,7 @@ namespace ecc {
         // Add final token
         lexicalVector.push_back(std::make_shared<LexicalToken>(
                 LexicalToken::Type::NORMAL_FINAL_TOKEN, LexicalToken::END_OF_FILE,
-                LexicalToken::END_OF_FILE, line, column, position));
+                LexicalToken::END_OF_FILE, line, column));
 
         // Log generate tokens
         BOOST_LOG(ecc_logger::get()) << "Finished generating lexical tokens:";
@@ -174,18 +169,18 @@ namespace ecc {
      * @return object | null if the token should be ignored
      */
     std::shared_ptr<LexicalToken> Lexical::createToken(
-            std::string tokenName, std::string tokenValue, const int &line, const int &column, const int &position) {
+            std::string tokenName, std::string tokenValue, const int &line, const int &column) {
 
         // Check the type of the token name
         if(m_config->isErrorToken(tokenName)) {
             return std::make_shared<LexicalToken>(
                     LexicalToken::Type::ERROR_TOKEN, tokenName,
-                    tokenValue, line, column, position);
+                    tokenValue, line, column);
         } else if(!m_config->mustIgnoreToken(tokenName)) {
             tokenName = m_config->updateTokenName(tokenName, tokenValue);
             return std::make_shared<LexicalToken>(
                     LexicalToken::Type::NORMAL_TOKEN, tokenName,
-                    tokenValue, line, column, position);
+                    tokenValue, line, column);
         }
         return nullptr;
     }

@@ -8,7 +8,7 @@ namespace ecc{
 
     std::string LexicalToken::getString() {
         std::ostringstream ss;
-        ss << "<" << m_name << ",l:" << m_line << ",c:" << m_column << ",p:" << m_position << ">";
+        ss << "<" << m_name << ",l:" << m_line << ",c:" << m_column << ">";
         return ss.str();
     }
 }
