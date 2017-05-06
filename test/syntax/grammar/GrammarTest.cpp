@@ -2,45 +2,45 @@
 #include <gtest/gtest.h>
 
 TEST(GrammarParsingTest, GrammarParsingTest_Empty_Production_Array_Test) {
-    ASSERT_THROW(ecc::Grammar("resources/test/grammar/grammar_test1.json"), std::runtime_error);
+    ASSERT_THROW(ecc::Grammar::buildGrammarFromFile("resources/test/grammar/grammar_test1.json"), std::runtime_error);
 }
 
 TEST(GrammarParsingTest, GrammarParsingTest_Empty_Key_Test) {
-    ASSERT_THROW(ecc::Grammar("resources/test/grammar/grammar_test2.json"), std::runtime_error);
+    ASSERT_THROW(ecc::Grammar::buildGrammarFromFile("resources/test/grammar/grammar_test2.json"), std::runtime_error);
 }
 
 TEST(GrammarParsingTest, GrammarParsingTest_Empty_Production_String_Test) {
-    ASSERT_THROW(ecc::Grammar("resources/test/grammar/grammar_test3.json"), std::runtime_error);
+    ASSERT_THROW(ecc::Grammar::buildGrammarFromFile("resources/test/grammar/grammar_test3.json"), std::runtime_error);
 }
 
 TEST(GrammarParsingTest, GrammarParsingTest_LHS_Must_Be_Upper_Case_Only_Test) {
-    ASSERT_THROW(ecc::Grammar("resources/test/grammar/grammar_test4.json"), std::runtime_error);
+    ASSERT_THROW(ecc::Grammar::buildGrammarFromFile("resources/test/grammar/grammar_test4.json"), std::runtime_error);
 }
 
 TEST(GrammarParsingTest, GrammarParsingTest_Semantic_Action_Terminal_Test) {
-    ecc::Grammar("resources/test/grammar/grammar_test5.json");
+    ecc::Grammar::buildGrammarFromFile("resources/test/grammar/grammar_test5.json");
     SUCCEED();
 }
 
 TEST(GrammarParsingTest, GrammarParsingTest_Semantic_Action_Epsilon_Test) {
-    ecc::Grammar("resources/test/grammar/grammar_test6.json");
+    ecc::Grammar::buildGrammarFromFile("resources/test/grammar/grammar_test6.json");
     SUCCEED();
 }
 
 TEST(GrammarParsingTest, GrammarParsingTest_Terminal_Alone_Test) {
-    ASSERT_THROW(ecc::Grammar("resources/test/grammar/grammar_test7.json"), std::runtime_error);
+    ASSERT_THROW(ecc::Grammar::buildGrammarFromFile("resources/test/grammar/grammar_test7.json"), std::runtime_error);
 }
 
 TEST(GrammarParsingTest, GrammarParsingTest_Epsilon_Alone_Test) {
-    ASSERT_THROW(ecc::Grammar("resources/test/grammar/grammar_test8.json"), std::runtime_error);
+    ASSERT_THROW(ecc::Grammar::buildGrammarFromFile("resources/test/grammar/grammar_test8.json"), std::runtime_error);
 }
 
 TEST(GrammarParsingTest, GrammarParsingTest_Duplicate_Keys_Test) {
-    ASSERT_THROW(ecc::Grammar("resources/test/grammar/grammar_test9.json"), std::runtime_error);
+    ASSERT_THROW(ecc::Grammar::buildGrammarFromFile("resources/test/grammar/grammar_test9.json"), std::runtime_error);
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_1_Test) {
-    ecc::Grammar grammar("resources/test/firstfollow/ff_test1.json");
+    ecc::Grammar &grammar = *ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test1.json");
 
     std::string A = "A";
     std::string B = "B";
@@ -144,7 +144,7 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_1_Test) {
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_1_Test) {
-    ecc::Grammar grammar("resources/test/firstfollow/ff_test1.json");
+    ecc::Grammar &grammar = *ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test1.json");
 
     std::string A = "A";
     std::string B = "B";
@@ -270,7 +270,7 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_1_Test) {
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_2_Test) {
-    ecc::Grammar grammar("resources/test/firstfollow/ff_test2.json");
+    ecc::Grammar &grammar = *ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test2.json");
 
     std::string A = "A";
     std::string B = "B";
@@ -308,7 +308,7 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_2_Test) {
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_2_Test) {
-    ecc::Grammar grammar("resources/test/firstfollow/ff_test2.json");
+    ecc::Grammar &grammar = *ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test2.json");
 
     std::string A = "A";
     std::string B = "B";
@@ -346,7 +346,7 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_2_Test) {
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_3_Test) {
-    ecc::Grammar grammar("resources/test/firstfollow/ff_test3.json");
+    ecc::Grammar &grammar = *ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test3.json");
 
     std::string A = "A";
     std::string B = "B";
@@ -386,7 +386,7 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_3_Test) {
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_3_Test) {
-    ecc::Grammar grammar("resources/test/firstfollow/ff_test3.json");
+    ecc::Grammar &grammar = *ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test3.json");
 
     std::string A = "A";
     std::string B = "B";
@@ -424,7 +424,7 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_3_Test) {
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_4_Test) {
-    ecc::Grammar grammar("resources/test/firstfollow/ff_test4.json");
+    ecc::Grammar &grammar = *ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test4.json");
 
     std::string A = "A";
     std::string B = "B";
@@ -468,7 +468,7 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_4_Test) {
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_4_Test) {
-    ecc::Grammar grammar("resources/test/firstfollow/ff_test4.json");
+    ecc::Grammar &grammar = *ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test4.json");
 
     std::string A = "A";
     std::string B = "B";
@@ -512,7 +512,7 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_4_Test) {
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_5_Test) {
-    ecc::Grammar grammar("resources/test/firstfollow/ff_test5.json");
+    ecc::Grammar grammar = *ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test5.json");
 
     std::string A = "A";
     std::string B = "B";
@@ -567,7 +567,7 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_5_Test) {
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_5_Test) {
-    ecc::Grammar grammar("resources/test/firstfollow/ff_test5.json");
+    ecc::Grammar grammar = *ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test5.json");
 
     std::string A = "A";
     std::string B = "B";
@@ -623,7 +623,7 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_5_Test) {
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_6_Test) {
-    ecc::Grammar grammar("resources/test/firstfollow/ff_test6.json");
+    ecc::Grammar grammar = *ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test6.json");
 
     std::string A = "A";
     std::string B = "B";
@@ -665,7 +665,7 @@ TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_First_set_6_Test) {
 }
 
 TEST(GrammarFirstFollowTest, GrammarFirstFollowTest_Follow_set_6_Test) {
-    ecc::Grammar grammar("resources/test/firstfollow/ff_test6.json");
+    ecc::Grammar grammar = *ecc::Grammar::buildGrammarFromFile("resources/test/firstfollow/ff_test6.json");
 
     std::string A = "A";
     std::string B = "B";
