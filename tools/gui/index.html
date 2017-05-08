@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Graph GUI</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/logo-nav.css" rel="stylesheet">
+
+    <style>
+        .panel.with-nav-tabs .panel-heading{
+            padding: 5px 5px 0 5px;
+        }
+        #network{
+            width: 100%;
+            height:800px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <h3 style="color:white;">EasyCC GUI</h3>
+            </div>
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Add/Update/Delete node</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group col-xs-2">
+                            <label for="nodeId">Update/Delete node id</label>
+                            <select class="form-control" id="nodeId">
+                                <option value="-1">None</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-xs-2">
+                            <label for="nodeType">Type</label>
+                            <select class="form-control" id="nodeType">
+                                <option value="INITIAL">Initial</option>
+                                <option value="NORMAL">Normal</option>
+                                <option value="FINAL">Final</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-xs-4">
+                            <label for="nodeToken">Token name</label>
+                            <input type="text" class="form-control" id="nodeToken" placeholder="Token name">
+                        </div>
+                        <div class="form-group col-xs-4">
+                            <label for="nodeBacktrack">Backtrack</label>
+                            <div class="checkbox">
+                                <label><input id="nodeBacktrack" type="checkbox" value="">True</label>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12">
+                            <button class="btn btn-primary">Add node</button>
+                            <button class="btn btn-success">Update node</button>
+                            <button class="btn btn-danger">Delete node</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Add/Delete edge</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group col-xs-2">
+                            <label for="sourceNodeId">Source node id</label>
+                            <select class="form-control" id="sourceNodeId">
+                                <option value="-1">None</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-xs-2">
+                            <label for="targetNodeId">Target node id</label>
+                            <select class="form-control" id="targetNodeId">
+                                <option value="-1">None</option>
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-xs-4">
+                            <label for="edgeLabel">Edge label</label>
+                            <input type="text" class="form-control" id="edgeLabel" placeholder="Edge label">
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="panel-group">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" href="#collapse1">Special values</a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse1" class="panel-collapse collapse">
+                                        <ul class="list-group">
+                                            <li class="list-group-item">EOF</li>
+                                            <li class="list-group-item">LOWER_CASE_LETTER</li>
+                                            <li class="list-group-item">UPPER_CASE_LETTER</li>
+                                            <li class="list-group-item">POSITIVE</li>
+                                            <li class="list-group-item">OTHER</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-12">
+                            <button class="btn btn-primary">Add node</button>
+                            <button class="btn btn-danger">Delete node</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="panel with-nav-tabs panel-default">
+                    <div class="panel-heading">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#graph" data-toggle="tab">Graph</a></li>
+                            <li><a href="#json" data-toggle="tab">JSON</a></li>
+                        </ul>
+                    </div>
+                    <div class="panel-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade in active" id="graph">
+                                <div id="network"></div>
+                            </div>
+                            <div class="tab-pane fade" id="json">
+                                <pre>
+                                    hello world
+                                </pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!--Vis-->
+    <script src="js/vis.min.js"></script>
+
+    <!--TS-->
+    <script src="ts/node.js"></script>
+    <script src="ts/edge.js"></script>
+    <script src="ts/graph.js"></script>
+
+    <script>
+        var graph = new graph();
+        var data = {
+            nodes: graph.nodesObjects(),
+            edges: graph.edgesObjects()
+        };
+        var container = document.getElementById('network');
+        var options = {
+            edges: {
+                arrows:{
+                    to: {enabled: true, scaleFactor:1, type:'arrow'}
+                }
+            },
+            layout: {
+                hierarchical: {
+                    direction: "LR",
+                    sortMethod: "directed"
+                }
+            },
+            interaction: {dragNodes :false},
+            physics: {enabled: false}
+        };
+        var network = new vis.Network(container, data, options);
+
+        function update() {
+            network.setData()
+        }
+    </script>
+</body>
+</html>
