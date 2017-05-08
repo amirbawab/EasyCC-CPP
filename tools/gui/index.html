@@ -193,8 +193,22 @@
                     sortMethod: "directed"
                 }
             },
-            interaction: {dragNodes :false},
-            physics: {enabled: false}
+            interaction: {dragNodes :true},
+            physics: {enabled: false},
+            groups: {
+                initial: {
+                    color:{background:'#BEEB9F'}
+                },
+                normal: {
+                    color:{background:'#F3FFE2'}
+                },
+                final: {
+                    color:{background:'#FFFF9D'}
+                },
+                final_backtrack: {
+                    color:{background:'#ACF0F2'}
+                }
+            }
         };
         var network = new vis.Network(container, {}, options);
 
