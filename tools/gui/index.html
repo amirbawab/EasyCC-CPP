@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Graph GUI</title>
+    <title>EasyCC GUI</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -50,16 +50,11 @@
                             <label for="nodeId">Update/Delete node id</label>
                             <select class="form-control" id="nodeId">
                                 <option value="-1">None</option>
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
                             </select>
                         </div>
                         <div class="form-group col-xs-2">
                             <label for="nodeType">Type</label>
-                            <select class="form-control" id="nodeType">
+                            <select class="form-control" id="nodeType" onchange="refreshInput()">
                                 <option value="INITIAL">Initial</option>
                                 <option value="NORMAL">Normal</option>
                                 <option value="FINAL">Final</option>
@@ -76,7 +71,7 @@
                             </div>
                         </div>
                         <div class="form-group col-xs-12">
-                            <button class="btn btn-primary">Add node</button>
+                            <button class="btn btn-primary" onclick="addNode()">Add node</button>
                             <button class="btn btn-success">Update node</button>
                             <button class="btn btn-danger">Delete node</button>
                         </div>
@@ -93,22 +88,12 @@
                             <label for="sourceNodeId">Source node id</label>
                             <select class="form-control" id="sourceNodeId">
                                 <option value="-1">None</option>
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
                             </select>
                         </div>
                         <div class="form-group col-xs-2">
                             <label for="targetNodeId">Target node id</label>
                             <select class="form-control" id="targetNodeId">
                                 <option value="-1">None</option>
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
                             </select>
                         </div>
                         <div class="form-group col-xs-4">
@@ -136,8 +121,8 @@
                             </div>
                         </div>
                         <div class="form-group col-xs-12">
-                            <button class="btn btn-primary">Add node</button>
-                            <button class="btn btn-danger">Delete node</button>
+                            <button class="btn btn-primary">Add edge</button>
+                            <button class="btn btn-danger">Delete edge</button>
                         </div>
                     </div>
                 </div>
@@ -184,10 +169,6 @@
 
     <script>
         var graph = new graph();
-        var data = {
-            nodes: graph.nodesObjects(),
-            edges: graph.edgesObjects()
-        };
         var container = document.getElementById('network');
         var options = {
             edges: {
@@ -204,10 +185,46 @@
             interaction: {dragNodes :false},
             physics: {enabled: false}
         };
-        var network = new vis.Network(container, data, options);
+        var network = new vis.Network(container, {}, options);
 
-        function update() {
-            network.setData()
+        // Call main function
+        main();
+
+        function main() {
+            refreshGraph();
+            refreshInput();
+        }
+
+        // Repopulate the graph
+        function refreshGraph() {
+            network.setData({nodes: graph.nodesObjects(), edges: graph.edgesObjects()});
+        }
+
+        // Refresh the input fields
+        function refreshInput() {
+            var type = document.getElementById("nodeType");
+            var token = document.getElementById("nodeToken");
+            var backtrack = document.getElementById("nodeBacktrack")
+            if(type.value == "FINAL") {
+                token.disabled = true;
+                backtrack.disabled = true;
+            } else {
+                token.disabled = false;
+                backtrack.disabled = false;
+            }
+        }
+
+        function addNode() {
+            var type = document.getElementById("nodeType").value;
+            var n = graph.addNode();
+            n.type = type;
+            if(type == "FINAL") {
+                var name = document.getElementById("nodeToken").value;
+                var backtrack = document.getElementById("nodeBacktrack").checked;
+                n.token = name;
+                n.backtrack = backtrack;
+            }
+            refreshGraph();
         }
     </script>
 </body>
