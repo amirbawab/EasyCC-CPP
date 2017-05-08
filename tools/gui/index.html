@@ -72,8 +72,8 @@
                         </div>
                         <div class="form-group col-xs-12">
                             <button class="btn btn-primary" onclick="addNode()">Add node</button>
-                            <button class="btn btn-success">Update node</button>
-                            <button class="btn btn-danger">Delete node</button>
+                            <button class="btn btn-success" onclick="updateNode()">Update node</button>
+                            <button class="btn btn-danger" onclick="deleteNode()">Delete node</button>
                         </div>
                     </div>
                 </div>
@@ -122,7 +122,7 @@
                         </div>
                         <div class="form-group col-xs-12">
                             <button class="btn btn-primary" onclick="addEdge()">Add edge</button>
-                            <button class="btn btn-danger">Delete edge</button>
+                            <button class="btn btn-danger" onclick="deleteEdge()">Delete edge</button>
                         </div>
                     </div>
                 </div>
@@ -202,24 +202,18 @@
         main();
 
         function main() {
-            refreshGraph();
             refreshInput();
-            refreshNodeIdLists();
+            _refreshGraph();
+            _refreshNodeIdLists();
         }
 
-        // Repopulate the graph
-        function refreshGraph() {
-            network.setData({nodes: graph.nodesObjects(), edges: graph.edgesObjects()});
-        }
-
-        // Refresh the input fields
         function refreshInput() {
 
             // Disable fields on type change
             var type = document.getElementById("nodeType");
             var token = document.getElementById("nodeToken");
             var backtrack = document.getElementById("nodeBacktrack");
-            if(type.value == "FINAL") {
+            if(type.value != "FINAL") {
                 token.disabled = true;
                 backtrack.disabled = true;
             } else {
@@ -228,26 +222,30 @@
             }
         }
 
+        function _refreshGraph() {
+            network.setData({nodes: graph.nodesObjects(), edges: graph.edgesObjects()});
+        }
+
         function _showMessage(dom, message) {
             dom.style.display = 'block';
-            dom.innerText = message;
+            dom.innerHTML = message;
             setTimeout(function() {
                 dom.style.display = 'none';
-                dom.innerText = '';
+                dom.innerHTML = '';
             }, 5000);
         }
 
-        function showErrorMessage(message) {
+        function _showErrorMessage(message) {
             var errorMessage = document.getElementById("errorMessage");
             _showMessage(errorMessage, message);
         }
 
-        function showInfoMessage(message) {
+        function _showInfoMessage(message) {
             var infoMessage = document.getElementById("infoMessage");
             _showMessage(infoMessage, message);
         }
 
-        function refreshNodeIdLists() {
+        function _refreshNodeIdLists() {
             var nodeIdList = document.getElementById('nodeId');
             var sourceNodeIdList = document.getElementById('sourceNodeId');
             var targetNodeIdList = document.getElementById('targetNodeId');
@@ -258,46 +256,152 @@
 
         function _refreshNodeIdList(list) {
             // Delete previous data
-            for(var i=0; i < graph.nodes.length-1; i++) {
-                list.options.remove(list.options.length-1);
+            while(list.options.length > 1) {
+                list.options.remove(1);
             }
 
             // Add the data again
             for(var i=0; i < graph.nodes.length; i++) {
                 var id = graph.nodes[i].id;
-                list.options[list.options.length] = new Option(id, id);
+                list.options[i+1] = new Option(id, id);
             }
         }
 
-        function addNode() {
-            var type = document.getElementById("nodeType").value;
-            var n = graph.addNode();
-            n.type = type;
-            if(type == "FINAL") {
-                var name = document.getElementById("nodeToken").value;
-                var backtrack = document.getElementById("nodeBacktrack").checked;
-                n.token = name;
-                n.backtrack = backtrack;
+        function _getNodeInput() {
+            var nodeId = document.getElementById("nodeId");
+            var type = document.getElementById("nodeType");
+            var name = "";
+            var backtrack = false;
+            if(type.value == "FINAL") {
+                name = document.getElementById("nodeToken");
+                backtrack = document.getElementById("nodeBacktrack");
+
+                if(name.value.trim().length == 0) {
+                    _showErrorMessage("Token name cannot be empty")
+                    return null;
+                }
             }
-            refreshGraph();
-            refreshNodeIdLists();
+            return {id:nodeId.value, type: type.value, name: name.value, backtrack: backtrack.checked};
+        }
+
+        function _resetNodeInput() {
+            var nodeId = document.getElementById("nodeId");
+            var type = document.getElementById("nodeType");
+            var name = document.getElementById("nodeToken");
+            var backtrack = document.getElementById("nodeBacktrack");
+            nodeId.selectedIndex = 0;
+            type.selectedIndex = 0;
+            name.value = "";
+            backtrack.checked = false;
+        }
+
+        function _resetEdgeInput() {
+            var source = document.getElementById("sourceNodeId");
+            var target = document.getElementById("targetNodeId");
+            var label = document.getElementById("edgeLabel");
+            source.selectedIndex = 0;
+            target.selectedIndex = 0;
+            label.value = "";
+        }
+
+        function addNode() {
+            var nInput = _getNodeInput();
+            if(nInput != null) {
+                var n = graph.addNode();
+                n.token = nInput.name;
+                n.backtrack = nInput.backtrack;
+                n.type = nInput.type;
+                _refreshGraph();
+                _refreshNodeIdLists();
+                _showInfoMessage("Node {id: " + n.id + "} added!")
+                _resetNodeInput();
+            }
+        }
+
+        function updateNode() {
+            var nInput = _getNodeInput();
+            if(nInput != null) {
+
+                if(nInput.id < 0) {
+                    _showErrorMessage("Select a node to update");
+                    return;
+                }
+
+                var n = graph.nodes[nInput.id];
+                n.token = nInput.name;
+                n.backtrack = nInput.backtrack;
+                n.type = nInput.type;
+                _refreshGraph();
+                _showInfoMessage("Node {id: " + n.id + "} updated!");
+                _resetNodeInput();
+            }
         }
 
         function addEdge() {
             var source = document.getElementById("sourceNodeId");
             var target = document.getElementById("targetNodeId");
             var label = document.getElementById("edgeLabel");
-            if(source.value >= 0 && target.value >= 0) {
-                if(label.trim().length == 0) {
-                    showErrorMessage("Edge label cannot be empty")
+
+            if(source.value < 0 || target.value < 0) {
+                _showErrorMessage("Source and target nodes must be specified");
+                return;
+            }
+
+            if(label.value.length == 0) {
+                _showErrorMessage("Edge label cannot be empty");
+                return;
+            }
+
+            var e = graph.addEdge(graph.nodes[source.value], graph.nodes[target.value]);
+            e.label.push(label.value);
+            _refreshGraph();
+            _showInfoMessage("Edge {source: " + source.value +
+                ", target: " + target.value + ", label: " + label.value + "} added!");
+            _resetEdgeInput();
+        }
+
+        function deleteNode() {
+            var nodeId = document.getElementById("nodeId");
+            if(nodeId.value < 0) {
+                _showErrorMessage("Select a node to delete");
+                return;
+            }
+            var id = nodeId.value;
+            graph.deleteNode(graph.nodes[nodeId.value]);
+            graph.reassignIds();
+            _refreshGraph();
+            _refreshNodeIdLists();
+            _showInfoMessage("Node {id: " + id + "} deleted<br/><b>NOTE:</b> Nodes Ids might have changed");
+            _resetNodeInput();
+        }
+
+        function deleteEdge() {
+            var source = document.getElementById("sourceNodeId");
+            var target = document.getElementById("targetNodeId");
+            var label = document.getElementById("edgeLabel");
+
+            if(source.value < 0 || target.value < 0) {
+                _showErrorMessage("Source and target nodes must be specified");
+                return;
+            }
+
+            if(label.value.length == 0) {
+                if(graph.deleteEdge(graph.nodes[source.value], graph.nodes[target.value])) {
+                    _showInfoMessage("Edge {from: " + source.value + ", to: " + target.value + "} deleted");
                 } else {
-                    var e = graph.addEdge(graph.nodes[source.value], graph.nodes[target.value]);
-                    e.label.push(label.value);
+                    _showErrorMessage("Edge {from: " + source.value + ", to: " + target.value + "} not found");
                 }
             } else {
-                showErrorMessage("Source and target nodes must be specified")
+                if(graph.deleteEdgeLabel(graph.nodes[source.value], graph.nodes[target.value], label.value)) {
+                    _showInfoMessage("Edge {from: " + source.value + ", to: " + target.value +
+                        ", label: " + label.value + "} deleted");
+                } else {
+                    _showErrorMessage("Edge {from: " + source.value + ", to: " + target.value +
+                        ", label: " + label.value + "} not found");
+                }
             }
-            refreshGraph();
+            _refreshGraph();
+            _resetEdgeInput()
         }
     </script>
 </body>

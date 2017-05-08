@@ -30,6 +30,59 @@ class graph {
         return e;
     }
 
+    public deleteNode(node : node) {
+        // Delete node
+        for(let i=0; i < this.nodes.length; i++) {
+            if(this.nodes[i] == node) {
+                this.nodes.splice(i,1);
+                break;
+            }
+        }
+
+        // Delete related edges
+        let relatedEdges : edge[] = [];
+        for(let i=0; i < this.edges.length; i++) {
+            if(this.edges[i].source == node || this.edges[i].target == node) {
+                relatedEdges.push(this.edges[i]);
+            }
+        }
+        for(let e of relatedEdges) {
+            this.deleteEdge(e.source, e.target);
+        }
+    }
+
+    public deleteEdge(source : node, target : node) : boolean {
+        for(let i=0; i < this.edges.length; i++) {
+            let e : edge = this.edges[i];
+            if(e.source == source && e.target == target) {
+                this.edges.splice(i,1);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public deleteEdgeLabel(source : node, target : node, label : string) : boolean {
+        for(let i=0; i < this.edges.length; i++) {
+            let e : edge = this.edges[i];
+            if(e.source == source && e.target == target) {
+                let found : boolean = false;
+                for(let j=0; j < e.label.length; j++) {
+                    if(e.label[j] == label) {
+                        e.label.splice(j,1);
+                        found = true;
+                        break;
+                    }
+                }
+                if(e.label.length == 0) {
+                    this.edges.splice(i,1);
+                }
+                console.log(found);
+                return found;
+            }
+        }
+    }
+
     public nodesObjects() : any {
         let nodesObjects : any[] = [];
         for(let n of this.nodes) {
@@ -44,5 +97,12 @@ class graph {
             edgesObjects.push(e.object());
         }
         return edgesObjects;
+    }
+
+    public reassignIds() {
+        for(let i=0; i < this.nodes.length; i++) {
+            this.nodes[i].id = i;
+        }
+        this.id = this.nodes.length;
     }
 }
