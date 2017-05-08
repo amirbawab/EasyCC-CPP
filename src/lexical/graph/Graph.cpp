@@ -177,19 +177,19 @@ namespace ecc {
 
         // Check if in special transitions
         if(charRead >= 'a' && charRead <= 'z'
-           && this->m_adjacencyList[stateId].count(Graph::TRANSITION_LOWER_CASE_LETTER) == 1) {
+           && m_adjacencyList[stateId].find(Graph::TRANSITION_LOWER_CASE_LETTER) != m_adjacencyList[stateId].end()) {
             return this->m_adjacencyList[stateId][Graph::TRANSITION_LOWER_CASE_LETTER];
 
         } else if(charRead >= 'A' && charRead <= 'Z'
-                && this->m_adjacencyList[stateId].count(Graph::TRANSITION_UPPER_CASE_LETTER) == 1) {
+            && m_adjacencyList[stateId].find(Graph::TRANSITION_UPPER_CASE_LETTER) != m_adjacencyList[stateId].end()) {
             return this->m_adjacencyList[stateId][Graph::TRANSITION_UPPER_CASE_LETTER];
 
         } else if(charRead >= '1' && charRead <= '9'
-                && this->m_adjacencyList[stateId].count(Graph::TRANSITION_POSITIVE) == 1) {
+                && this->m_adjacencyList[stateId].find(Graph::TRANSITION_POSITIVE) != m_adjacencyList[stateId].end()) {
             return this->m_adjacencyList[stateId][Graph::TRANSITION_POSITIVE];
 
         } else if(charRead == EOF
-                && this->m_adjacencyList[stateId].count(Graph::TRANSITION_EOF) == 1) {
+                && this->m_adjacencyList[stateId].find(Graph::TRANSITION_EOF) != m_adjacencyList[stateId].end()) {
             return this->m_adjacencyList[stateId][Graph::TRANSITION_EOF];
 
         } else if(charRead == '\n'
