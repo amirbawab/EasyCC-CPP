@@ -121,11 +121,17 @@
                             </div>
                         </div>
                         <div class="form-group col-xs-12">
-                            <button class="btn btn-primary">Add edge</button>
+                            <button class="btn btn-primary" onclick="addEdge()">Add edge</button>
                             <button class="btn btn-danger">Delete edge</button>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="col-xs-12">
+                <div style="display: none;" class="alert alert-danger" role="alert" id="errorMessage"></divs>
+            </div>
+            <div class="col-xs-12">
+                <div style="display: none;" class="alert alert-info" role="alert" id="infoMessage"></divs>
             </div>
             <div class="col-xs-12">
                 <div class="panel with-nav-tabs panel-default">
@@ -174,6 +180,11 @@
             edges: {
                 arrows:{
                     to: {enabled: true, scaleFactor:1, type:'arrow'}
+                },
+                smooth: {
+                    enabled: true,
+                    type: "dynamic",
+                    roundness: 0.5
                 }
             },
             layout: {
@@ -193,6 +204,7 @@
         function main() {
             refreshGraph();
             refreshInput();
+            refreshNodeIdLists();
         }
 
         // Repopulate the graph
@@ -202,15 +214,58 @@
 
         // Refresh the input fields
         function refreshInput() {
+
+            // Disable fields on type change
             var type = document.getElementById("nodeType");
             var token = document.getElementById("nodeToken");
-            var backtrack = document.getElementById("nodeBacktrack")
+            var backtrack = document.getElementById("nodeBacktrack");
             if(type.value == "FINAL") {
                 token.disabled = true;
                 backtrack.disabled = true;
             } else {
                 token.disabled = false;
                 backtrack.disabled = false;
+            }
+        }
+
+        function _showMessage(dom, message) {
+            dom.style.display = 'block';
+            dom.innerText = message;
+            setTimeout(function() {
+                dom.style.display = 'none';
+                dom.innerText = '';
+            }, 5000);
+        }
+
+        function showErrorMessage(message) {
+            var errorMessage = document.getElementById("errorMessage");
+            _showMessage(errorMessage, message);
+        }
+
+        function showInfoMessage(message) {
+            var infoMessage = document.getElementById("infoMessage");
+            _showMessage(infoMessage, message);
+        }
+
+        function refreshNodeIdLists() {
+            var nodeIdList = document.getElementById('nodeId');
+            var sourceNodeIdList = document.getElementById('sourceNodeId');
+            var targetNodeIdList = document.getElementById('targetNodeId');
+            _refreshNodeIdList(nodeIdList);
+            _refreshNodeIdList(sourceNodeIdList);
+            _refreshNodeIdList(targetNodeIdList);
+        }
+
+        function _refreshNodeIdList(list) {
+            // Delete previous data
+            for(var i=0; i < graph.nodes.length-1; i++) {
+                list.options.remove(list.options.length-1);
+            }
+
+            // Add the data again
+            for(var i=0; i < graph.nodes.length; i++) {
+                var id = graph.nodes[i].id;
+                list.options[list.options.length] = new Option(id, id);
             }
         }
 
@@ -223,6 +278,24 @@
                 var backtrack = document.getElementById("nodeBacktrack").checked;
                 n.token = name;
                 n.backtrack = backtrack;
+            }
+            refreshGraph();
+            refreshNodeIdLists();
+        }
+
+        function addEdge() {
+            var source = document.getElementById("sourceNodeId");
+            var target = document.getElementById("targetNodeId");
+            var label = document.getElementById("edgeLabel");
+            if(source.value >= 0 && target.value >= 0) {
+                if(label.trim().length == 0) {
+                    showErrorMessage("Edge label cannot be empty")
+                } else {
+                    var e = graph.addEdge(graph.nodes[source.value], graph.nodes[target.value]);
+                    e.label.push(label.value);
+                }
+            } else {
+                showErrorMessage("Source and target nodes must be specified")
             }
             refreshGraph();
         }
