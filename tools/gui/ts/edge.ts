@@ -18,4 +18,12 @@ class edge {
             label: this.label.join(",")
         };
     }
+
+    public json() : any {
+        let json = {};
+        json["from"] = this.source.id;
+        json["to"] = this.target.id;
+        json["chars"] = this.label;
+        return json;
+    }
 }

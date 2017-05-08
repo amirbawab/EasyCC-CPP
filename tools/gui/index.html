@@ -23,6 +23,10 @@
             width: 100%;
             height:800px;
         }
+        #jsonCode {
+            width: 100%;
+            height: 800px;
+        }
     </style>
 </head>
 <body>
@@ -147,9 +151,15 @@
                                 <div id="network"></div>
                             </div>
                             <div class="tab-pane fade" id="json">
-                                <pre>
-                                    hello world
-                                </pre>
+
+                                <div class="form-group col-xs-12">
+                                    <button class="btn btn-info" onclick="_generateJson()">Refresh JSON</button>
+                                    <button class="btn btn-info" onclick="_generateGraph()">Update Graph</button>
+                                </div>
+
+                                <div class="form-group col-xs-12">
+                                    <textarea id="jsonCode"></textarea>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -316,6 +326,18 @@
             source.selectedIndex = 0;
             target.selectedIndex = 0;
             label.value = "";
+        }
+
+        function _generateJson() {
+            var jsonCode = document.getElementById("jsonCode");
+            jsonCode.value = JSON.stringify(graph.json(), undefined, 4);
+        }
+
+        function _generateGraph() {
+            var jsonCode = document.getElementById("jsonCode");
+            graph.readJson(jsonCode.value);
+            _refreshGraph();
+            _refreshNodeIdLists();
         }
 
         function addNode() {

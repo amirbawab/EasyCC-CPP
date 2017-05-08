@@ -102,4 +102,53 @@ class graph {
         }
         this.id = this.nodes.length;
     }
+
+    public json() : any {
+        let json = {};
+        json["states"] = [];
+        for(let n of this.nodes) {
+            json["states"].push(n.json());
+        }
+
+        json["transitions"] = [];
+        for(let e of this.edges) {
+            json["transitions"].push(e.json());
+        }
+        return json;
+    }
+
+    public readJson(jsonStr : string) : boolean {
+        try {
+            let json = JSON.parse(jsonStr);
+
+            // If keys not defined
+            if(!json.hasOwnProperty("states") || !json.hasOwnProperty("transitions")) {
+                return false;
+            }
+
+            // Create nodes
+            for(let s of json.states) {
+                let n = new node();
+                n.id = s.id;
+                n.type = s.type;
+                if(n.type == node.TYPE_FINAL) {
+                    n.backtrack = s.backtrack;
+                    n.token = s.token;
+                }
+                this.nodes[n.id] = n;
+            }
+
+            // Update graph next id
+            this.id = this.nodes.length;
+
+            // Create edges
+            for(let t of json.transitions) {
+                let e = this.addEdge(this.nodes[t.from], this.nodes[t.to]);
+                e.label = t.chars;
+            }
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
 }

@@ -26,4 +26,15 @@ class node {
             group: this._getGroup()
         };
     }
+
+    public json() : any {
+        let json = {};
+        json["type"] = this.type;
+        json["id"] = this.id;
+        if(this.type == node.TYPE_FINAL) {
+            json["token"] = this.token;
+            json["backtrack"] = this.backtrack;
+        }
+        return json;
+    }
 }
