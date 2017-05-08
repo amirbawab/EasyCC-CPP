@@ -353,7 +353,11 @@
             }
 
             var e = graph.addEdge(graph.nodes[source.value], graph.nodes[target.value]);
-            e.label.push(label.value);
+            if(!e.addLabel(label.value)) {
+                _showErrorMessage("Label already exists");
+                _resetEdgeInput();
+                return;
+            }
             _refreshGraph();
             _showInfoMessage("Edge {source: " + source.value +
                 ", target: " + target.value + ", label: " + label.value + "} added!");

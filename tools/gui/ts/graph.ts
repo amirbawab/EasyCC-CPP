@@ -13,20 +13,17 @@ class graph {
     public addEdge(source : node, target : node) : edge {
 
         // Search for the edge
-        let e : edge = null;
         for(let tmp of this.edges) {
             if(tmp.source == source && tmp.target == target) {
-                e = tmp;
+                return tmp;
             }
         }
 
         // If not found, create it
-        if(e == null) {
-            e = new edge();
-            e.source = source;
-            e.target = target;
-            this.edges.push(e);
-        }
+        let e = new edge();
+        e.source = source;
+        e.target = target;
+        this.edges.push(e);
         return e;
     }
 
