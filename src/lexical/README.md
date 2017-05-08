@@ -80,6 +80,10 @@ The state machine is provided as a json file with the follwoing syntax:
     Each value in the array will be treated as an independent transition that goes from `from` to `to`.<br/>
     The following are special values that will facilitate building the state machine:<br/>
     - `EOF`: End of file<br/>
+    - `NEW_LINE`: New line (\n)<br/>
+    - `RETURN`: Return (\r)<br/>
+    - `SPACE`: " " (without quotes)<br/>
+    - `TAB`: Tab (\t)<br/>
     - `LOWER_CASE_LETTER`: A letter from a to z<br/>
     - `UPPER_CASE_LETTER`: A letter from A to Z<br/>
     - `POSITIVE`: A positive digit 1-9<br/>
