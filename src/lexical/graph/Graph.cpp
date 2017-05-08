@@ -13,6 +13,10 @@ namespace ecc {
     const std::string Graph::TRANSITION_UPPER_CASE_LETTER = "UPPER_CASE_LETTER";
     const std::string Graph::TRANSITION_POSITIVE = "POSITIVE";
     const std::string Graph::TRANSITION_OTHER = "OTHER";
+    const std::string Graph::TRANSITION_NEW_LINE = "NEW_LINE";
+    const std::string Graph::TRANSITION_RETURN = "RETURN";
+    const std::string Graph::TRANSITION_SPACE = "SPACE";
+    const std::string Graph::TRANSITION_TAB = "TAB";
 
     std::shared_ptr<Graph> Graph::buildGraphFromFile(std::string fileName) {
         std::ifstream ifs(fileName);
@@ -187,6 +191,22 @@ namespace ecc {
         } else if(charRead == EOF
                 && this->m_adjacencyList[stateId].count(Graph::TRANSITION_EOF) == 1) {
             return this->m_adjacencyList[stateId][Graph::TRANSITION_EOF];
+
+        } else if(charRead == '\n'
+                  && m_adjacencyList[stateId].find(Graph::TRANSITION_NEW_LINE) != m_adjacencyList[stateId].end()) {
+            return m_adjacencyList[stateId][Graph::TRANSITION_NEW_LINE];
+
+        } else if(charRead == '\r'
+                  && m_adjacencyList[stateId].find(Graph::TRANSITION_RETURN) != m_adjacencyList[stateId].end()) {
+            return m_adjacencyList[stateId][Graph::TRANSITION_RETURN];
+
+        } else if(charRead == ' '
+                  && m_adjacencyList[stateId].find(Graph::TRANSITION_SPACE) != m_adjacencyList[stateId].end()) {
+            return m_adjacencyList[stateId][Graph::TRANSITION_SPACE];
+
+        } else if(charRead == '\t'
+                  && m_adjacencyList[stateId].find(Graph::TRANSITION_TAB) != m_adjacencyList[stateId].end()) {
+            return m_adjacencyList[stateId][Graph::TRANSITION_TAB];
         }
         return this->m_adjacencyList[stateId][Graph::TRANSITION_OTHER];
     }

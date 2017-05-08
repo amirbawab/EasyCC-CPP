@@ -20,6 +20,10 @@ namespace ecc {
         static const std::string TRANSITION_UPPER_CASE_LETTER;
         static const std::string TRANSITION_POSITIVE;
         static const std::string TRANSITION_OTHER;
+        static const std::string TRANSITION_NEW_LINE;
+        static const std::string TRANSITION_RETURN;
+        static const std::string TRANSITION_SPACE;
+        static const std::string TRANSITION_TAB;
 
         /**
          * Build a graph based on a JSON file
