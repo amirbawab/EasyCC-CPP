@@ -45,6 +45,9 @@ Both libraries use the same Lexical and Syntax algorithms, and switching from on
 For examples on how to use each library, check the calculator program in the `examples` directory.
 
 ### To do
+* ~~Create a gui tool~~
 * ~~Handle extra special characters for lexical phase (\n,\r, space and tab)~~
 * Replace shared_ptr by star
 * Handle auto detection of new line in lexical analysis, and remove it from configuration
+* Tool to compile grammar
+* Enhance method for embedded resources into executable when using easyccpro library
