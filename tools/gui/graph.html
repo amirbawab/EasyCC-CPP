@@ -188,7 +188,7 @@
     <script src="ts/graph.js"></script>
 
     <script>
-        var graph = new graph();
+        var g = new graph();
         var container = document.getElementById('network');
         var options = {
             edges: {
@@ -251,7 +251,7 @@
         }
 
         function _refreshGraph() {
-            network.setData({nodes: graph.nodesObjects(), edges: graph.edgesObjects()});
+            network.setData({nodes: g.nodesObjects(), edges: g.edgesObjects()});
         }
 
         function _showMessage(dom, message) {
@@ -289,8 +289,8 @@
             }
 
             // Add the data again
-            for(var i=0; i < graph.nodes.length; i++) {
-                var id = graph.nodes[i].id;
+            for(var i=0; i < g.nodes.length; i++) {
+                var id = g.nodes[i].id;
                 list.options[i+1] = new Option(id, id);
             }
         }
@@ -334,12 +334,13 @@
 
         function _generateJson() {
             var jsonCode = document.getElementById("jsonCode");
-            jsonCode.value = JSON.stringify(graph.json(), undefined, 4);
+            jsonCode.value = JSON.stringify(g.json(), undefined, 4);
         }
 
         function _generateGraph() {
             var jsonCode = document.getElementById("jsonCode");
-            graph.readJson(jsonCode.value);
+            g = new graph();
+            g.readJson(jsonCode.value);
             _refreshGraph();
             _refreshNodeIdLists();
         }
@@ -347,7 +348,7 @@
         function addNode() {
             var nInput = _getNodeInput();
             if(nInput != null) {
-                var n = graph.addNode();
+                var n = g.addNode();
                 n.token = nInput.name;
                 n.backtrack = nInput.backtrack;
                 n.type = nInput.type;
@@ -368,7 +369,7 @@
                     return;
                 }
 
-                var n = graph.nodes[nInput.id];
+                var n = g.nodes[nInput.id];
                 n.token = nInput.name;
                 n.backtrack = nInput.backtrack;
                 n.type = nInput.type;
@@ -393,7 +394,7 @@
                 return;
             }
 
-            var e = graph.addEdge(graph.nodes[source.value], graph.nodes[target.value]);
+            var e = g.addEdge(g.nodes[source.value], g.nodes[target.value]);
             if(!e.addLabel(label.value)) {
                 _showErrorMessage("Label already exists");
                 _resetEdgeInput();
@@ -412,8 +413,8 @@
                 return;
             }
             var id = nodeId.value;
-            graph.deleteNode(graph.nodes[nodeId.value]);
-            graph.reassignIds();
+            g.deleteNode(g.nodes[nodeId.value]);
+            g.reassignIds();
             _refreshGraph();
             _refreshNodeIdLists();
             _showInfoMessage("Node {id: " + id + "} deleted<br/><b>NOTE:</b> Nodes Ids might have changed");
@@ -432,13 +433,13 @@
             }
 
             if(label.value.length == 0) {
-                if(graph.deleteEdge(graph.nodes[source.value], graph.nodes[target.value])) {
+                if(g.deleteEdge(g.nodes[source.value], g.nodes[target.value])) {
                     _showInfoMessage("Edge {from: " + source.value + ", to: " + target.value + "} deleted");
                 } else {
                     _showErrorMessage("Edge {from: " + source.value + ", to: " + target.value + "} not found");
                 }
             } else {
-                if(graph.deleteEdgeLabel(graph.nodes[source.value], graph.nodes[target.value], label.value)) {
+                if(g.deleteEdgeLabel(g.nodes[source.value], g.nodes[target.value], label.value)) {
                     _showInfoMessage("Edge {from: " + source.value + ", to: " + target.value +
                         ", label: " + label.value + "} deleted");
                 } else {
