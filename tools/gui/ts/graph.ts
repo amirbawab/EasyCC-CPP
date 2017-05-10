@@ -144,7 +144,7 @@ class graph {
             // Create edges
             for(let t of json.transitions) {
                 let e = this.addEdge(this.nodes[t.from], this.nodes[t.to]);
-                e.label = t.chars;
+                e.label.push(t.chars);
             }
         } catch (e) {
             return false;

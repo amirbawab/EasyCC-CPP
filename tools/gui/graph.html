@@ -355,6 +355,7 @@
                 _refreshNodeIdLists();
                 _showInfoMessage("Node {id: " + n.id + "} added!")
                 _resetNodeInput();
+                refreshInput();
             }
         }
 
@@ -417,6 +418,7 @@
             _refreshNodeIdLists();
             _showInfoMessage("Node {id: " + id + "} deleted<br/><b>NOTE:</b> Nodes Ids might have changed");
             _resetNodeInput();
+            refreshInput();
         }
 
         function deleteEdge() {
