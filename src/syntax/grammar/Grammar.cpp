@@ -542,6 +542,6 @@ namespace ecc {
         if(terminal.length() > 2 && terminal[0] == '\'' && terminal[terminal.length()-1] == '\'') {
             return terminal.substr(1,terminal.length()-2);
         }
-        std::runtime_error("String '" + terminal + "' is not a terminal");
+        throw std::runtime_error("String '" + terminal + "' is not a terminal");
     }
 }
