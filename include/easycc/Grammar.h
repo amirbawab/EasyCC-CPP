@@ -133,6 +133,11 @@ namespace ecc {
         void logFollowSet();
 
         /**
+         * Check if the first and follow sets have the same keys
+         */
+        void checkFFKeys();
+
+        /**
          * Build a parsing table using a map
          * TT[NT][Input[0]] = production | not found
          */

@@ -9,6 +9,7 @@
 #include <boost/log/sources/record_ostream.hpp>
 #include <boost/log/sources/global_logger_storage.hpp>
 #include <rapidjson/istreamwrapper.h>
+#include <boost/algorithm/string/join.hpp>
 
 namespace src = boost::log::sources;
 BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(ecc_logger, src::logger_mt)
@@ -130,11 +131,10 @@ namespace ecc {
         // Print the logs for the follow set
         logFollowSet();
 
-        BOOST_LOG(ecc_logger::get()) << "Checking if the keys size for the first set matches "
+        BOOST_LOG(ecc_logger::get()) << "Checking if the keys for the first set matches "
                     "the keys size for the follow set ...";
-        if(m_firstSet.size() != m_followSet.size()) {
-            throw std::runtime_error("Not all non-terminals were assigned a production");
-        }
+
+        checkFFKeys();
 
         BOOST_LOG(ecc_logger::get()) << "Checking if the grammar satisfies the LL conditions ...";
 
@@ -148,6 +148,25 @@ namespace ecc {
 
         BOOST_LOG(ecc_logger::get()) << "Grammar parsed successfully!";
     }
+
+    void Grammar::checkFFKeys() {
+		std::vector<std::string> diffKeys;
+		for(auto pair : m_firstSet) {
+			if(m_followSet.find(pair.first) == m_followSet.end()) {
+				diffKeys.push_back(pair.first);
+			}
+		}
+		for(auto pair : m_followSet) {
+			if(m_firstSet.find(pair.first) == m_firstSet.end()) {
+				diffKeys.push_back(pair.first);
+			}
+		}
+		if(!diffKeys.empty()) {
+			std::string joined = boost::algorithm::join(diffKeys, ", ");
+			throw std::runtime_error("The following tokens [" + joined + "] either are defined but never "
+					"used in a production, or used in a production but never defined");
+		}
+	}
 
     void Grammar::logFirstSet() {
         BOOST_LOG(ecc_logger::get()) << "Finished computing first set:";
