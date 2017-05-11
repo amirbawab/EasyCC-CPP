@@ -446,18 +446,18 @@ namespace ecc {
         }
 
         // Cond 3
-        for(auto definition : m_productions) {
-            if (m_firstSet[definition.first]->find(Grammar::EPSILON) != m_firstSet[definition.first]->end()) {
-                // Get the follow set
-                std::shared_ptr<std::set<std::string>> tokenFollowSet = m_followSet[definition.first];
-                for (std::string token : *m_firstSet[definition.first]) {
-                    if (tokenFollowSet->find(token) != tokenFollowSet->end()) {
-                        std::stringstream intersection;
-                        std::copy(m_firstSet[definition.first]->begin(), m_firstSet[definition.first]->end(),
-                                  std::ostream_iterator<std::string>(intersection, " "));
-                        throw std::runtime_error("The first and follow sets of the non-terminal: " + definition.first +
-                                                 " intersect at " + intersection.str());
+        for(auto firstPair : m_firstSet) {
+            if(firstPair.second->find(Grammar::EPSILON) != firstPair.second->end()) {
+                std::vector<std::string> intersection;
+                for(const std::string &token : *firstPair.second) {
+                    if(token != Grammar::EPSILON &&
+                            m_followSet[firstPair.first]->find(token) != m_followSet[firstPair.first]->end()) {
+                        intersection.push_back(token);
                     }
+                }
+                if(!intersection.empty()) {
+                    throw std::runtime_error("The first and follow sets of the non-terminal: " + firstPair.first +
+                                             " intersect at " + boost::algorithm::join(intersection, ", "));
                 }
             }
         }
