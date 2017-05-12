@@ -51,3 +51,4 @@ For examples on how to use each library, check the calculator program in the `ex
 * Handle auto detection of new line in lexical analysis, and remove it from configuration
 * Tool to compile grammar
 * Enhance method for embedded resources into executable when using easyccpro library
+* Print error messages directly instead of buffering them in Lexical and Syntax phases
