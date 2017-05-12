@@ -26,10 +26,9 @@ namespace ecc {
         this->m_messages = LexicalMessages::loadMessagesFromString(errors);
     }
 
-    void Lexical::generateLexicalTokens(
+    bool Lexical::generateLexicalTokens(
             std::string fileName,
-            std::vector<std::shared_ptr<LexicalToken>> &lexicalVector,
-            std::vector<std::string> &errorMessages) {
+            std::vector<std::shared_ptr<LexicalToken>> &lexicalVector) {
         BOOST_LOG(ecc_logger::get()) << "Converting content of " << fileName << " into lexical tokens ...";
 
         // Keep track of file information
@@ -37,6 +36,7 @@ namespace ecc {
         int tokenColumn = 1;
         int line = 1;
         int column = 1;
+        bool success = true;
 
         // Keep track of the state
         std::shared_ptr<State> state = m_graph->getInitialState();
@@ -85,7 +85,8 @@ namespace ecc {
 
                         // Check if the token is an error token
                         if(token->getType() == LexicalToken::Type::ERROR_TOKEN) {
-                            errorMessages.push_back(generateErrorMessage(token));
+                            std::cerr << generateErrorMessage(token) << std::endl;
+                            success = false;
                         }
                     }
 
@@ -144,7 +145,8 @@ namespace ecc {
 
                 // Check if the token is an error token
                 if(token->getType() == LexicalToken::Type::ERROR_TOKEN) {
-                    errorMessages.push_back(generateErrorMessage(token));
+                    std::cerr << generateErrorMessage(token) << std::endl;
+                    success = false;
                 }
             }
         }
@@ -161,7 +163,9 @@ namespace ecc {
                 BOOST_LOG(ecc_logger::get()) << lexicalVector[i]->getString();
             }
         }
+        BOOST_LOG(ecc_logger::get()) << (success ? "SUCCESS" : "FAILURE");
         BOOST_LOG(ecc_logger::get()) << "----------";
+        return success;
     }
 
     /**

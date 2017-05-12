@@ -26,8 +26,7 @@ namespace ecc{
          * Parse lexical tokens
          * @param lexicalTokens
          */
-        void parseTokens(std::vector<std::shared_ptr<LexicalToken>> &lexicalTokens,
-                         std::vector<std::string> &errorMessages);
+        bool parseTokens(std::vector<std::shared_ptr<LexicalToken>> &lexicalTokens);
 
         /**
          * Set semantic action

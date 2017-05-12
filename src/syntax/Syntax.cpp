@@ -41,8 +41,7 @@ namespace ecc{
         return lexicalToken[index++];
     }
 
-    void Syntax::parseTokens(std::vector<std::shared_ptr<LexicalToken>> &lexicalTokens,
-                             std::vector<std::string> &errorMessages) {
+    bool Syntax::parseTokens(std::vector<std::shared_ptr<LexicalToken>> &lexicalTokens) {
 
         BOOST_LOG(ecc_logger::get()) << "Started parsing the lexical tokens ...";
 
@@ -54,6 +53,9 @@ namespace ecc{
 
         // Store the current index of the lexical token
         int inputIndex = 0;
+
+        // Report success of failure of this phase
+        bool success = false;
 
         // Store lexical tokens
         std::shared_ptr<LexicalToken> lexicalToken = nextToken(lexicalTokens, inputIndex);
@@ -131,8 +133,9 @@ namespace ecc{
 
                     // Generate error message in the first parsing phase
                     if(!m_silent) {
-                        errorMessages.push_back(generateErrorMessage(top, lexicalTokens, inputIndex-1));
+                        std::cerr << generateErrorMessage(top, lexicalTokens, inputIndex-1) << std::endl;
                     }
+                    success = false;
 
                     // If terminal is in the follow set or there is no more input to process,
                     // then pop the parse stack
@@ -153,12 +156,14 @@ namespace ecc{
         if(lexicalToken->getName() != Grammar::END_OF_STACK) {
             // Generate error message in the first parsing phase
             if(!m_silent) {
-                errorMessages.push_back(generateErrorMessage(
-                        parseStack.top(), lexicalTokens, inputIndex-1));
+                std::cerr << generateErrorMessage(parseStack.top(), lexicalTokens, inputIndex-1) << std::endl;
             }
+            success = false;
         }
 
         BOOST_LOG(ecc_logger::get()) << "Finished parsing the lexical tokens ...";
+        BOOST_LOG(ecc_logger::get()) << (success ? "SUCCESS" : "FAILURE");
+        return success;
     }
 
     std::string Syntax::generateErrorMessage(std::string nonTerminal,

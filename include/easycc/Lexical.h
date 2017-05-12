@@ -28,11 +28,9 @@ namespace ecc {
          * Analyze a text file
          * @param fileName Text file to be analyzed
          * @param vector which will contain the tokens
-         * @param vector which will contain the error tokens
          */
-        void generateLexicalTokens(std::string fileName,
-                                   std::vector<std::shared_ptr<LexicalToken>> &lexicalVector,
-                                   std::vector<std::string> &errorMessages);
+        bool generateLexicalTokens(std::string fileName,
+                                   std::vector<std::shared_ptr<LexicalToken>> &lexicalVector);
     private:
 
         // State machine

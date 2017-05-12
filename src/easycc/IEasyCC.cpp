@@ -43,24 +43,12 @@ namespace ecc {
 
         // Start lexical analyzer
         std::vector<std::shared_ptr<LexicalToken>> lexicalTokens;
-        std::vector<std::string> lexicalErrorMessages;
-        m_lexical->generateLexicalTokens(fileName, lexicalTokens, lexicalErrorMessages);
-
-        // Logging
-        for(auto message : lexicalErrorMessages)
-            std::cerr << message << std::endl;
-        if(lexicalErrorMessages.size() != 0) {
+        if(!m_lexical->generateLexicalTokens(fileName, lexicalTokens)) {
             return ERR_CODE_LEXICAL;
         }
 
         // Start syntax analyzer
-        std::vector<std::string> syntaxErrorMessages;
-        m_syntax->parseTokens(lexicalTokens, syntaxErrorMessages);
-
-        // Logging syntax phase
-        for(auto message : syntaxErrorMessages)
-            std::cerr << message << std::endl;
-        if(syntaxErrorMessages.size() != 0) {
+        if(!m_syntax->parseTokens(lexicalTokens)) {
             return ERR_CODE_SYNTAX;
         }
 
