@@ -55,7 +55,7 @@ namespace ecc{
         int inputIndex = 0;
 
         // Report success of failure of this phase
-        bool success = false;
+        bool success = true;
 
         // Store lexical tokens
         std::shared_ptr<LexicalToken> lexicalToken = nextToken(lexicalTokens, inputIndex);

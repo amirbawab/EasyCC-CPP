@@ -31,8 +31,8 @@ namespace ecc {
         });
     }
 
-    void IEasyCC::setSilentSyntaxErrorMessages(bool visible) {
-        this->m_syntax->setSilent(!visible);
+    void IEasyCC::setSilentSyntaxErrorMessages(bool silent) {
+        this->m_syntax->setSilent(silent);
     }
 
     void IEasyCC::setParsingPhase(int phase) {
