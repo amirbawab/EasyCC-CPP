@@ -7,7 +7,6 @@
 namespace ecc {
     class LexicalToken {
     public:
-        LexicalToken();
         static const std::string END_OF_FILE;
 
         // Set the token types
@@ -18,7 +17,8 @@ namespace ecc {
         };
 
         LexicalToken(LexicalToken::Type type,std::string name, std::string value, int line, int column) :
-                m_type(type), m_name(name), m_value(value), m_line(line), m_column(column){};
+                m_type(type), m_name(name), m_value(value), m_line(line), m_column(column),
+                m_uid(LexicalToken::s_uid++){};
 
         /**
          * Get token name

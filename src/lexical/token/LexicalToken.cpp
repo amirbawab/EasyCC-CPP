@@ -7,10 +7,6 @@ namespace ecc{
     const std::string LexicalToken::END_OF_FILE = "$";
     unsigned int LexicalToken::s_uid = 0;
 
-    LexicalToken::LexicalToken() {
-        m_uid = LexicalToken::s_uid++;
-    }
-
     std::string LexicalToken::getString() {
         std::ostringstream ss;
         ss << "<" << m_name << ",l:" << m_line << ",c:" << m_column << ">";
