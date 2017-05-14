@@ -3,6 +3,7 @@
 
 #include <easycc/Lexical.h>
 #include <easycc/Syntax.h>
+#include <easycc/LexicalToken.h>
 #include <memory>
 #include <vector>
 #include <string>
@@ -14,6 +15,7 @@ namespace ecc{
         std::shared_ptr<Syntax> m_syntax;
         void setSemanticAction();
     private:
+        std::map<std::string,std::vector<std::shared_ptr<LexicalToken>>> m_lexicalTokensMap;
         std::map<std::string, std::function<void
                 (int, std::vector<std::shared_ptr<LexicalToken>>&, int, bool)>> m_semanticActionMap;
     public:

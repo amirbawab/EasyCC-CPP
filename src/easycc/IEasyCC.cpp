@@ -41,9 +41,16 @@ namespace ecc {
 
     int IEasyCC::compile(std::string fileName) {
 
-        // Start lexical analyzer
+        // Prepare lexical analyzer vector
         std::vector<std::shared_ptr<LexicalToken>> lexicalTokens;
-        if(!m_lexical->generateLexicalTokens(fileName, lexicalTokens)) {
+
+        // If lexical tokens were generated for that file use them, otherwise
+        // generate them. If generating them did not succeed, return error code
+        if(m_lexicalTokensMap.find(fileName) != m_lexicalTokensMap.end()) {
+            lexicalTokens = m_lexicalTokensMap[fileName];
+        } else if(m_lexical->generateLexicalTokens(fileName, lexicalTokens)) {
+            m_lexicalTokensMap[fileName] = lexicalTokens;
+        } else {
             return ERR_CODE_LEXICAL;
         }
 
