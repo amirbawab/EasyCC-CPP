@@ -7,6 +7,7 @@
 namespace ecc {
     class LexicalToken {
     public:
+        LexicalToken();
         static const std::string END_OF_FILE;
 
         // Set the token types
@@ -54,11 +55,21 @@ namespace ecc {
          */
         std::string getString();
 
+        /**
+         * Get a unique unsigned integer for a lexical token
+         * across all compiled files
+         */
+        unsigned int getUID() {
+            return m_uid;
+        }
+
     private:
         std::string m_name;
         std::string m_value;
         int m_line;
         int m_column;
+        static unsigned int s_uid;
+        unsigned int m_uid;
         LexicalToken::Type m_type;
     };
 }
