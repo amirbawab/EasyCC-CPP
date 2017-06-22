@@ -26,6 +26,7 @@ namespace ecc {
             if(m_semanticActionMap.find(semanticAction) == m_semanticActionMap.end()) {
                 BOOST_LOG(ecc_logger::get()) << "Error: Cannot find a handler for the semantic action: " << semanticAction;
             } else {
+                BOOST_LOG(ecc_logger::get()) << "Calling handler for the semantic action: " << semanticAction;
                 m_semanticActionMap[semanticAction](phase, lexicalTokensParam, index, stable);
             }
         });
