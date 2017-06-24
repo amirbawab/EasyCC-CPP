@@ -40,8 +40,8 @@ add_definitions(-DBOOST_LOG_DYN_LINK)
 find_package(Boost 1.63.0 COMPONENTS log log_setup thread date_time filesystem system REQUIRED)
 link_libraries(${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES} ${Boost_LIBRARIES})
 
-# Add -std=c++11 flag
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+# Compile with -std=c++11 flag
+add_compile_options(-std=c++11)
 
 # Link libraries to all targets
 link_libraries(-lpthread)
