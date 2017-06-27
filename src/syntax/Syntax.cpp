@@ -43,7 +43,7 @@ namespace ecc{
 
     bool Syntax::parseTokens(std::vector<std::shared_ptr<LexicalToken>> &lexicalTokens) {
 
-        BOOST_LOG(ecc_logger::get()) << "Started parsing the lexical tokens ...";
+        BOOST_LOG(ecc_logger::get()) << "Started parsing the lexical tokens [PHASE " << m_phase << "]";
 
         // Prepare the stack
         std::stack<std::string> parseStack;
