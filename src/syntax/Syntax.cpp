@@ -161,7 +161,7 @@ namespace ecc{
             success = false;
         }
 
-        BOOST_LOG(ecc_logger::get()) << "Finished parsing the lexical tokens ...";
+        BOOST_LOG(ecc_logger::get()) << "Finished parsing the lexical tokens [PHASE " << m_phase << "]";
         BOOST_LOG(ecc_logger::get()) << (success ? "SUCCESS" : "FAILURE");
         return success;
     }
