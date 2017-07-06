@@ -43,12 +43,3 @@ Both libraries use the same Lexical and Syntax algorithms, and switching from on
 * EasyCCPro (EasyCC production mode) takes the JSON files as arguments to the CMake. The compile process for your program will be composed of two steps. First is embedding the JSON files into the executable. Second is compiling your program with the generated files.
 
 For examples on how to use each library, check the calculator program in the `examples` directory.
-
-### To do
-* ~~Create a gui tool~~
-* ~~Handle extra special characters for lexical phase (\n,\r, space and tab)~~
-* ~~Print error messages directly instead of buffering them in Lexical and Syntax phases~~
-* Replace shared_ptr by star
-* Handle auto detection of new line in lexical analysis, and remove it from configuration
-* Tool to compile grammar
-* Enhance method for embedded resources into executable when using easyccpro library
