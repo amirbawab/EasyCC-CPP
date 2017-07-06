@@ -129,7 +129,8 @@ namespace ecc{
                 !m_lexicalErrorsFile.empty() &&
                 !m_syntaxGrammarFile.empty() &&
                 !m_syntaxErrorsFile.empty() &&
-                !m_inputFiles.empty();
+                !m_inputFiles.empty() &&
+                !m_outputFile.empty();
     }
 
     void EasyCC::fetchInputFiles(const int argc, char *argv[]) {
