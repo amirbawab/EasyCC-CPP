@@ -41,7 +41,7 @@ namespace ecc{
         return lexicalToken[index++];
     }
 
-    bool Syntax::parseTokens(std::vector<std::shared_ptr<LexicalToken>> &lexicalTokens) {
+    bool Syntax::parseTokens(std::string fileName, std::vector<std::shared_ptr<LexicalToken>> &lexicalTokens) {
 
         BOOST_LOG(ecc_logger::get()) << "Started parsing the lexical tokens [PHASE " << m_phase << "]";
 
@@ -136,7 +136,8 @@ namespace ecc{
 
                     // Generate error message in the first parsing phase
                     if(!m_silentSyntaxErrorMessages) {
-                        std::cerr << generateErrorMessage(top, lexicalTokens, inputIndex-1) << std::endl;
+                        std::cerr << fileName << ": " << generateErrorMessage(top, lexicalTokens, inputIndex-1)
+                                  << std::endl;
                     }
                     success = false;
 

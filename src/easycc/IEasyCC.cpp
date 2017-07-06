@@ -65,7 +65,7 @@ namespace ecc {
         }
 
         // Start syntax analyzer
-        if(!m_syntax->parseTokens(lexicalTokens)) {
+        if(!m_syntax->parseTokens(fileName, lexicalTokens)) {
             return ERR_CODE_SYNTAX;
         }
 

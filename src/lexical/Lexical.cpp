@@ -85,7 +85,7 @@ namespace ecc {
 
                         // Check if the token is an error token
                         if(token->getType() == LexicalToken::Type::ERROR_TOKEN) {
-                            std::cerr << generateErrorMessage(token) << std::endl;
+                            std::cerr << fileName << ": " << generateErrorMessage(token) << std::endl;
                             success = false;
                         }
                     }
