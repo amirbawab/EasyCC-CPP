@@ -41,8 +41,16 @@ namespace ecc{
          * Silent mode ignores syntax error messages
          * @param silent
          */
-        void setSilent(bool silent) {
-            this->m_silent = silent;
+        void setSilentSyntaxErrorMessages(bool silent) {
+            this->m_silentSyntaxErrorMessages = silent;
+        }
+
+        /**
+         * Silent semantic actions won't call corresponding handlers
+         * @param silent
+         */
+        void setSilentSemanticAction(bool silent) {
+            this->m_silentSemanticEvents = silent;
         }
 
         /**
@@ -54,7 +62,8 @@ namespace ecc{
         }
     private:
         int m_phase = 0;
-        bool m_silent = false;
+        bool m_silentSyntaxErrorMessages = false;
+        bool m_silentSemanticEvents = false;
         std::shared_ptr<Grammar> m_grammar;
         std::shared_ptr<SyntaxMessages> m_messages;
         std::function<void(std::string, int, std::vector<std::shared_ptr<LexicalToken>>&, int, bool)> m_semanticAction;

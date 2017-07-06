@@ -36,6 +36,12 @@ namespace ecc{
         void setSilentSyntaxErrorMessages(bool silent);
 
         /**
+         * Ignore semantic action handlers
+         * @param silent
+         */
+        void setSilentSemanticEvents(bool silent);
+
+        /**
          * Set the parsing phase
          * @param phase number
          */

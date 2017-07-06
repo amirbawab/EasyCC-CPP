@@ -33,7 +33,11 @@ namespace ecc {
     }
 
     void IEasyCC::setSilentSyntaxErrorMessages(bool silent) {
-        this->m_syntax->setSilent(silent);
+        this->m_syntax->setSilentSyntaxErrorMessages(silent);
+    }
+
+    void IEasyCC::setSilentSemanticEvents(bool silent) {
+        this->m_syntax->setSilentSemanticAction(silent);
     }
 
     void IEasyCC::setParsingPhase(int phase) {
@@ -50,7 +54,7 @@ namespace ecc {
         if(m_lexicalTokensMap.find(fileName) != m_lexicalTokensMap.end()) {
             lexicalTokens = m_lexicalTokensMap[fileName];
         } else if(m_lexical->generateLexicalTokens(fileName, lexicalTokens)) {
-            // TODO Use md5 checksum (e.g. "myFile.bc" and "../cur_dir/myFile.bc" are the same files)
+            // TODO Add same file detector (e.g. "myFile.bc" and "../cur_dir/myFile.bc" are the same files)
             m_lexicalTokensMap[fileName] = lexicalTokens;
         } else {
             return ERR_CODE_LEXICAL;

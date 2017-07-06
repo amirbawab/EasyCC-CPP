@@ -93,16 +93,19 @@ namespace ecc{
                 }
             } else if(Grammar::isSemanticAction(top)) {
 
-                // Call the semantic action handler.
-                // inputIndex value is subtracted by 2:
-                // inputIndex:   -1-+-2-+-3-+-3-+-4-
-                //                  A   B   #C  $
-                // To retrieve the value of `B`, the semantic action `#C`
-                // is placed right after. But at the time `#C` is processed,
-                // the value of inputIndex is 3 which is the original index of B + 2.
-                // Note that if the semantic action is placed at the beginning
-                // of the grammar production, then the input index will be 2 - 1 = -1
-                this->m_semanticAction(top, m_phase, lexicalTokens, inputIndex-2, stable);
+                // Call semantic handlers if silent flag is set to false
+                if(!m_silentSemanticEvents) {
+                    // Call the semantic action handler.
+                    // inputIndex value is subtracted by 2:
+                    // inputIndex:   -1-+-2-+-3-+-3-+-4-
+                    //                  A   B   #C  $
+                    // To retrieve the value of `B`, the semantic action `#C`
+                    // is placed right after. But at the time `#C` is processed,
+                    // the value of inputIndex is 3 which is the original index of B + 2.
+                    // Note that if the semantic action is placed at the beginning
+                    // of the grammar production, then the input index will be 2 - 1 = -1
+                    this->m_semanticAction(top, m_phase, lexicalTokens, inputIndex-2, stable);
+                }
 
                 // Remove the action from the stack
                 parseStack.pop();
@@ -132,7 +135,7 @@ namespace ecc{
                 } else { // Error found
 
                     // Generate error message in the first parsing phase
-                    if(!m_silent) {
+                    if(!m_silentSyntaxErrorMessages) {
                         std::cerr << generateErrorMessage(top, lexicalTokens, inputIndex-1) << std::endl;
                     }
                     success = false;
@@ -155,7 +158,7 @@ namespace ecc{
 
         if(lexicalToken->getName() != Grammar::END_OF_STACK) {
             // Generate error message in the first parsing phase
-            if(!m_silent) {
+            if(!m_silentSyntaxErrorMessages) {
                 std::cerr << generateErrorMessage(parseStack.top(), lexicalTokens, inputIndex-1) << std::endl;
             }
             success = false;
