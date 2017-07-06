@@ -152,6 +152,11 @@ namespace ecc{
 
                     // Mark unstable
                     stable = false;
+
+                    // Broadcast error
+                    if(m_onSyntaxError) {
+                        this->m_onSyntaxError();
+                    }
                 }
             }
         }

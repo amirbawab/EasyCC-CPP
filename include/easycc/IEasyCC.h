@@ -42,6 +42,12 @@ namespace ecc{
         void setSilentSemanticEvents(bool silent);
 
         /**
+         * Set on syntax error
+         * @param onSyntaxError
+         */
+        void setOnSyntaxError(std::function<void()> onSyntaxError);
+
+        /**
          * Set the parsing phase
          * @param phase number
          */

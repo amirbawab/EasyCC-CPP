@@ -38,6 +38,14 @@ namespace ecc{
         }
 
         /**
+         * Set on syntax error
+         * @param onSyntaxError
+         */
+        void setOnSyntaxError(std::function<void()> onSyntaxError) {
+            this->m_onSyntaxError = onSyntaxError;
+        }
+
+        /**
          * Silent mode ignores syntax error messages
          * @param silent
          */
@@ -67,6 +75,7 @@ namespace ecc{
         std::shared_ptr<Grammar> m_grammar;
         std::shared_ptr<SyntaxMessages> m_messages;
         std::function<void(std::string, int, std::vector<std::shared_ptr<LexicalToken>>&, int, bool)> m_semanticAction;
+        std::function<void()> m_onSyntaxError;
 
         /**
          * Generate an error message

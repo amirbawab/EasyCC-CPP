@@ -40,6 +40,10 @@ namespace ecc {
         this->m_syntax->setSilentSemanticAction(silent);
     }
 
+    void IEasyCC::setOnSyntaxError(std::function<void()> onSyntaxError) {
+        this->m_syntax->setOnSyntaxError(onSyntaxError);
+    }
+
     void IEasyCC::setParsingPhase(int phase) {
         this->m_syntax->setParsingPhase(phase);
     }
