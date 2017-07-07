@@ -1,0 +1,10 @@
+{
+    "default_message": "Error found: ${lexical.value} at line ${lexical.line} and column ${lexical.column}",
+    "error_messages": [
+        {
+            "non_terminal": "",
+            "terminal": "",
+            "message": "Expecting a symbol instead of ${lexical.value} at line ${lexical.line} and column ${lexical.column}"
+        }
+    ]
+}

@@ -57,8 +57,6 @@ add_library(${PROJECT_PRO_LIB} ${PROJECT_SOURCE_FILES} src/easycc/EasyCCPro.cpp)
 add_subdirectory(tools/convert)
 add_subdirectory(googletest)
 add_subdirectory(test)
-add_subdirectory(examples/calculator-dev)
-add_subdirectory(examples/calculator-pro)
 
 # Explicitely generate header files
 add_custom_target(
