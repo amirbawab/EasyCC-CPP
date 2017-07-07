@@ -4,6 +4,11 @@ void Calculator::setOutput(std::string filename) {
     m_output.open(filename);
 }
 
+void Calculator::error() {
+    m_output << "Error evaluating expression" << std::endl;
+    m_output.close();
+}
+
 void Calculator::initHandlers() {
     /**
      * Register 'push' semantic action

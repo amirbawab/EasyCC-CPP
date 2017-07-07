@@ -32,6 +32,7 @@ int main(int argc, char *argv[]) {
     easyccdev->setSilentSemanticEvents(false);
     easyccdev->setOnSyntaxError([&](){
         easyccdev->setSilentSemanticEvents(true);
+        calculator.error();
     });
 
     // Compile all files

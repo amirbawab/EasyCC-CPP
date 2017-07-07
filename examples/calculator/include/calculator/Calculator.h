@@ -25,6 +25,11 @@ public:
      * @param filename
      */
     void setOutput(std::string filename);
+
+    /**
+     * Output error message into file
+     */
+    void error();
 private:
 
     // Create stack for computing the expression
