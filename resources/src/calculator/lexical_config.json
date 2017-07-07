@@ -15,5 +15,9 @@
         "exclude": []
     },
 
-    "reserved": {}
+    "reserved": {
+        "T_INTEGER" : {
+            "0" : "T_ZERO"
+        }
+    }
 }
