@@ -1,26 +1,19 @@
 EasyCC C++
 ============
 
-### Project UML
-* <a href="https://drive.google.com/file/d/0B8fWEFscW3Z4SzlpMnpETkdPOGs/view">UML Draw.io</a>
+EasyCC C++ (Easy Compiler Compiler) is a library allowing users to easily develop their own programming language. The project does not require wrting any line of code for the lexical and syntax analysis phases. The configurations of the latters are provided as JSON files to the library. Adding the logic for a programming language is done by simply registering semantic action handlers in order to gradually build the structure of the input and eventually generating output code.
 
-### Lexical Analysis
-* <a href="https://github.com/amirbawab/EasyCC-CPP/tree/master/src/lexical">Documentation</a>
+To learn more about how it works, read the documentation and/or check the step by step tutorial below.
 
-### Syntax Analysis
-* <a href="https://github.com/amirbawab/EasyCC-CPP/tree/master/src/syntax">Documentation</a>
-
-### Semantic Analysis
-```
-typedef std::vector<std::shared_ptr<ecc::LexicalToken>> Tokens;
-easyCC.registerSemanticAction("#MyAction#",[&](int phase, Tokens &lexicalVector, int index, bool stable){
-    std::cout << "Action `MyAction` handled!" << std::endl;
-});
-```
 ### Difference between EasyCCDev and EasyCCPro
 Both libraries use the same Lexical and Syntax algorithms, and switching from one library to another requires minor changes. 
 * EasyCCDev (EasyCC development mode) takes the JSON files as arguments in the final executable. This is useful during the development phase because the program does not need to be recompiled to apply changes in the JSON files.
 * EasyCCPro (EasyCC production mode) takes the JSON files as arguments to the CMake. The compile process for your program will be composed of two steps. First is embedding the JSON files into the executable. Second is compiling your program with the generated files.
+
+### Links
+* Project UML: <a href="https://drive.google.com/file/d/0B8fWEFscW3Z4SzlpMnpETkdPOGs/view">UML Draw.io</a>
+* Lexical Analysis: <a href="src/lexical">Documentation</a>
+* Syntax Analysis: <a href="src/syntax">Documentation</a>
 
 ### Learn by examples
 #### Calculator programming language
