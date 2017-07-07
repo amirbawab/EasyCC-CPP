@@ -26,6 +26,6 @@ before_script:
   - cd boost_1_63_0/; ./bootstrap.sh --prefix=/usr/local | tail -n50
   - sudo ./b2 install
   - cd $WORKSPACE; cmake .; make
-  - cd $WORKSPACE/examples/calculator/; cmake ..; make
+  - cd $WORKSPACE/examples/calculator/; cmake .; make
 
 script: cd $WORKSPACE/bin; ./easycctests
