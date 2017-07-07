@@ -49,3 +49,11 @@ Now that error lexical tokens are recognized by the library, the compiler needs 
 
 Lexical error message: <a href="resources/src/calculator/lexical_errors.json">lexical_config.json</a>  
 JSON description: <a href="src/lexical#error-messages">Doc</a>
+
+#### Step 4: Create a "syntax_grammar.json" file
+Probably the most important part of this library is defining the programming language grammar. Usually a grammar file is updated continuously during the development to adjust the syntax or inject semantic actions, explained later in this tutorial. The grammar required by this library is composed of exactly three types of tokens. First, non-terminal tokens are words that can be replaced by a production defined in the grammar. Second, terminal tokens are words labeled after the lexical tokens names or by the reserved words specified previously in the lexical configuration (step 2). Third, semantic actions are special tokens that do not have any role in the syntax analysis phase, but are crucial for the semantics analysis phase. The syntax for each type of token is explained in more details in the documentation.
+
+The grammar created for this tutorial is a good example of how tokens types are used. Starting from the initial production, the calculator grammar forces the users to format their inputs as follow: `integer symbol [integer symbol]* integer semicolon`. Notice that the calculator language allow comments, but none of the grammar productions have a comment token (link to the grammar is provided below). As explained in the lexical configuration step, comments are thrown in the ignored lexical tokens box, meaning that they will not be passed to the syntax analyzer. A grammar imposes a language format, but it is common to make syntactical mistakes during a software development. For that reason, the library will report errors when the input does not align with the grammar. In the next step, a new file will be created for customizing messages for each syntax error.
+
+Syntax grammar: <a href="resources/src/calculator/syntax_grammar.json">syntax_grammar.json</a>
+JSON description: <a href="src/syntax#grammar">Doc</a>
