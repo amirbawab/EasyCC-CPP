@@ -59,14 +59,14 @@ Syntax grammar: <a href="resources/src/calculator/syntax_grammar.json">syntax_gr
 JSON description: <a href="src/syntax#grammar">Doc</a>
 
 #### Step 5: Create a "syntax_errors.json" file
-Syntax error messages file is structured similarly as the lexical error messages file. Each error entry is composed of a nonterminal representing the potential productions, a terminal marking what was actually read from the input, and a message displayed on the console when this error occurs. 
+Syntax error messages file is structured similarly as the lexical error messages file. The only difference is each error entry is composed of a nonterminal representing the potential productions, a terminal marking what was actually read from the input, and a message displayed on the console when this error occurs. 
 
 The combination of the nonterminal and terminal is important to specify which error message to display because different error cases require different messages. For instance, consider a programming language allowing a class declaration: `class MyClass {}`. Also consider that the grammar has this production: `"CLASS_DECLARATION": ["CLASS CLASS_NAME OPEN_CURLY CLASS_BODY CLOSE_CURLY"]`. An input file has been submitted to the compiler containing the following class declaration: `class {}`. Clearly, the developer forgot to put the class name, and therefore an informative message needs to be displayed to correct this error. Here is an example on how to create an entry for that particular case: 
-* First error entry:
-  * nonterminal `CLASS_NAME`
-  * terminal `open_curly_bracket`. Note that the state machine should generate a lexical token named `open_curly_bracket` when the symbol `{` is read.
-  * message `Missing class name before the curly bracket ...`.
-The above entry can be also read: If a `CLASS_NAME` is expected but read an `open_curly_bracket` instead, then display `Missing class name before the curly bracket ...`.
+* nonterminal `CLASS_NAME`
+* terminal `open_curly_bracket`. Note that the state machine should generate a lexical token named `open_curly_bracket` when the symbol `{` is read.
+* message `Missing class name before the curly bracket ...`.
+
+The above entry can also be read: If a `CLASS_NAME` is expected but read an `open_curly_bracket` instead, then display `Missing class name before the curly bracket ...`.
 
 Because there are many possible error cases, one does not have to list all of them. Instead, the reserved terminal word `:any` can be used to generalize the entry and include all possible terminals (more details in the documentation).In addition to specific error entries, a default message can be displayed if a combination was not found. 
 
