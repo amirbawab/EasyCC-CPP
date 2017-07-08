@@ -1,7 +1,5 @@
 #include <easycc/EasyCCDev.h>
 #include <calculator/Calculator.h>
-#include <iostream>
-#include <getopt.h>
 
 int main(int argc, char *argv[]) {
 
@@ -15,33 +13,8 @@ int main(int argc, char *argv[]) {
     }
 
     // Create calculator
-    Calculator calculator;
+    Calculator calculator(easyccdev);
 
-    // Set calculator easycc
-    calculator.setEasyCC(easyccdev);
-
-    // Initialize semantic action handlers
-    calculator.initHandlers();
-
-    // Set output file
-    calculator.setOutput(easyccdev->getOutputFileName());
-
-    // Configure easycc
-    easyccdev->setParsingPhase(0);
-    easyccdev->setSilentSyntaxErrorMessages(false);
-    easyccdev->setSilentSemanticEvents(false);
-    easyccdev->setOnSyntaxError([&](){
-        easyccdev->setSilentSemanticEvents(true);
-        calculator.error();
-    });
-
-    // Compile all files
-    for(std::string fileName : easyccdev->getInputFilesNames()) {
-        code = easyccdev->compile(fileName);
-        if(code != ecc::EasyCC::OK_CODE) {
-            return code;
-        }
-    }
-
-    return 0;
+    // Compile files
+    return calculator.compile(easyccdev->getInputFilesNames(), easyccdev->getOutputFileName());
 }

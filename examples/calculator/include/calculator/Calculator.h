@@ -9,27 +9,24 @@ typedef std::vector<std::shared_ptr<ecc::LexicalToken>> Tokens;
 
 class Calculator {
 public:
+
+    /**
+     * Initialize members
+     * @param easycc
+     */
+    Calculator(std::shared_ptr<ecc::IEasyCC> easycc) : m_easyCC(easycc){}
+
     /**
      * Initialize calculator semantic anction handlers
      */
     void initHandlers();
 
     /**
-     * Set easycc
-     * @param easycc
+     * Compile files
+     * @param inputFiles
+     * @param outputFile
      */
-    void setEasyCC(std::shared_ptr<ecc::IEasyCC> easycc) {m_easyCC = easycc;}
-
-    /**
-     * Set output file
-     * @param filename
-     */
-    void setOutput(std::string filename);
-
-    /**
-     * Output error message into file
-     */
-    void error();
+    int compile(std::vector<std::string> inputFiles, std::string outputFile);
 private:
 
     // Create stack for computing the expression

@@ -69,33 +69,8 @@ int main(int argc, char *argv[]) {
     std::shared_ptr<ecc::IEasyCC> easyccpro = std::make_shared<ecc::EasyCC>();
 
     // Create calculator
-    Calculator calculator;
+    Calculator calculator(easyccpro);
 
-    // Set calculator easycc
-    calculator.setEasyCC(easyccpro);
-
-    // Initialize semantic action handlers
-    calculator.initHandlers();
-
-    // Set output file
-    calculator.setOutput(outputFile);
-
-    // Configure easycc
-    easyccpro->setParsingPhase(0);
-    easyccpro->setSilentSyntaxErrorMessages(false);
-    easyccpro->setSilentSemanticEvents(false);
-    easyccpro->setOnSyntaxError([&](){
-        easyccpro->setSilentSemanticEvents(true);
-        calculator.error();
-    });
-
-    // Compile all files
-    for(std::string fileName : inputFiles) {
-        int code = easyccpro->compile(fileName);
-        if(code != ecc::EasyCC::OK_CODE) {
-            return code;
-        }
-    }
-
-    return 0;
+    // Compile files
+    return calculator.compile(inputFiles, outputFile);
 }

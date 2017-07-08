@@ -1,12 +1,31 @@
 #include <calculator/Calculator.h>
 
-void Calculator::setOutput(std::string filename) {
-    m_output.open(filename);
-}
+int Calculator::compile(std::vector<std::string> inputFiles, std::string outputFile) {
 
-void Calculator::error() {
-    m_output << "Error evaluating expression" << std::endl;
-    m_output.close();
+    // Initialize semantic action handlers
+    initHandlers();
+
+    // Set output file
+    m_output.open(outputFile);
+
+    // Configure easycc
+    m_easyCC->setParsingPhase(0);
+    m_easyCC->setSilentSyntaxErrorMessages(false);
+    m_easyCC->setSilentSemanticEvents(false);
+    m_easyCC->setOnSyntaxError([&](){
+        m_easyCC->setSilentSemanticEvents(true);
+        m_output << "Error evaluating expression" << std::endl;
+        m_output.close();
+    });
+
+    // Compile all files
+    for(std::string fileName : inputFiles) {
+        int code = m_easyCC->compile(fileName);
+        if(code != ecc::IEasyCC::OK_CODE) {
+            return code;
+        }
+    }
+    return 0;
 }
 
 void Calculator::initHandlers() {
