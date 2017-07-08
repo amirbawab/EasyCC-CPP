@@ -123,13 +123,17 @@ namespace ecc {
         computeFirstSet();
 
         // Print the logs for the first set
-        logFirstSet();
+        if(boost::log::core::get()->get_logging_enabled()) {
+            logFirstSet();
+        }
 
         // Construct the follow set
         computeFollowSet();
 
         // Print the logs for the follow set
-        logFollowSet();
+        if(boost::log::core::get()->get_logging_enabled()) {
+            logFollowSet();
+        }
 
         BOOST_LOG(ecc_logger::get()) << "Checking if the keys for the first set matches "
                     "the keys size for the follow set ...";
