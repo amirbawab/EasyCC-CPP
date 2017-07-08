@@ -51,13 +51,13 @@ void initParams(int argc, char *argv[]) {
 
 int main(int argc, char *argv[]) {
 
+    // Initialize parameters
+    initParams(argc, argv);
+
     // Store input files in a vector
     for(int i = optind; i < argc; ++i) {
         inputFiles.push_back(argv[i]);
     }
-
-    // Initialize parameters
-    initParams(argc, argv);
 
     // Check missing requirements
     if(outputFile.empty() || inputFiles.empty()) {
