@@ -10,7 +10,7 @@ BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(ecc_logger, src::logger_mt)
 namespace ecc {
 
     void IEasyCC::registerSemanticAction(std::string semanticAction, std::function<void
-            (int, std::vector<std::shared_ptr<LexicalToken>>&, int, bool)> semanticActionFunction) {
+            (int, std::vector<std::shared_ptr<LexicalToken>>&, int)> semanticActionFunction) {
         if(m_semanticActionMap.find(semanticAction) == m_semanticActionMap.end()) {
             m_semanticActionMap[semanticAction] = semanticActionFunction;
         } else {
@@ -22,12 +22,12 @@ namespace ecc {
     void IEasyCC::setSemanticAction() {
         m_syntax->setSemanticAction([&](std::string semanticAction, int phase,
                                         std::vector<std::shared_ptr<LexicalToken>> &lexicalTokensParam,
-                                        int index, bool stable) -> void {
+                                        int index) -> void {
             if(m_semanticActionMap.find(semanticAction) == m_semanticActionMap.end()) {
                 BOOST_LOG(ecc_logger::get()) << "Error: Cannot find a handler for the semantic action: " << semanticAction;
             } else {
                 BOOST_LOG(ecc_logger::get()) << "Calling handler for the semantic action: " << semanticAction;
-                m_semanticActionMap[semanticAction](phase, lexicalTokensParam, index, stable);
+                m_semanticActionMap[semanticAction](phase, lexicalTokensParam, index);
             }
         });
     }

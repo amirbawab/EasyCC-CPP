@@ -47,9 +47,6 @@ namespace ecc{
         // Prepare the stack
         std::stack<std::string> parseStack;
 
-        // Keep track if parser is in panic mode
-        bool stable = true;
-
         // Store the current index of the lexical token
         int inputIndex = 0;
 
@@ -80,9 +77,6 @@ namespace ecc{
                     // Start over by scanning new input and processing a new top
                     parseStack.pop();
                     lexicalToken = nextToken(lexicalTokens, inputIndex);
-
-                    // Mark stable
-                    stable = true;
                 } else {
                     throw std::runtime_error(
                             "Failed to process the input: "
@@ -103,7 +97,7 @@ namespace ecc{
                     // the value of inputIndex is 3 which is the original index of B + 2.
                     // Note that if the semantic action is placed at the beginning
                     // of the grammar production, then the input index will be 2 - 1 = -1
-                    this->m_semanticAction(top, m_phase, lexicalTokens, inputIndex-2, stable);
+                    this->m_semanticAction(top, m_phase, lexicalTokens, inputIndex-2);
                 }
 
                 // Remove the action from the stack
@@ -128,9 +122,6 @@ namespace ecc{
                         }
                     }
 
-                    // Mark stable
-                    stable = true;
-
                 } else { // Error found
 
                     // Generate error message in the first parsing phase
@@ -149,9 +140,6 @@ namespace ecc{
                     } else {
                         lexicalToken = nextToken(lexicalTokens, inputIndex);
                     }
-
-                    // Mark unstable
-                    stable = false;
 
                     // Broadcast error
                     if(m_onSyntaxError) {

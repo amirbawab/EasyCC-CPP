@@ -17,7 +17,7 @@ namespace ecc{
     private:
         std::map<std::string,std::vector<std::shared_ptr<LexicalToken>>> m_lexicalTokensMap;
         std::map<std::string, std::function<void
-                (int, std::vector<std::shared_ptr<LexicalToken>>&, int, bool)>> m_semanticActionMap;
+                (int, std::vector<std::shared_ptr<LexicalToken>>&, int)>> m_semanticActionMap;
     public:
         // Return codes
         static const int OK_CODE = 0;
@@ -27,7 +27,7 @@ namespace ecc{
 
         virtual int compile(std::string fileName);
         virtual void registerSemanticAction(std::string semanticAction, std::function<void
-            (int, std::vector<std::shared_ptr<LexicalToken>>&, int, bool)> semanticActionFunction);
+            (int, std::vector<std::shared_ptr<LexicalToken>>&, int)> semanticActionFunction);
 
         /**
          * Hide syntax error messages
