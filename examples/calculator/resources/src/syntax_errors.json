@@ -1,15 +1,15 @@
 {
-    "default_message": "Error found: ${lexical.value} at line ${lexical.line} and column ${lexical.column}",
+    "default_message": "${filename}: Error found: ${lexical.value} at line ${lexical.line} and column ${lexical.column}",
     "error_messages": [
         {
             "non_terminal": ":any",
             "terminal": "T_INTEGER",
-            "message": "Expecting a symbol before '${lexical.value}' at line ${lexical.line} and column ${lexical.column}"
+            "message": "${filename}: Expecting a symbol before '${lexical.value}' at line ${lexical.line} and column ${lexical.column}"
         },
         {
             "non_terminal": ":any",
             "terminal": "T_ZERO",
-            "message": "Expecting a symbol before '0' at line ${lexical.line} and column ${lexical.column}"
+            "message": "${filename}: Expecting a symbol before '0' at line ${lexical.line} and column ${lexical.column}"
         }
     ]
 }
