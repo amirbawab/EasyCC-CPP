@@ -1,5 +1,4 @@
 #include <easycc/Syntax.h>
-
 #include <boost/log/sources/logger.hpp>
 #include <boost/log/sources/record_ostream.hpp>
 #include <boost/log/sources/global_logger_storage.hpp>
@@ -7,8 +6,8 @@
 #include <stack>
 #include <regex>
 #include <boost/algorithm/string.hpp>
-
 #include <iostream>
+#include <boost/filesystem/path.hpp>
 
 namespace ecc{
 
@@ -136,7 +135,7 @@ namespace ecc{
 
                     // Generate error message in the first parsing phase
                     if(!m_silentSyntaxErrorMessages) {
-                        std::cerr << fileName << ": " << generateErrorMessage(top, lexicalTokens, inputIndex-1)
+                        std::cerr << generateErrorMessage(fileName, top, lexicalTokens, inputIndex-1)
                                   << std::endl;
                     }
                     success = false;
@@ -165,7 +164,7 @@ namespace ecc{
         if(lexicalToken->getName() != Grammar::END_OF_STACK) {
             // Generate error message in the first parsing phase
             if(!m_silentSyntaxErrorMessages) {
-                std::cerr << generateErrorMessage(parseStack.top(), lexicalTokens, inputIndex-1) << std::endl;
+                std::cerr << generateErrorMessage(fileName, parseStack.top(), lexicalTokens, inputIndex-1) << std::endl;
             }
             success = false;
         }
@@ -175,7 +174,7 @@ namespace ecc{
         return success;
     }
 
-    std::string Syntax::generateErrorMessage(std::string nonTerminal,
+    std::string Syntax::generateErrorMessage(std::string fileName, std::string nonTerminal,
                                              std::vector<std::shared_ptr<LexicalToken>> &lexicalTokens,
                                              int index) {
         // Load error message
@@ -222,6 +221,7 @@ namespace ecc{
             }
 
             boost::replace_all(message, matchValue, newValue);
+            boost::replace_all(message, "${filename}", boost::filesystem::path(fileName).filename().c_str());
             messageCopy = match.suffix();
         }
 

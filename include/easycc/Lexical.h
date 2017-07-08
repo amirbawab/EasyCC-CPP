@@ -57,7 +57,7 @@ namespace ecc {
          * @param pointer to the lexical token
          * @return error message
          */
-        std::string generateErrorMessage(std::shared_ptr<LexicalToken> lexicalToken);
+        std::string generateErrorMessage(std::string fileName, std::shared_ptr<LexicalToken> lexicalToken);
     };
 }
 

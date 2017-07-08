@@ -84,7 +84,7 @@ namespace ecc{
          * @param index Index of the current lexical token
          * @return error message
          */
-        std::string generateErrorMessage(std::string nonTerminal,
+        std::string generateErrorMessage(std::string fileName, std::string nonTerminal,
                                          std::vector<std::shared_ptr<LexicalToken>> &lexicalToken,
                                          int index);
     };

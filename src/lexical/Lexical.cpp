@@ -3,10 +3,10 @@
 #include <sstream>
 #include <iostream>
 #include <boost/algorithm/string.hpp>
-
 #include <boost/log/sources/logger.hpp>
 #include <boost/log/sources/record_ostream.hpp>
 #include <boost/log/sources/global_logger_storage.hpp>
+#include <boost/filesystem/path.hpp>
 
 namespace logging = boost::log;
 namespace src = boost::log::sources;
@@ -85,7 +85,7 @@ namespace ecc {
 
                         // Check if the token is an error token
                         if(token->getType() == LexicalToken::Type::ERROR_TOKEN) {
-                            std::cerr << fileName << ": " << generateErrorMessage(token) << std::endl;
+                            std::cerr << generateErrorMessage(fileName, token) << std::endl;
                             success = false;
                         }
                     }
@@ -145,7 +145,7 @@ namespace ecc {
 
                 // Check if the token is an error token
                 if(token->getType() == LexicalToken::Type::ERROR_TOKEN) {
-                    std::cerr << generateErrorMessage(token) << std::endl;
+                    std::cerr << generateErrorMessage(fileName, token) << std::endl;
                     success = false;
                 }
             }
@@ -189,11 +189,12 @@ namespace ecc {
         return nullptr;
     }
 
-    std::string Lexical::generateErrorMessage(std::shared_ptr<LexicalToken> lexicalToken) {
+    std::string Lexical::generateErrorMessage(std::string fileName, std::shared_ptr<LexicalToken> lexicalToken) {
         std::string message = this->m_messages->getErrorMessage(lexicalToken->getName());
         boost::replace_all(message, "${value}", lexicalToken->getValue());
         boost::replace_all(message, "${line}", std::to_string(lexicalToken->getLine()));
         boost::replace_all(message, "${column}", std::to_string(lexicalToken->getColumn()));
+        boost::replace_all(message, "${filename}", boost::filesystem::path(fileName).filename().c_str());
         return message;
     }
 }
