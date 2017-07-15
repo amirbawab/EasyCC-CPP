@@ -36,15 +36,14 @@ else()
 endif()
 
 # Add boost
-set(Boost_USE_STATIC_LIBS ON)
-set(Boost_USE_MULTITHREADED ON)
-set(Boost_USE_STATIC_RUNTIME OFF)
+add_definitions(-DBOOST_LOG_DYN_LINK)
 find_package(Boost 1.63.0 COMPONENTS log log_setup thread date_time filesystem system REQUIRED)
 if(NOT Boost_FOUND)
     message(FATAL_ERROR "Boost not found!")
 endif()
-include_directories(${Boost_INCLUDE_DIRS})
-link_libraries(${Boost_LIBRARIES} -lpthread)
+
+# Link libraries
+link_libraries(${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
 
 # Compile with -std=c++11 flag
 add_compile_options(-std=c++11)
