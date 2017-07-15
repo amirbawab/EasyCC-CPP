@@ -44,7 +44,7 @@ if(NOT Boost_FOUND)
     message(FATAL_ERROR "Boost not found!")
 endif()
 include_directories(${Boost_INCLUDE_DIRS})
-link_libraries(${Boost_LIBRARIES})
+link_libraries(${Boost_LIBRARIES} -lpthread)
 
 # Compile with -std=c++11 flag
 add_compile_options(-std=c++11)
