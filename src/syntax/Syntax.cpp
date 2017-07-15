@@ -42,6 +42,7 @@ namespace ecc{
 
     bool Syntax::parseTokens(std::string fileName, std::vector<std::shared_ptr<LexicalToken>> &lexicalTokens) {
 
+        BOOST_LOG(ecc_logger::get()) << "Analyzing syntax in file: " << fileName;
         BOOST_LOG(ecc_logger::get()) << "Started parsing the lexical tokens [PHASE " << m_phase << "]";
 
         // Prepare the stack
@@ -159,6 +160,7 @@ namespace ecc{
 
         BOOST_LOG(ecc_logger::get()) << "Finished parsing the lexical tokens [PHASE " << m_phase << "]";
         BOOST_LOG(ecc_logger::get()) << (success ? "SUCCESS" : "FAILURE");
+        BOOST_LOG(ecc_logger::get()) << "----------";
         return success;
     }
 
