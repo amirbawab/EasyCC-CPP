@@ -100,4 +100,4 @@ m_easyCC->registerSemanticAction("#endClass#",[&](int phase, Tokens &lexicalVect
     delete newClass;
 });
 ```
-For further examples about semantic action handlers, check the <a href="examples/calculator">calculator example</a>
+For further examples about semantic action handlers, check the <a href="examples/calculator">calculator example</a> (Simple) and the <a href="https://github.com/amirbawab/BashClass">BashClass project</a> (Advanced)
