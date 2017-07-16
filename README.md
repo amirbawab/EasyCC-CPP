@@ -74,3 +74,30 @@ In this tutorial a default message and specific error entries has been used to p
 
 Syntax error messages: <a href="resources/src/calculator/syntax_errors.json">syntax_errors.json</a>  
 JSON description: <a href="src/lexical#error-messages">Doc</a>
+
+#### Step 6: Register semantic actions
+Now that all the configuration files are created, it's time to add the logic for the language by registering the semantic actions. For instance, consider an example used previously which allow creating classes. The modified grammar would look as follow:
+```
+{...
+"CLASS_DEC" : ["#startClass# CLASS CLASS_NAME #className# OPEN_CURLY CLASS_BODY CLOSE_CURLY #endClass#"],
+...}
+```
+The tokens between `#` symbols are semantic actions marking breakpoints for the grammar parser (in the syntax analysis phase). Here is an example on how to handle the semantic actions:
+```
+// Create a new class
+m_easyCC->registerSemanticAction("#startClass#",[&](int phase, Tokens &lexicalVector, int index){
+    newClass = new MyClass();
+});
+
+// Set the class name. lexicalVector[index] refers to the lexical token
+// located to the left of the semantic action in the grammar
+m_easyCC->registerSemanticAction("#className#",[&](int phase, Tokens &lexicalVector, int index){
+    newClass->setName(lexicalVector[index]);
+});
+
+// Delete the created class when done
+m_easyCC->registerSemanticAction("#endClass#",[&](int phase, Tokens &lexicalVector, int index){
+    delete newClass;
+});
+```
+For further examples about semantic action handlers, check the <a href="examples/calculator">calculator example</a>
