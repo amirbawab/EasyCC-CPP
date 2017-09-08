@@ -1,0 +1,4 @@
+site_name: 'EasyCC C++'
+repo_url: 'https://github.com/amirbawab/EasyCC-CPP'
+theme: 'readthedocs'
+site_description: 'EasyCC C++ documentation'
