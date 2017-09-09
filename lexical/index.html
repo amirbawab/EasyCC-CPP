@@ -145,16 +145,19 @@ Edges allow input characters to traverse the graph by assigning a letter label t
         <th>Key</th>
         <th>Description</th>
         <th>Value</th>
+        <th>Required</th>
     </tr>
     <tr>
         <td>states</td>
         <td>List of states/vertices of the state machine</td>
         <td>Array of <a href="#state-object">state objects</a></td>
+        <td>Yes</td>
     </tr>
     <tr>
         <td>transitions</td>
         <td>List of transitions/edges of the state machine</td>
         <td>Array of <a href="#transition-object">transition objects</a></td>
+        <td>Yes</td>
     </tr>
 </table></p>
 <p><b id="state-object">State object table</b>
@@ -192,7 +195,7 @@ Edges allow input characters to traverse the graph by assigning a letter label t
         <td>token</td>
         <td>Name of the token created when landing on a final state</td>
         <td>string (e.g. <code>T_SEMICOLON</code>)</td>
-        <td>Cannot be a <a href="#reserved-lexical-keyword">reserved lexical keyword</a></td>
+        <td>Cannot be a <a href="syntax/#reserved-syntax-keyword">reserved syntax keyword</a></td>
         <td>Only for final states</td>
     </tr>
     <tr>
@@ -207,18 +210,6 @@ Edges allow input characters to traverse the graph by assigning a letter label t
     <tr>
         <td>true</td>
         <td>Backtrack</td>
-    </tr>
-</table></p>
-<p><b id="reserved-lexical-keyword">Reserved lexical keyword table</b>
-<table>
-    <tr>
-        <th>Lexical Keyword</th>
-    </tr>
-    <tr>
-        <td><code>:any</code></td>
-    </tr>
-    <tr>
-        <td><code>$</code></td>
     </tr>
 </table></p>
 <p><b id="transition-object">Transition object table </b>
@@ -309,12 +300,14 @@ Edges allow input characters to traverse the graph by assigning a letter label t
         <th>Key description</th>
         <th>Value</th>
         <th>Value description</th>
+        <th>Required</th>
     </tr>
     <tr>
         <td rowspan="3">newline</td>
         <td rowspan="3">Line separator</td>
         <td>CR</td>
         <td><code>\r</code></td>
+        <td rowspan="3">Yes</td>
     </tr>
     <tr>
         <td>LF</td>
@@ -329,12 +322,14 @@ Edges allow input characters to traverse the graph by assigning a letter label t
         <td>List of lexical tokens to be ignored (e.g. code comments)</td>
         <td><a href="#ignore-object">Ignore object</a></td>
         <td>Check table</td>
+        <td>Yes</td>
     </tr>
     <tr>
         <td>error</td>
         <td>List of lexical tokens resulting in lexical error</td>
         <td><a href="#error-object">Error object</a></td>
         <td>Check table</td>
+        <td>Yes</td>
     </tr>
     <tr>
         <td>reserved</td>
@@ -342,6 +337,7 @@ Edges allow input characters to traverse the graph by assigning a letter label t
         keyword and the state machine marked it as a more general name.</td>
         <td><a href="#reserved-object">Reserved object</a></td>
         <td>Check table</td>
+        <td>Yes</td>
     </tr>
 </table></p>
 <p><b id="ignore-object">Ignore object table</b>
@@ -446,6 +442,7 @@ Edges allow input characters to traverse the graph by assigning a letter label t
         <th>Key description</th>
         <th>Value</th>
         <th>Value description</th>
+        <th>Required</th>
     </tr>
     <tr>
         <td>default_message</td>
@@ -453,11 +450,13 @@ Edges allow input characters to traverse the graph by assigning a letter label t
         <td>string</td>
         <td>General error message. The string can contain <a href="#optional-placeholders">optional 
         placeholders</a>.</td>
+        <td>Yes</td>
     <tr>
         <td>error_messages</td>
         <td>Specific message for an error token</td>
         <td>Object of <a href="#error-message-object">error message</a></td>
         <td>Check table</td>
+        <td>Yes</td>
     </tr>
 </table></p>
 <p><b id="error-message-object">Error message object table</b>
