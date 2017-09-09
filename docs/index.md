@@ -1,7 +1,8 @@
 # EasyCC C++ [![Build Status](https://travis-ci.org/amirbawab/EasyCC-CPP.svg?branch=master)](https://travis-ci.org/amirbawab/EasyCC-CPP)
+**Version**: 1.1.0
 
 ## Github
-Link: [https://github.com/amirbawab/EasyCC-CPP](https://github.com/amirbawab/EasyCC-CPP)
+Link: [Release 1.1.0](https://github.com/amirbawab/EasyCC-CPP/releases/tag/v1.1.0)
 
 ## About
 EasyCC C++ (Easy Compiler Compiler written in C++) is a library allowing users to easily develop their own programming language. The project does not require wrting any line of code for the lexical and syntax analysis phases. The configurations of the latters are provided as JSON files to the library. Adding the logic for a programming language is done by simply registering semantic action handlers in order to gradually build the structure of the input and eventually generating output code.
