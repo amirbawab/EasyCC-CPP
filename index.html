@@ -54,8 +54,47 @@
             
     <li class="toctree-l2"><a href="#easycc-c">EasyCC C++</a></li>
     
+        <ul>
+        
+            <li><a class="toctree-l3" href="#github">Github</a></li>
+        
+            <li><a class="toctree-l3" href="#about">About</a></li>
+        
+            <li><a class="toctree-l3" href="#usage">Usage</a></li>
+        
+            <li><a class="toctree-l3" href="#difference-between-easyccdev-and-easyccpro-libraries">Difference between easyccdev and easyccpro libraries</a></li>
+        
+            <li><a class="toctree-l3" href="#contribution">Contribution</a></li>
+        
+        </ul>
+    
 
     </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="lexical/">Lexical analysis</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="syntax/">Syntax analysis</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="semantic/">Semantic analysis</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="code/">Code generation</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="example/">Calculator example</a>
 	    </li>
           
         </ul>
@@ -93,11 +132,59 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="easycc-c">EasyCC C++</h1>
+                <h1 id="easycc-c">EasyCC C++ <a href="https://travis-ci.org/amirbawab/EasyCC-CPP"><img alt="Build Status" src="https://travis-ci.org/amirbawab/EasyCC-CPP.svg?branch=master" /></a></h1>
+<h2 id="github">Github</h2>
+<p>Link: <a href="https://github.com/amirbawab/EasyCC-CPP">https://github.com/amirbawab/EasyCC-CPP</a></p>
+<h2 id="about">About</h2>
+<p>EasyCC C++ (Easy Compiler Compiler written in C++) is a library allowing users to easily develop their own programming language. The project does not require wrting any line of code for the lexical and syntax analysis phases. The configurations of the latters are provided as JSON files to the library. Adding the logic for a programming language is done by simply registering semantic action handlers in order to gradually build the structure of the input and eventually generating output code.</p>
+<h2 id="usage">Usage</h2>
+<p><em>Note: The library depends on Boost 1.63.0, make sure it is installed before compiling the project (Instructions can be found in <code>.travis.yml</code> file).</em></p>
+<h3 id="cmakeliststxt">CMakeLists.txt</h3>
+<pre><code>cmake_minimum_required(VERSION 3.5)
+project(myProject)
+set(MYPROJECT_DEV_EXEC &quot;myproject_dev&quot;)
+set(MYPROJECT_PRO_EXEC &quot;myproject_pro&quot;)
+
+add_subdirectory(EasyCC-CPP)
+add_compile_options(-std=c++11)
+
+# Configure directory of output file
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+# Include easycc header files
+include_directories(EasyCC-CPP/include)
+
+# Add the executables
+add_executable(${MYPROJECT_DEV_EXEC} maindev.cpp)
+add_executable(${MYPROJECT_PRO_EXEC} mainpro.cpp)
+
+# Link library to the executable
+target_link_libraries(${MYPROJECT_DEV_EXEC} easyccdev)
+target_link_libraries(${MYPROJECT_PRO_EXEC} easyccpro)
+</code></pre>
+
+<p>For a full <code>CMakeLists.txt</code> example, check <a href="https://github.com/amirbawab/BashClass">BashClass</a> which uses EasyCC C++ library</p>
+<h2 id="difference-between-easyccdev-and-easyccpro-libraries">Difference between <code>easyccdev</code> and <code>easyccpro</code> libraries</h2>
+<p>Both libraries use the same Lexical and Syntax algorithms, and switching from one library to another requires minor changes.</p>
+<ul>
+<li><code>easyccdev</code> (EasyCC development mode) takes the JSON files as arguments in the final executable. This is useful during the development phase because the program does not need to be recompiled to apply changes in the JSON files.</li>
+<li><code>easyccpro</code> (EasyCC production mode) takes the JSON files as arguments to the <code>cmake</code> program. The compile process for your program will be composed of two steps. First is embedding the JSON files into the executable, and  second is compiling your program with the generated files.</li>
+</ul>
+<h2 id="contribution">Contribution</h2>
+<ul>
+<li>Feel free to contribute</li>
+</ul>
               
             </div>
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="lexical/" class="btn btn-neutral float-right" title="Lexical analysis">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+    </div>
   
 
   <hr/>
@@ -124,6 +211,8 @@
       
       
       
+        <span style="margin-left: 15px"><a href="lexical/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
     </span>
 </div>
     <script src="./js/theme.js"></script>
@@ -133,5 +222,5 @@
 
 <!--
 MkDocs version : 0.16.3
-Build Date UTC : 2017-09-08 17:05:27
+Build Date UTC : 2017-09-09 05:50:18
 -->

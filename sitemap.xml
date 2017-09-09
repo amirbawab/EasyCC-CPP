@@ -4,7 +4,47 @@
     
     <url>
      <loc>/</loc>
-     <lastmod>2017-09-08</lastmod>
+     <lastmod>2017-09-09</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/lexical/</loc>
+     <lastmod>2017-09-09</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/syntax/</loc>
+     <lastmod>2017-09-09</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/semantic/</loc>
+     <lastmod>2017-09-09</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/code/</loc>
+     <lastmod>2017-09-09</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+    
+
+    
+    <url>
+     <loc>/example/</loc>
+     <lastmod>2017-09-09</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
