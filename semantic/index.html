@@ -67,6 +67,23 @@
     <a class="current" href="./">Semantic analysis</a>
     <ul class="subnav">
             
+    <li class="toctree-l2"><a href="#semantic-analysis">Semantic analysis</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#description">Description</a></li>
+        
+            <li><a class="toctree-l3" href="#what-is-an-action-token">What is an action token?</a></li>
+        
+            <li><a class="toctree-l3" href="#what-is-an-action-handler">What is an action handler?</a></li>
+        
+            <li><a class="toctree-l3" href="#i-add-action-tokens-to-the-grammar">I - Add action tokens to the grammar</a></li>
+        
+            <li><a class="toctree-l3" href="#ii-create-action-handlers">II - Create action handlers</a></li>
+        
+        </ul>
+    
+
     </ul>
 	    </li>
           
@@ -115,7 +132,63 @@
           <div role="main">
             <div class="section">
               
-                
+                <h1 id="semantic-analysis">Semantic analysis</h1>
+<h2 id="description">Description</h2>
+<p>Semantic anlysis is applied while the syntax analyzer matches the user code with its corresponding grammar
+productions. The semantic analysis phase introduces action tokens, responsible for performing actions at 
+specific locations in the language grammar.</p>
+<h2 id="what-is-an-action-token">What is an action token?</h2>
+<p>An action token is a special token that can be injected at several locations in the language grammar. 
+The added tokens do not affect the syntax of the language, but they inform the syntax analyzer that at this 
+location in the grammar a particular action need to be performed. In its turn, the syntax anlyzer
+passes the action to the semantic analyzer which can map each action to its corresponding handler function.</p>
+<h2 id="what-is-an-action-handler">What is an action handler?</h2>
+<p>An action handler is a function that is executed by the semantic analyzer when the syntax analyzer encounters
+an action token. When an action hander is called, it will be provided with the last lexical token parsed
+by the syntax analyzer, and the phase number which is usally helpful when an input file needs to be scanned
+more than one time.</p>
+<h2 id="i-add-action-tokens-to-the-grammar">I - Add action tokens to the grammar</h2>
+<p>An action token is represented by a string surrounded by a <code>#</code> symbol on both sides. Each action token in
+the grammar reports information about the most recent lexical token that was consumed by the syntax analyzer.</p>
+<p>For example, consider the following grammar:</p>
+<pre><code class="json">{
+    &quot;...&quot;,
+    &quot;CLASS_DEFINITION&quot;  : &quot;CLASS #newClass# CLASS_NAME #setClassName# CLASS_BODY #endClass#&quot;,
+    &quot;CLASS&quot;             : &quot;'class'&quot;,
+    &quot;CLASS_NAME&quot;        : &quot;'identifier'&quot;,
+    &quot;CLASS_BODY&quot;        : &quot;OPEN_CURLY STATEMENT CLOSE_CURLY&quot;,
+    &quot;...&quot;
+}
+</code></pre>
+
+<p>The above grammar demonstrates how action tokens help in constructing a class:</p>
+<ul>
+<li><code>#newClass#</code> action handler can construct a new instance of a class.</li>
+<li><code>#setClassName#</code> action handler can set the name of the created class. <ul>
+<li>Notice that the action token is placed right after the lexical token <code>'identifier'</code> because it
+provides the handler function with the necessary arguments to identify the exact lexical token.</li>
+</ul>
+</li>
+<li><code>#endClass#</code> action handler can delete the created class.</li>
+</ul>
+<h2 id="ii-create-action-handlers">II - Create action handlers</h2>
+<p>An action handler can be registered using the function<code>IEasyCC::registerSemanticAction()</code>. Here is a simple
+code showing how the action tokens in the previous example can be registered.</p>
+<pre><code class="c++">typedef std::vector&lt;std::shared_ptr&lt;ecc::LexicalToken&gt;&gt; Tokens;
+
+easyCC-&gt;registerSemanticAction(&quot;#newClass#&quot;,[&amp;](int phase, Tokens &amp;lexicalVector, int index){
+    newClass = new MyClass();
+});
+
+easyCC-&gt;registerSemanticAction(&quot;#setClassName#&quot;,[&amp;](int phase, Tokens &amp;lexicalVector, int index){
+    newClass-&gt;setName(lexicalVector[index]); // Get the last lexical token parsed
+                                             // by the syntax analyzer
+});
+
+easyCC-&gt;registerSemanticAction(&quot;#endClass#&quot;,[&amp;](int phase, Tokens &amp;lexicalVector, int index){
+    delete newClass;
+});
+</code></pre>
               
             </div>
           </div>

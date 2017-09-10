@@ -77,6 +77,27 @@
     <a class="current" href="./">Calculator example</a>
     <ul class="subnav">
             
+    <li class="toctree-l2"><a href="#calculator-example">Calculator example</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#motivation">Motivation</a></li>
+        
+            <li><a class="toctree-l3" href="#project-setup">Project setup</a></li>
+        
+            <li><a class="toctree-l3" href="#lexical-analysis">Lexical analysis</a></li>
+        
+            <li><a class="toctree-l3" href="#syntax-analysis">Syntax analysis</a></li>
+        
+            <li><a class="toctree-l3" href="#semantic-analysis-code-generation">Semantic analysis &amp; Code generation</a></li>
+        
+            <li><a class="toctree-l3" href="#build-the-calculator-project">Build the Calculator project</a></li>
+        
+            <li><a class="toctree-l3" href="#use-calculator-compiler">Use Calculator compiler</a></li>
+        
+        </ul>
+    
+
     </ul>
 	    </li>
           
@@ -115,7 +136,572 @@
           <div role="main">
             <div class="section">
               
-                
+                <h1 id="calculator-example">Calculator example</h1>
+<h2 id="motivation">Motivation</h2>
+<p>Calculator example is a very simple compiler that takes a list of expressions seperated by <code>;</code> as input, then evalutes each and stores the answers in a file.</p>
+<h3 id="inputtxt">input.txt</h3>
+<pre><code class="bash"># Expr 1
+1 + 2 * 3;
+
+# Expr 2
+(1 + 2) * 3;
+</code></pre>
+
+<h3 id="outputtxt">output.txt</h3>
+<pre><code class="bash">Expression result: 7
+Expression result: 9
+</code></pre>
+
+<h2 id="project-setup">Project setup</h2>
+<p>The calculator project can be found under <code>examples/</code> in the repo root directory. In this example,
+the content of the two main files will not be explained because they only provide the command line
+interface to the executables.</p>
+<h3 id="structure">Structure</h3>
+<pre><code>calculator
+├── CMakeLists.txt
+├── include
+│   └── calculator
+│       └── Calculator.h
+├── resources
+│   └── src
+│       ├── input.txt
+│       ├── lexical_config.json
+│       ├── lexical_errors.json
+│       ├── lexical_state_machine.json
+│       ├── syntax_errors.json
+│       └── syntax_grammar.json
+└── src
+    └── calculator
+        ├── Calculator.cpp
+        ├── maindev.cpp
+        └── mainpro.cpp
+
+</code></pre>
+
+<h3 id="cmakeliststxt">CMakeLists.txt</h3>
+<p>Refer to the <a href="../">home page</a> for the sample <code>CMakeLists.txt</code></p>
+<pre><code class="cmake">cmake_minimum_required(VERSION 3.5)
+project(calculator)
+set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CALCULATOR_DEV_EXEC &quot;calculatordev&quot;)
+set(CALCULATOR_PRO_EXEC &quot;calculator&quot;)
+
+# Add easycc CMakeLists.txt to build it automatically
+add_subdirectory(${PROJECT_SOURCE_DIR}/../../ ${PROJECT_BINARY_DIR}/EasyCC-CPP)
+
+# Compile with -std=c++11 flag
+add_compile_options(-std=c++11)
+
+# Configure directory of output file
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+# Include calculator header files (e.g. same as -I flag)
+include_directories(include)
+include_directories(../../include)
+include_directories(../../rapidjson/include)
+
+# Store cpp files in a variable
+file(GLOB_RECURSE CALC_PROJECT_SOURCE_FILES src/*/*.cpp)
+list(REMOVE_ITEM CALC_PROJECT_SOURCE_FILES
+        &quot;${PROJECT_SOURCE_DIR}/src/calculator/maindev.cpp&quot;
+        &quot;${PROJECT_SOURCE_DIR}/src/calculator/mainpro.cpp&quot;)
+
+# Add the executables
+add_executable(${CALCULATOR_DEV_EXEC} ${CALC_PROJECT_SOURCE_FILES} src/calculator/maindev.cpp)
+add_executable(${CALCULATOR_PRO_EXEC} ${CALC_PROJECT_SOURCE_FILES} src/calculator/mainpro.cpp)
+
+# Link library to the executable
+target_link_libraries(${CALCULATOR_DEV_EXEC} easyccdev)
+target_link_libraries(${CALCULATOR_PRO_EXEC} easyccpro)
+
+</code></pre>
+
+<h2 id="lexical-analysis">Lexical analysis</h2>
+<h3 id="i-lexical_state_machinejson">I - lexical_state_machine.json</h3>
+<p>An image of the state machine is provided <a href="#state-machine-image">below</a>.<br />
+Refer to the <a href="../lexical/#i-state-machine">state machine section</a> for more details.</p>
+<pre><code>{
+    &quot;states&quot;: [
+        {
+            &quot;type&quot;: &quot;INITIAL&quot;,
+            &quot;id&quot;: 0
+        },
+        {
+            &quot;type&quot;: &quot;NORMAL&quot;,
+            &quot;id&quot;: 1
+        },
+        {
+            &quot;type&quot;: &quot;FINAL&quot;,
+            &quot;id&quot;: 2,
+            &quot;token&quot;: &quot;T_INTEGER&quot;,
+            &quot;backtrack&quot;: true
+        },
+        {
+            &quot;type&quot;: &quot;FINAL&quot;,
+            &quot;id&quot;: 3,
+            &quot;token&quot;: &quot;T_PLUS&quot;,
+            &quot;backtrack&quot;: false
+        },
+        {
+            &quot;type&quot;: &quot;FINAL&quot;,
+            &quot;id&quot;: 4,
+            &quot;token&quot;: &quot;T_MINUS&quot;,
+            &quot;backtrack&quot;: false
+        },
+        {
+            &quot;type&quot;: &quot;FINAL&quot;,
+            &quot;id&quot;: 5,
+            &quot;token&quot;: &quot;T_MULTIPLY&quot;,
+            &quot;backtrack&quot;: false
+        },
+        {
+            &quot;type&quot;: &quot;FINAL&quot;,
+            &quot;id&quot;: 6,
+            &quot;token&quot;: &quot;T_DIVIDE&quot;,
+            &quot;backtrack&quot;: false
+        },
+        {
+            &quot;type&quot;: &quot;FINAL&quot;,
+            &quot;id&quot;: 7,
+            &quot;token&quot;: &quot;T_SEMICOLON&quot;,
+            &quot;backtrack&quot;: false
+        },
+        {
+            &quot;type&quot;: &quot;FINAL&quot;,
+            &quot;id&quot;: 8,
+            &quot;token&quot;: &quot;T_INVALID_CHAR&quot;,
+            &quot;backtrack&quot;: false
+        },
+        {
+            &quot;type&quot;: &quot;FINAL&quot;,
+            &quot;id&quot;: 9,
+            &quot;token&quot;: &quot;T_INTEGER&quot;,
+            &quot;backtrack&quot;: false
+        },
+        {
+            &quot;type&quot;: &quot;FINAL&quot;,
+            &quot;id&quot;: 10,
+            &quot;token&quot;: &quot;T_OPEN_PAR&quot;,
+            &quot;backtrack&quot;: false
+        },
+        {
+            &quot;type&quot;: &quot;FINAL&quot;,
+            &quot;id&quot;: 11,
+            &quot;token&quot;: &quot;T_CLOSE_PAR&quot;,
+            &quot;backtrack&quot;: false
+        },
+        {
+            &quot;type&quot;: &quot;NORMAL&quot;,
+            &quot;id&quot;: 12
+        },
+        {
+            &quot;type&quot;: &quot;FINAL&quot;,
+            &quot;id&quot;: 13,
+            &quot;token&quot;: &quot;T_COMMENT&quot;,
+            &quot;backtrack&quot;: true
+        }
+    ],
+    &quot;transitions&quot;: [
+        {
+            &quot;from&quot;: 0,
+            &quot;to&quot;: 0,
+            &quot;chars&quot;: [&quot;SPACE&quot;,&quot;RETURN&quot;,&quot;TAB&quot;,&quot;NEW_LINE&quot;,&quot;EOF&quot;]
+        },
+        {
+            &quot;from&quot;: 0,
+            &quot;to&quot;: 1,
+            &quot;chars&quot;: [&quot;POSITIVE&quot;]
+        },
+        {
+            &quot;from&quot;: 1,
+            &quot;to&quot;: 1,
+            &quot;chars&quot;: [&quot;POSITIVE&quot;,&quot;0&quot;]
+        },
+        {
+            &quot;from&quot;: 1,
+            &quot;to&quot;: 2,
+            &quot;chars&quot;: [&quot;OTHER&quot;]
+        },
+        {
+            &quot;from&quot;: 0,
+            &quot;to&quot;: 3,
+            &quot;chars&quot;: [&quot;+&quot;]
+        },
+        {
+            &quot;from&quot;: 0,
+            &quot;to&quot;: 4,
+            &quot;chars&quot;: [&quot;-&quot;]
+        },
+        {
+            &quot;from&quot;: 0,
+            &quot;to&quot;: 5,
+            &quot;chars&quot;: [&quot;*&quot;]
+        },
+        {
+            &quot;from&quot;: 0,
+            &quot;to&quot;: 6,
+            &quot;chars&quot;: [&quot;/&quot;]
+        },
+        {
+            &quot;from&quot;: 0,
+            &quot;to&quot;: 7,
+            &quot;chars&quot;: [&quot;;&quot;]
+        },
+        {
+            &quot;from&quot;: 0,
+            &quot;to&quot;: 8,
+            &quot;chars&quot;: [&quot;OTHER&quot;]
+        },
+        {
+            &quot;from&quot;: 0,
+            &quot;to&quot;: 9,
+            &quot;chars&quot;: [&quot;0&quot;]
+        },
+        {
+            &quot;from&quot;: 0,
+            &quot;to&quot;: 10,
+            &quot;chars&quot;: [&quot;(&quot;]
+        },
+        {
+            &quot;from&quot;: 0,
+            &quot;to&quot;: 11,
+            &quot;chars&quot;: [&quot;)&quot;]
+        },
+        {
+            &quot;from&quot;: 0,
+            &quot;to&quot;: 12,
+            &quot;chars&quot;: [&quot;#&quot;]
+        },
+        {
+            &quot;from&quot;: 12,
+            &quot;to&quot;: 12,
+            &quot;chars&quot;: [&quot;OTHER&quot;]
+        },
+        {
+            &quot;from&quot;: 12,
+            &quot;to&quot;: 13,
+            &quot;chars&quot;: [&quot;NEW_LINE&quot;,&quot;EOF&quot;]
+        }
+    ]
+}
+</code></pre>
+
+<p>The graph below was generated by the tool described in the 
+<a href="../lexical/#gui-to-json">lexical analysis page</a>.
+<img id="state-machine-image" align="center" width="300" src="../state-machine.png" alt="state machine"></p>
+<h3 id="ii-lexical_configjson">II - lexical_config.json</h3>
+<ul>
+<li>The lexical tokens <code>T_COMMENT</code> are ignored, so they will not be passed to the syntax analyzer.</li>
+<li>The lexical tokens <code>T_INVALID_CHAR</code> are marked as error tokens and will report 
+<a href="#iii-lexical_errorsjson">error messages</a> once created.</li>
+<li>The lexical tokens <code>T_INTEGER</code> which have the value <code>0</code> will be renamed to <code>T_ZERO</code>.</li>
+</ul>
+<p>Refer to the <a href="../lexical/#ii-lexical-configuration">lexical configuration section</a> for more details.</p>
+<pre><code class="json">{
+    &quot;newline&quot;: &quot;LF&quot;,
+
+    &quot;ignore&quot;: {
+        &quot;prefix&quot;: &quot;&quot;,
+        &quot;suffix&quot;: &quot;&quot;,
+        &quot;include&quot;: [&quot;T_COMMENT&quot;],
+        &quot;exclude&quot;: []
+    },
+
+    &quot;error&quot;: {
+        &quot;prefix&quot;: &quot;T_INVALID_CHAR&quot;,
+        &quot;suffix&quot;: &quot;&quot;,
+        &quot;include&quot;: [],
+        &quot;exclude&quot;: []
+    },
+
+    &quot;reserved&quot;: {
+        &quot;T_INTEGER&quot; : {
+            &quot;0&quot; : &quot;T_ZERO&quot;
+        }
+    }
+}
+</code></pre>
+
+<h3 id="iii-lexical_errorsjson">III - lexical_errors.json</h3>
+<ul>
+<li>Default message is printed if no message was assigned to an error token (In this case, default message is
+never printed).</li>
+<li><code>T_INVALID_CHAR</code> will print its assigned message once created.</li>
+<li>Placeholders are replaced with their corresponding values. Check the full list of 
+<a href="../lexical/#optional-placeholders">lexical error message placeholders</a>.</li>
+</ul>
+<p>Refer to the <a href="../lexical/#iii-lexical-error-messages">lexical error message section</a> for 
+more details.</p>
+<pre><code>{
+    &quot;default_message&quot;: &quot;${filename}: Error found '${value}' at line ${line} and column ${column}&quot;,
+    &quot;error_messages&quot;: {
+        &quot;T_INVALID_CHAR&quot; : &quot;${filename}: Invalid character '${value}' found at line ${line} and column ${column}&quot;
+    }
+}
+</code></pre>
+
+<h2 id="syntax-analysis">Syntax analysis</h2>
+<h3 id="i-syntax_grammarjson">I - syntax_grammar.json</h3>
+<ul>
+<li>The grammar takes care of the operator precedence.</li>
+<li>Notice the 4 different types of items in the grammar:<ul>
+<li>Terminal</li>
+<li>Non-terminal</li>
+<li>Epsilon</li>
+<li>Action token</li>
+</ul>
+</li>
+</ul>
+<p>Refer to the <a href="../syntax/#i-grammar">grammar section</a> for more details.</p>
+<pre><code>{
+    &quot;S&quot;             : [&quot;A T_SEMICOLON #print# S #end#&quot;,&quot;EPSILON&quot;],
+    &quot;A&quot;             : [&quot;C B&quot;],
+    &quot;B&quot;             : [&quot;EPSILON&quot;,&quot;T_PLUS C #plus# B&quot;,&quot;T_MINUS C #minus# B&quot;],
+    &quot;C&quot;             : [&quot;E D&quot;],
+    &quot;D&quot;             : [&quot;EPSILON&quot;,&quot;T_MULTIPLY E #multiply# D&quot;,&quot;T_DIVIDE #divide# E D&quot;],
+    &quot;E&quot;             : [&quot;T_OPEN_PAR A T_CLOSE_PAR&quot;,&quot;NUMBER #push#&quot;],
+    &quot;NUMBER&quot;        : [&quot;'T_INTEGER'&quot;,&quot;'T_ZERO'&quot;],
+    &quot;T_PLUS&quot;        : [&quot;'T_PLUS'&quot;],
+    &quot;T_MINUS&quot;       : [&quot;'T_MINUS'&quot;],
+    &quot;T_MULTIPLY&quot;    : [&quot;'T_MULTIPLY'&quot;],
+    &quot;T_DIVIDE&quot;      : [&quot;'T_DIVIDE'&quot;],
+    &quot;T_OPEN_PAR&quot;    : [&quot;'T_OPEN_PAR'&quot;],
+    &quot;T_CLOSE_PAR&quot;   : [&quot;'T_CLOSE_PAR'&quot;],
+    &quot;T_SEMICOLON&quot;   : [&quot;'T_SEMICOLON'&quot;]
+}
+</code></pre>
+
+<h3 id="ii-syntax_errorsjson">II - syntax_errors.json</h3>
+<ul>
+<li>Default message is printed if the syntax analyzer is in panic mode and did not find an error message
+associated to the situation.</li>
+<li>If the syntax analyzer was expecting anything <code>:any</code> but a <code>T_INTEGER</code>, then it will print the
+corresponding error message.</li>
+<li>Similarly, if the syntax was expecting anything <code>:any</code> but a <code>T_ZERO</code>, then it will print the 
+corresponding error message.</li>
+<li>Placeholders are replaced with their corresponding values. Check the full list of 
+<a href="../syntax/#optional-placeholders">syntax error message placeholders</a>.</li>
+<li>For the list of special values for <code>non_terminal</code> and <code>terminal</code> keys, check the table in the 
+<a href="../syntax/#error-message-object">syntax error messages section</a>.</li>
+</ul>
+<p>Refer to the <a href="../syntax/#ii-syntax-error-messages">syntax error messages section</a> for more 
+details.</p>
+<pre><code>{
+    &quot;default_message&quot;: &quot;${filename}: Error found: ${lexical.value} at line ${lexical.line} and column ${lexical.column}&quot;,
+    &quot;error_messages&quot;: [
+        {
+            &quot;non_terminal&quot;: &quot;:any&quot;,
+            &quot;terminal&quot;: &quot;T_INTEGER&quot;,
+            &quot;message&quot;: &quot;${filename}: Expecting a symbol before '${lexical.value}' at line ${lexical.line} and column ${lexical.column}&quot;
+        },
+        {
+            &quot;non_terminal&quot;: &quot;:any&quot;,
+            &quot;terminal&quot;: &quot;T_ZERO&quot;,
+            &quot;message&quot;: &quot;${filename}: Expecting a symbol before '0' at line ${lexical.line} and column ${lexical.column}&quot;
+        }
+    ]
+}
+</code></pre>
+
+<h2 id="semantic-analysis-code-generation">Semantic analysis &amp; Code generation</h2>
+<h3 id="calculatorcpp">Calculator.cpp</h3>
+<h4 id="calculatorcompile">Calculator::compile()</h4>
+<ul>
+<li>Initialize handler (explained <a href="#calculatorinithandlers">below</a>)</li>
+<li>Open output file for code generation.</li>
+<li>Configure EasyCC library.<ul>
+<li><code>setParsingPhase(0)</code>: sets the phase value which is passed as argument to action handlers. 
+For languages that require analyzing the syntax mutliple times, the phase value can be set to a counter
+that increments on every iteration.</li>
+<li><code>setSilentSyntaxErrorMessages(false)</code>: If a language is parsed several times, then only one iteration
+needs to report syntax errors. </li>
+<li><code>setSilentSemanticEvent(false)</code>: If <code>true</code> is passed as argument, then no action handlers will be
+executed.</li>
+<li><code>setOnSyntaxError(function)</code>: Register a function that is executed when a syntax error occurs. In the
+calculator example, if a syntax error occurs the program writes a message to the output file and closes it.</li>
+</ul>
+</li>
+<li>Loop on input files and compile them.</li>
+</ul>
+<pre><code class="c++">int Calculator::compile(std::vector&lt;std::string&gt; inputFiles, std::string outputFile) {
+
+    // Initialize semantic action handlers
+    initHandlers();
+
+    // Set output file
+    m_output.open(outputFile);
+
+    // Configure easycc
+    m_easyCC-&gt;setParsingPhase(0);
+    m_easyCC-&gt;setSilentSyntaxErrorMessages(false);
+    m_easyCC-&gt;setSilentSemanticEvents(false);
+    m_easyCC-&gt;setOnSyntaxError([&amp;](){
+        m_easyCC-&gt;setSilentSemanticEvents(true);
+        m_output &lt;&lt; &quot;Error evaluating expression&quot; &lt;&lt; std::endl;
+        m_output.close();
+    });
+
+    // Compile all files
+    for(std::string fileName : inputFiles) {
+        int code = m_easyCC-&gt;compile(fileName);
+        if(code != ecc::IEasyCC::OK_CODE) {
+            return code;
+        }
+    }
+    return 0;
+}
+</code></pre>
+
+<h4 id="calculatorinithandlers">Calculator::initHandlers()</h4>
+<ul>
+<li>Register an action handler for <code>#push#</code><ul>
+<li>Once a number is parsed, push it to the stack</li>
+</ul>
+</li>
+<li>Register an action handler for <code>#plus#</code><ul>
+<li>Once a <code>+</code> is parsed, pop the last two numbers and push the result to the stack</li>
+</ul>
+</li>
+<li>Register an action handler for <code>#minus#</code><ul>
+<li>Once a <code>-</code> is parsed, pop the last two numbers and push the result to the stack</li>
+</ul>
+</li>
+<li>Register an action handler for <code>#multiply#</code><ul>
+<li>Once a <code>*</code> is parsed, pop the last two numbers and push the result to the stack</li>
+</ul>
+</li>
+<li>Register an action handler for <code>#divide#</code><ul>
+<li>Once a <code>/</code> is parsed, pop the last two numbers and push the result to the stack</li>
+</ul>
+</li>
+<li>Register an action handler for <code>#print#</code><ul>
+<li>Write final result to the file at the end of each expression.</li>
+</ul>
+</li>
+<li>Register an action handler for <code>#end#</code><ul>
+<li>Close the output file at the end of the input file</li>
+</ul>
+</li>
+</ul>
+<pre><code class="c++">void Calculator::initHandlers() {
+    /**
+     * Register 'push' semantic action
+     * Every time an integer is read it will be pushed into the stack
+     */
+    m_easyCC-&gt;registerSemanticAction(&quot;#push#&quot;,[&amp;](int phase, Tokens &amp;lexicalVector, int index){
+        m_operands.push(std::stoi(lexicalVector[index]-&gt;getValue()));
+    });
+
+    /**
+     * Register 'plus' semantic action
+     * Once the two operands are pushed, add them and push the result into the stack
+     */
+    m_easyCC-&gt;registerSemanticAction(&quot;#plus#&quot;,[&amp;](int phase, Tokens &amp;lexicalVector, int index){
+        int popR = m_operands.top();
+        m_operands.pop();
+        int popL = m_operands.top();
+        m_operands.pop();
+        m_operands.push(popL + popR);
+    });
+
+    /**
+     * Register 'minus' semantic action
+     * Once the two operands are pushed, subtract them and push the result into the stack
+     */
+    m_easyCC-&gt;registerSemanticAction(&quot;#minus#&quot;,[&amp;](int phase, Tokens &amp;lexicalVector, int index){
+        int popR = m_operands.top();
+        m_operands.pop();
+        int popL = m_operands.top();
+        m_operands.pop();
+        m_operands.push(popL - popR);
+    });
+
+    /**
+     * Register 'multiply' semantic action
+     * Once the two operands are pushed, multiply them and push the result into the stack
+     */
+    m_easyCC-&gt;registerSemanticAction(&quot;#multiply#&quot;,[&amp;](int phase, Tokens &amp;lexicalVector, int index){
+        int popR = m_operands.top();
+        m_operands.pop();
+        int popL = m_operands.top();
+        m_operands.pop();
+        m_operands.push(popL * popR);
+    });
+
+    /**
+     * Register 'divide' semantic action
+     * Once the two operands are pushed, divide them and push the result into the stack
+     */
+    m_easyCC-&gt;registerSemanticAction(&quot;#divide#&quot;,[&amp;](int phase, Tokens &amp;lexicalVector, int index){
+        int popR = m_operands.top();
+        m_operands.pop();
+        int popL = m_operands.top();
+        m_operands.pop();
+        m_operands.push(popL / popR);
+    });
+
+    /**
+     * Register 'print' semantic action
+     * At the end of the expression, output the result to a file
+     */
+    m_easyCC-&gt;registerSemanticAction(&quot;#print#&quot;,[&amp;](int phase, Tokens &amp;lexicalVector, int index){
+        m_output &lt;&lt; &quot;Expression result: &quot; &lt;&lt; m_operands.top() &lt;&lt; std::endl;
+        m_operands.pop();
+    });
+
+    /**
+     * Register 'end' semantic action
+     * Once the end of file is reached, close the output file
+     */
+    m_easyCC-&gt;registerSemanticAction(&quot;#end#&quot;,[&amp;](int phase, Tokens &amp;lexicalVector, int index){
+        m_output.close();
+    });
+}
+</code></pre>
+
+<h2 id="build-the-calculator-project">Build the Calculator project</h2>
+<h3 id="cmake">cmake</h3>
+<pre><code>cmake . \
+    -DSYNTAX_ERRORS=&quot;resources/src/syntax_errors.json&quot;\
+    -DSYNTAX_GRAMMAR=&quot;resources/src/syntax_grammar.json&quot;\
+    -DLEXICAL_ERRORS=&quot;resources/src/lexical_errors.json&quot;\
+    -DLEXICAL_CONFIG=&quot;resources/src/lexical_config.json&quot;\
+    -DLEXICAL_STATE_MACHINE=&quot;resources/src/lexical_state_machine.json&quot;
+
+</code></pre>
+
+<h3 id="make-calculator-production-mode">make <code>calculator</code> production mode</h3>
+<pre><code># Generate header file
+make generate_files
+
+# Run cmake again (section above)
+# cmake . ...
+
+# Build project
+make calculator
+
+</code></pre>
+
+<h3 id="make-calculator-developer-mode">make <code>calculator</code> developer mode</h3>
+<pre><code>make calculatordev
+</code></pre>
+
+<h2 id="use-calculator-compiler">Use Calculator compiler</h2>
+<h3 id="production-mode">Production mode</h3>
+<pre><code>./bin/calculator resources/src/input.txt -o output.txt
+</code></pre>
+
+<h3 id="developer-mode">Developer mode</h3>
+<pre><code>./bin/calculatordev \
+    -s resources/src/lexical_state_machine.json \
+    -c resources/src/lexical_config.json \
+    -e resources/src/lexical_errors.json \
+    -g resources/src/syntax_grammar.json \
+    -E resources/src/syntax_errors.json \
+    -o /tmp/result.txt \
+    -v \
+    resources/src/input.txt
+</code></pre>
               
             </div>
           </div>

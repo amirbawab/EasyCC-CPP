@@ -290,6 +290,17 @@ Edges allow input characters to traverse the graph by assigning a letter label t
         <td>Any other character. Every non-final state must have a transition on <code>OTHER</code></td>
     </tr>
 </table></p>
+<h3 id="gui-to-json">GUI to JSON</h3>
+<h4 id="introduction">Introduction</h4>
+<p>A state machine can get large and it will become hard to keep track of states and transitions. To reduce the
+complexity of building state machines, use the <code>graph.html</code> tool located under <code>tools/gui/</code> in order to
+build the machine using a graphical user interface and then export it to JSON. </p>
+<p><em>Note: The tool is written in TypeScript and needs to be compiled before using it.</em></p>
+<h4 id="compile-tool">Compile tool</h4>
+<pre><code class="bash">cd tools/gui/ts/
+tsc @compile
+</code></pre>
+
 <h2 id="ii-lexical-configuration">II - Lexical configuration</h2>
 <p>Lexical configuration allow manipulating and tagging generated tokens.</p>
 <h3 id="json-structure_1">JSON structure</h3>
