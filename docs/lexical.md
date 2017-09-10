@@ -165,6 +165,20 @@ Edges allow input characters to traverse the graph by assigning a letter label t
     </tr>
 </table>
 
+### GUI to JSON
+#### Introduction
+A state machine can get large and it will become hard to keep track of states and transitions. To reduce the
+complexity of building state machines, use the `graph.html` tool located under `tools/gui/` in order to
+build the machine using a graphical user interface and then export it to JSON. 
+
+*Note: The tool is written in TypeScript and needs to be compiled before using it.*
+
+#### Compile tool
+```bash
+cd tools/gui/ts/
+tsc @compile
+```
+
 ## II - Lexical configuration
 Lexical configuration allow manipulating and tagging generated tokens.
 
