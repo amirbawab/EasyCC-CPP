@@ -1,4 +1,4 @@
-# EasyCC C++ [![Build Status](https://travis-ci.org/amirbawab/EasyCC-CPP.svg?branch=master)](https://travis-ci.org/amirbawab/EasyCC-CPP)
+# <img src="logo.png" alt="EasyCC-C++ logo" width="200"> [![Build Status](https://travis-ci.org/amirbawab/EasyCC-CPP.svg?branch=master)](https://travis-ci.org/amirbawab/EasyCC-CPP)
 **Version**: 1.1.0
 
 ## Github
