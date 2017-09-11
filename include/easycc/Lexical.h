@@ -4,10 +4,10 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include "Graph.h"
-#include "LexicalConfig.h"
-#include "LexicalToken.h"
-#include "LexicalMessages.h"
+#include <Graph.h>
+#include <easycc/LexicalConfig.h>
+#include <easycc/LexicalToken.h>
+#include <easycc/LexicalMessages.h>
 
 namespace ecc {
 

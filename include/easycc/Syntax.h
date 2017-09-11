@@ -1,9 +1,9 @@
 #ifndef EASYCC_CPP_SYNTAX_H
 #define EASYCC_CPP_SYNTAX_H
 
-#include "Grammar.h"
-#include "LexicalToken.h"
-#include "SyntaxMessages.h"
+#include <Grammar.h>
+#include <LexicalToken.h>
+#include <SyntaxMessages.h>
 #include <string>
 #include <memory>
 #include <functional>
