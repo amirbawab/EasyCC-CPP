@@ -25,7 +25,7 @@ list(REMOVE_ITEM PROJECT_SOURCE_FILES
 
 # Include easycc header files (e.g. same as -I flag)
 include_directories(include)
-include_directories(rapidjson/include)
+include_directories(thirdparty/rapidjson/include)
 include_directories(tools/include)
 
 # Check if generate files exists, if so use them
@@ -56,7 +56,7 @@ add_library(${PROJECT_PRO_LIB} ${PROJECT_SOURCE_FILES} src/easycc/EasyCCPro.cpp)
 
 # Add subdirectory CMakeLists.txt
 add_subdirectory(tools/convert)
-add_subdirectory(googletest)
+add_subdirectory(thirdparty/googletest)
 add_subdirectory(test)
 
 # Explicitely generate header files

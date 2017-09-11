@@ -1,8 +1,8 @@
 [submodule "rapidjson"]
-	path = rapidjson
+	path = thirdparty/rapidjson
 	url = https://github.com/miloyip/rapidjson
 	branch = v1.1.0
 [submodule "googletest"]
-	path = googletest
+	path = thirdparty/googletest
 	url = https://github.com/google/googletest
 	branch = release-1.8.0
