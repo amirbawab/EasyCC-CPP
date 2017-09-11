@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include <Graph.h>
+#include <easycc/Graph.h>
 #include <easycc/LexicalConfig.h>
 #include <easycc/LexicalToken.h>
 #include <easycc/LexicalMessages.h>
