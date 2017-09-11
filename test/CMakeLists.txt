@@ -5,7 +5,7 @@ set(PROJECT_TEST "easycctests")
 enable_testing()
 
 # Add gtest header files (e.g. same as -I flag)
-include_directories(../googletest/include)
+include_directories(../thirdparty/googletest/include)
 
 # Store easycc test files to a variable
 file(GLOB_RECURSE TEST_SRC *.cpp)
