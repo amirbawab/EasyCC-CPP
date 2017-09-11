@@ -515,11 +515,11 @@ void Calculator::initHandlers() {
 ### cmake
 ```
 cmake . \
-    -DSYNTAX_ERRORS="resources/src/syntax_errors.json"\
-    -DSYNTAX_GRAMMAR="resources/src/syntax_grammar.json"\
-    -DLEXICAL_ERRORS="resources/src/lexical_errors.json"\
-    -DLEXICAL_CONFIG="resources/src/lexical_config.json"\
-    -DLEXICAL_STATE_MACHINE="resources/src/lexical_state_machine.json"
+    -DSYNTAX_ERRORS="${PWD}/resources/src/syntax_errors.json"\
+    -DSYNTAX_GRAMMAR="${PWD}/resources/src/syntax_grammar.json"\
+    -DLEXICAL_ERRORS="${PWD}/resources/src/lexical_errors.json"\
+    -DLEXICAL_CONFIG="${PWD}/resources/src/lexical_config.json"\
+    -DLEXICAL_STATE_MACHINE="${PWD}/resources/src/lexical_state_machine.json"
 
 ```
 
