@@ -198,7 +198,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # Include calculator header files (e.g. same as -I flag)
 include_directories(include)
 include_directories(../../include)
-include_directories(../../rapidjson/include)
+include_directories(../../thirdparty/rapidjson/include)
 
 # Store cpp files in a variable
 file(GLOB_RECURSE CALC_PROJECT_SOURCE_FILES src/*/*.cpp)
@@ -213,7 +213,6 @@ add_executable(${CALCULATOR_PRO_EXEC} ${CALC_PROJECT_SOURCE_FILES} src/calculato
 # Link library to the executable
 target_link_libraries(${CALCULATOR_DEV_EXEC} easyccdev)
 target_link_libraries(${CALCULATOR_PRO_EXEC} easyccpro)
-
 </code></pre>
 
 <h2 id="lexical-analysis">Lexical analysis</h2>
@@ -662,11 +661,11 @@ calculator example, if a syntax error occurs the program writes a message to the
 <h2 id="build-the-calculator-project">Build the Calculator project</h2>
 <h3 id="cmake">cmake</h3>
 <pre><code>cmake . \
-    -DSYNTAX_ERRORS=&quot;resources/src/syntax_errors.json&quot;\
-    -DSYNTAX_GRAMMAR=&quot;resources/src/syntax_grammar.json&quot;\
-    -DLEXICAL_ERRORS=&quot;resources/src/lexical_errors.json&quot;\
-    -DLEXICAL_CONFIG=&quot;resources/src/lexical_config.json&quot;\
-    -DLEXICAL_STATE_MACHINE=&quot;resources/src/lexical_state_machine.json&quot;
+    -DSYNTAX_ERRORS=&quot;${PWD}/resources/src/syntax_errors.json&quot;\
+    -DSYNTAX_GRAMMAR=&quot;${PWD}/resources/src/syntax_grammar.json&quot;\
+    -DLEXICAL_ERRORS=&quot;${PWD}/resources/src/lexical_errors.json&quot;\
+    -DLEXICAL_CONFIG=&quot;${PWD}/resources/src/lexical_config.json&quot;\
+    -DLEXICAL_STATE_MACHINE=&quot;${PWD}/resources/src/lexical_state_machine.json&quot;
 
 </code></pre>
 
