@@ -66,7 +66,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # Include calculator header files (e.g. same as -I flag)
 include_directories(include)
 include_directories(../../include)
-include_directories(../../rapidjson/include)
+include_directories(../../thirdparty/rapidjson/include)
 
 # Store cpp files in a variable
 file(GLOB_RECURSE CALC_PROJECT_SOURCE_FILES src/*/*.cpp)
@@ -81,7 +81,6 @@ add_executable(${CALCULATOR_PRO_EXEC} ${CALC_PROJECT_SOURCE_FILES} src/calculato
 # Link library to the executable
 target_link_libraries(${CALCULATOR_DEV_EXEC} easyccdev)
 target_link_libraries(${CALCULATOR_PRO_EXEC} easyccpro)
-
 ```
 
 ## Lexical analysis
